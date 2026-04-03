@@ -1,0 +1,45 @@
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
+import Layout from './components/Layout';
+import HomePage from './pages/HomePage';
+import ShopPage from './pages/ShopPage';
+import ProductPage from './pages/ProductPage';
+import CartPage from './pages/CartPage';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+import CheckoutPage from './pages/CheckoutPage';
+import AdminPage from './pages/AdminPage';
+import AboutPage from './pages/AboutPage';
+import OrdersPage from './pages/OrdersPage';
+
+
+function App() {
+  return (
+    <AuthProvider>
+      <CartProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<HomePage />} />
+              <Route path="shop" element={<ShopPage />} />
+              <Route path="product/:id" element={<ProductPage />} />
+              <Route path="cart" element={<CartPage />} />
+              <Route path="about" element={<AboutPage />} />
+              <Route path="orders" element={<OrdersPage />} />
+              <Route path="login" element={<LoginPage />} />
+              <Route path="signup" element={<SignupPage />} />
+              <Route path="checkout" element={<CheckoutPage />} />
+              <Route path="admin" element={<AdminPage />} />
+
+
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </CartProvider>
+    </AuthProvider>
+  );
+}
+
+export default App;

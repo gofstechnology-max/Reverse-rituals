@@ -1,0 +1,173 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { motion } from 'framer-motion';
+import { Package, Truck, CheckCircle, Clock, MapPin, Phone, ArrowRight, ShoppingBag } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+const OrdersPage = () => {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+        const { data } = await axios.get(`${API_URL}/api/orders/myorders`, config);
+        setOrders(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+        setLoading(false);
+      }
+    };
+
+    if (user) {
+      fetchOrders();
+    }
+  }, [user]);
+
+  if (loading) return (
+    <div className="min-h-screen bg-[#fdfbf7] pt-24 flex items-center justify-center">
+      <div className="w-12 h-12 border-4 border-[#c5a059] border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-[#fdfbf7] pt-24 pb-16 px-4">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-[#064e3b]">My Orders</h1>
+            <p className="text-gray-500 text-sm mt-1">Track your orders</p>
+          </div>
+          <Link to="/" className="flex items-center gap-2 text-[#c5a059] font-medium text-sm hover:underline">
+            <ShoppingBag size={18} />
+            Continue Shopping
+          </Link>
+        </div>
+
+        {orders.length === 0 ? (
+          <div className="bg-white rounded-2xl p-12 text-center border border-gray-100 shadow-sm">
+            <div className="w-20 h-20 bg-[#f5f5f5] rounded-full flex items-center justify-center mx-auto mb-4">
+              <Package size={32} className="text-gray-400" />
+            </div>
+            <h3 className="text-lg font-semibold text-[#064e3b] mb-2">No orders yet</h3>
+            <p className="text-gray-500 text-sm mb-6">Start shopping to see your orders here</p>
+            <Link to="/" className="inline-flex items-center gap-2 px-6 py-3 bg-[#064e3b] text-white rounded-full font-medium text-sm hover:bg-[#c5a059] transition-colors">
+              Browse Products
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {orders.map((order, index) => (
+              <motion.div
+                key={order._id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+              >
+                {/* Order Header */}
+                <div className="bg-[#f8fdf9] px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center gap-4">
+                  <div className="flex items-center gap-4">
+                    <span className="text-xs font-semibold text-gray-400 uppercase">Order #{order._id.slice(-8).toUpperCase()}</span>
+                    <span className="text-xs text-gray-500">{new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.isPaid ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                      {order.isPaid ? 'Paid' : 'Pending'}
+                    </span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.isDelivered ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'}`}>
+                      {order.isDelivered ? 'Delivered' : 'Processing'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Products */}
+                <div className="p-6">
+                  <div className="flex flex-col sm:flex-row gap-6">
+                    {/* Product Images */}
+                    <div className="flex gap-2 overflow-x-auto sm:flex-col sm:overflow-visible sm:w-24">
+                      {order.orderItems.slice(0, 3).map((item, i) => (
+                        <div key={i} className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-[#f5f5f5] overflow-hidden flex-shrink-0">
+                          {item.image ? (
+                            <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-2xl">📦</div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Order Details */}
+                    <div className="flex-grow space-y-4">
+                      <div>
+                        <h3 className="font-semibold text-[#064e3b]">
+                          {order.orderItems.map(item => item.name).join(', ')}
+                        </h3>
+                        <p className="text-sm text-gray-500">{order.orderItems.length} item(s)</p>
+                      </div>
+
+                      <div className="flex flex-wrap gap-6 text-sm">
+                        {/* Status Timeline */}
+                        <div className="flex items-center gap-4">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${order.isPaid ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-400'}`}>
+                            <CheckCircle size={16} />
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500">Payment</p>
+                            <p className={`text-xs font-medium ${order.isPaid ? 'text-green-600' : 'text-gray-400'}`}>{order.isPaid ? 'Done' : 'Pending'}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${order.isPaid ? 'bg-[#064e3b]/10 text-[#064e3b]' : 'bg-gray-200 text-gray-400'}`}>
+                            <Truck size={16} />
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500">Delivery</p>
+                            <p className={`text-xs font-medium ${order.isDelivered ? 'text-[#064e3b]' : 'text-gray-400'}`}>{order.isDelivered ? 'Shipped' : 'Processing'}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-3 border-t border-gray-100 flex justify-between items-center">
+                        <div className="text-sm text-gray-500">
+                          <span className="font-medium text-[#064e3b]">Total: </span>
+                          <span className="font-bold text-[#c5a059]">₹{order.totalPrice}</span>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Shipping Address */}
+                  {order.shippingAddress && (
+                    <div className="mt-4 pt-4 border-t border-gray-100 flex items-start gap-3 text-sm text-gray-500">
+                      <MapPin size={16} className="text-[#c5a059] mt-0.5" />
+                      <div>
+                        <span className="font-medium text-[#064e3b]">Shipping: </span>
+                        {order.shippingAddress.fullName}, {order.shippingAddress.city}, {order.shippingAddress.state} - {order.shippingAddress.zipCode}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default OrdersPage;

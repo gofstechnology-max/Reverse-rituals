@@ -1,0 +1,451 @@
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import Hero from '../components/Hero';
+import ProductCard from '../components/ProductCard';
+import ReviewSection from '../components/ReviewSection';
+import AboutSection from '../components/AboutSection';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
+
+import { ShoppingBag, Star, Zap, Leaf, Shield, Heart, Award, CheckCircle2, Play, BookOpen, FlaskConical, Globe, HelpCircle, ChevronDown, ArrowRight } from 'lucide-react';
+import HairProductSection from '../components/HairProductSection';
+import IngredientsSection from '../components/IngredientSection';
+
+
+const HomePage = () => {
+   const [products, setProducts] = useState([]);
+   const [loading, setLoading] = useState(true);
+   const [activeFaq, setActiveFaq] = useState(null);
+   const [sliderPos, setSliderPos] = useState(50);
+   const sliderPosRef = useRef(50);
+   const [isDragging, setIsDragging] = useState(false);
+   const sliderRef = useRef(null);
+   const sliderLineRef = useRef(null);
+   const beforeImageRef = useRef(null);
+
+   const updateSliderPosition = (pos) => {
+
+      sliderPosRef.current = pos;
+      if (sliderLineRef.current) {
+         sliderLineRef.current.style.left = `${pos}%`;
+      }
+      if (beforeImageRef.current) {
+         beforeImageRef.current.style.clipPath = `inset(0 ${100 - pos}% 0 0)`;
+      }
+      setSliderPos(pos);
+   };
+   useEffect(() => {
+      updateSliderPosition(50); // center on load
+   }, []);
+   const handleMove = (e) => {
+      if (!isDragging || !sliderRef.current) return;
+      const rect = sliderRef.current.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const pos = ((clientX - rect.left) / rect.width) * 100;
+      updateSliderPosition(Math.max(0, Math.min(100, pos)));
+   };
+
+   const handleMouseDown = () => setIsDragging(true);
+   const handleMouseUp = () => setIsDragging(false);
+
+   useEffect(() => {
+      const fetchProducts = async () => {
+         try {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+            const { data } = await axios.get(`${API_URL}/api/products`);
+            setProducts(data);
+            setLoading(false);
+         } catch (error) {
+            console.error('Error fetching products:', error);
+            setProducts([]);
+            setLoading(false);
+         }
+      };
+      fetchProducts();
+   }, []);
+
+   const whyChoose = [
+      { icon: <Shield size={32} />, title: "Clinical Efficacy", desc: "Scientifically proven results in 21 days." },
+      { icon: <Heart size={32} />, title: "Pure Botanicals", desc: "Sulfate, Paraben, and Cruelty free." },
+      { icon: <Award size={32} />, title: "Gold Standard", desc: "Winner of 2026 Botanical Excellence." },
+      { icon: <Award size={32} />, title: "Hand Extracted", desc: "Small-batch clinical concentrates." },
+   ];
+
+   const ritualSteps = [
+      { number: "01", title: "The Purify Ritual", desc: "Our Alchemical Water strips away environmental pollutants without disrupting the scalp's microbiome.", time: "2 Mins" },
+      { number: "02", title: "The Nourish Phase", desc: "Massage our Signature Concentrate into the roots. The botanical oils penetrate cellular membranes.", time: "5 Mins" },
+      { number: "03", title: "The Seal Ritual", desc: "Apply the finishing serum to lock in nutrients and provide a natural UV-protective barrier.", time: "1 Min" },
+   ];
+
+   const comparison = [
+      { feature: "Ingredient Purity", others: "Standard Extracts", ours: "Clinical Alchemical Water" },
+      { feature: "Potency", others: "Diluted Oils", ours: "100% Pure Botanical Concentrates" },
+      { feature: "Efficacy", others: "Surface Level", ours: "Deep Cellular Penetration" },
+      { feature: "Sustainability", others: "Standard Logistics", ours: "Closed-Loop Ethical Sourcing" },
+   ];
+
+   const faqs = [
+      { q: "How soon will I see results?", a: "Most customers notice reduced hair fall within 21 days. For best results, we recommend using the product consistently for 2-3 months." },
+      { q: "Is it safe for colored or treated hair?", a: "Yes! Our formula is gentle and pH-balanced. It's safe for colored hair and helps maintain hair vibrancy while nourishing from within." },
+      { q: "Is this product vegan and cruelty-free?", a: "Absolutely. We never test on animals and use 100% plant-based natural ingredients. All products are ethically sourced." },
+      { q: "How often should I use it?", a: "For best results, apply 2-3 times per week. Massage into clean, damp scalp and leave for 30 minutes before washing." },
+      { q: "What makes this different from other hair oils?", a: "Our unique Ayurvedic blend combines traditional herbs with modern formulation, designed to penetrate deep into the scalp and strengthen roots." },
+   ];
+
+   return (
+      <div className="bg-[#fdfbf7] overflow-hidden">
+         <Hero />
+
+         {/* Trust Badges Section */}
+         <section className="py-16 md:py-20 px-6 bg-white">
+            <div className="max-w-6xl mx-auto">
+               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+                  {[
+                     { icon: <Star className="fill-current" size={28} />, value: "4.9/5", label: "Rating", color: "#c5a059" },
+                     { icon: <Heart className="fill-current" size={28} />, value: "50K+", label: "Happy Customers", color: "#064e3b" },
+                     { icon: <Leaf className="fill-current" size={28} />, value: "100%", label: "Natural Ingredients", color: "#22c55e" },
+                     { icon: <Shield className="fill-current" size={28} />, value: "Derma", label: "Dermatologically Safe", color: "#8b5cf6" },
+                  ].map((item, i) => (
+                     <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.1, duration: 0.5 }}
+                        className="flex flex-col items-center text-center p-6 md:p-8 rounded-3xl bg-[#fdfbf7] border border-[#064e3b]/5 hover:shadow-xl hover:border-[#064e3b]/10 transition-all duration-300 group"
+                     >
+                        <div
+                           className="w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-4 shadow-lg"
+                           style={{ backgroundColor: `${item.color}15`, color: item.color }}
+                        >
+                           {item.icon}
+                        </div>
+                        <span className="text-2xl md:text-3xl font-serif font-black text-[#1a1a1a] mb-1">{item.value}</span>
+                        <span className="text-xs md:text-sm font-medium text-[#1a1a1a]/50 uppercase tracking-wider">{item.label}</span>
+                     </motion.div>
+                  ))}
+               </div>
+            </div>
+         </section>
+         <section id="products" className="py-10 px-6">
+            <motion.div
+               initial={{ opacity: 0, y: 40 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true, margin: "-100px" }}
+               transition={{ duration: 0.8, ease: "easeOut" }}
+               className="max-w-7xl mx-auto"
+            >
+               <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-16 md:mb-32 gap-8 md:gap-12">
+                  <div className="max-w-3xl">
+                     <motion.span
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="section-subtitle"
+                     >Our Iconic Concentrates</motion.span>
+                     <h2 className="section-title">The <span className="italic font-medium">Reverse</span> Collection</h2>
+                     <p className="text-[#064e3b]/50 text-xl md:text-2xl font-medium leading-relaxed">Each formulation is a precisely engineered ritual, designed to reverse damage and restore biological vitality.</p>
+                  </div>
+                  <Link to="/shop" className="flex items-center gap-4 md:gap-6 bg-white px-6 md:px-8 py-3 md:py-4 rounded-full border border-black/5 shadow-2xl hover:scale-105 transition-transform group text-[#064e3b]">
+                     <ShoppingBag size={20} md:size={24} className="text-[#c5a059]" />
+                     <span className="font-black text-[10px] md:text-xs uppercase tracking-[0.3em]">{products.length} Masterpieces</span>
+                  </Link>
+               </div>
+            </motion.div>
+
+            {loading ? (
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 text-[#064e3b]">
+                  {[1, 2, 3, 4].map(n => (
+                     <div key={n} className="h-[500px] bg-white rounded-[3rem] animate-pulse border border-black/5"></div>
+                  ))}
+               </div>
+            ) : (
+               <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12"
+               >
+                  {products.map((product, idx) => (
+                     <motion.div
+                        key={product._id}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: idx * 0.1, duration: 0.5, ease: "easeOut" }}
+                     >
+                        <ProductCard product={product} />
+                     </motion.div>
+                  ))}
+               </motion.div>
+            )}
+         </section>
+         <section className="py-20 md:py-28 bg-gradient-to-b from-[#fafafa] to-white">
+            <div className="max-w-7xl mx-auto px-6">
+
+               {/* Header */}
+               <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                  className="text-center mb-16"
+               >
+                  <span className="text-[#c5a059] text-sm font-semibold uppercase tracking-widest">
+                     Real Customer Results
+                  </span>
+
+                  <h2 className="text-3xl md:text-5xl font-semibold text-[#064e3b] mt-4 leading-tight">
+                     Hair Transformation
+                     <span className="block font-serif italic text-[#c5a059] mt-2">
+                        Week 1 to Week 8
+                     </span>
+                  </h2>
+
+                  <p className="text-gray-500 mt-4 max-w-2xl mx-auto">
+                     See real progress of customers using SS Herbs Ayurvedic Hair Oil.
+                     Visible hair growth, reduced hair fall, and stronger roots in just 8 weeks.
+                  </p>
+               </motion.div>
+
+               {/* Before After Slider */}
+               <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7 }}
+                  className="mb-14"
+               >
+                  <div
+                     ref={sliderRef}
+                     onMouseDown={handleMouseDown}
+                     onMouseMove={handleMove}
+                     onMouseUp={handleMouseUp}
+                     onMouseLeave={handleMouseUp}
+                     onTouchStart={() => setIsDragging(true)}
+                     onTouchMove={handleMove}
+                     onTouchEnd={() => setIsDragging(false)}
+                     className="relative cursor-ew-resize select-none overflow-hidden rounded-3xl aspect-[16/9] shadow-2xl border border-gray-200"
+                  >
+
+                     {/* After */}
+                     <img
+                        src="/WEEK8.PNG"
+                        className="absolute inset-0 w-full h-full object-cover"
+                        alt="After 8 weeks"
+                     />
+
+                     {/* Before */}
+                     <div
+                        ref={beforeImageRef}
+                        className="absolute inset-0 overflow-hidden"
+                        style={{
+                           clipPath: `inset(0 ${100 - sliderPos}% 0 0)`
+                        }}
+                     >
+                        <img
+                           src="/WEEK1.PNG"
+                           className="w-full h-full object-cover"
+                           alt="Before"
+                        />
+                     </div>
+
+                     {/* Slider Line */}
+                     <div
+                        ref={sliderLineRef}
+                        className="absolute top-0 bottom-0 left-1/2 w-1 bg-white shadow-xl z-10"
+                     >
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
+                           <ArrowRight size={14} className="text-gray-500 rotate-180" />
+                           <ArrowRight size={14} className="text-gray-500" />
+                        </div>
+                     </div>
+
+                     {/* Labels */}
+                     <div className="absolute top-5 left-5">
+                        <span className="px-4 py-2 bg-black/70 text-white text-sm rounded-lg">
+                           Week 1
+                        </span>
+                     </div>
+
+                     <div className="absolute top-5 right-5">
+                        <span className="px-4 py-2 bg-[#c5a059] text-white text-sm rounded-lg">
+                           Week 8 Result
+                        </span>
+                     </div>
+                  </div>
+
+                  <p className="text-center text-gray-400 mt-4">
+                     Drag the slider to see the transformation
+                  </p>
+               </motion.div>
+
+               {/* Weekly Progress */}
+               {/* Weekly Progress */}
+               <div className="mt-4">
+
+                  <h3 className="text-center text-2xl md:text-3xl font-semibold text-[#064e3b] mb-10">
+                     Weekly Progress
+                  </h3>
+
+                  <div className="relative">
+
+                     {/* Scroll Container */}
+                     <div className="flex gap-8 overflow-x-auto pb-6 px-2 scrollbar-hide ">
+
+                        {[
+                           { week: '01', title: 'Week 1', img: '/WEEK1.PNG' },
+                           { week: '02', title: 'Week 2', img: '/WEEK2.PNG' },
+                           { week: '03', title: 'Week 3', img: '/WEEK3.PNG' },
+                           { week: '04', title: 'Week 4', img: '/WEEK4.PNG' },
+                           { week: '05', title: 'Week 5', img: '/WEEK5.PNG' },
+                           { week: '08', title: 'Week 8', img: '/WEEK8.PNG' },
+                        ].map((step, i) => (
+
+                           <motion.div
+                              key={i}
+                              initial={{ opacity: 0, y: 30 }}
+                              whileInView={{ opacity: 1, y: 0 }}
+                              viewport={{ once: true }}
+                              transition={{ delay: i * 0.1 }}
+                              className="min-w-[260px] md:min-w-[320px] group cursor-pointer"
+                              onClick={() => {
+                                 if (beforeImageRef.current) {
+                                    beforeImageRef.current.querySelector("img").src = step.img;
+                                    updateSliderPosition(50); // reset slider to center
+                                 }
+                              }}
+                           >
+
+                              {/* Card */}
+                              <div className="relative rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition duration-300">
+
+                                 <img
+                                    src={step.img}
+                                    alt={step.title}
+                                    className="w-full h-72 object-cover group-hover:scale-110 transition duration-500"
+                                 />
+
+                                 {/* Overlay */}
+                                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+
+                                 {/* Week Badge */}
+                                 <div className="absolute top-4 left-4 bg-[#c5a059] text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                                    Week {step.week}
+                                 </div>
+
+                                 {/* Title */}
+                                 <div className="absolute bottom-4 left-4 text-white">
+                                    <p className="text-lg font-semibold">{step.title}</p>
+                                    <p className="text-sm opacity-80">Hair Progress</p>
+                                 </div>
+
+                              </div>
+
+                           </motion.div>
+
+                        ))}
+
+                     </div>
+
+
+                  </div>
+
+               </div>
+
+            </div>
+         </section>
+         <IngredientsSection />
+
+         <AboutSection />
+         <ReviewSection />
+
+
+
+
+         <HairProductSection />
+
+
+
+
+
+
+
+         {/* FAQs Section */}
+         {/* FAQ Section */}
+         <section className="py-16 md:py-20 px-4 bg-white">
+            <div className="max-w-3xl mx-auto">
+               <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="text-center mb-10"
+               >
+                  <h2 className="text-2xl md:text-3xl font-medium text-[#064e3b]">
+                     Frequently <span className="font-serif italic text-[#c5a059]">Asked</span>
+                  </h2>
+                  <p className="text-gray-500 mt-2 text-sm">Got questions? We've got answers.</p>
+               </motion.div>
+
+               <div className="space-y-3">
+                  {faqs.map((faq, i) => (
+                     <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.1 }}
+                        className="bg-[#f8fdf9] rounded-xl overflow-hidden border border-[#c5a059]/10"
+                     >
+                        <button
+                           onClick={() => setActiveFaq(activeFaq === i ? null : i)}
+                           className="w-full px-5 py-4 flex items-center justify-between text-left group"
+                        >
+                           <span className="font-medium text-[#064e3b] text-sm group-hover:text-[#c5a059] transition-colors">{faq.q}</span>
+                           <ChevronDown className={`text-[#c5a059] transition-transform duration-300 ${activeFaq === i ? 'rotate-180' : ''}`} size={18} />
+                        </button>
+                        <AnimatePresence>
+                           {activeFaq === i && (
+                              <motion.div
+                                 initial={{ height: 0, opacity: 0 }}
+                                 animate={{ height: "auto", opacity: 1 }}
+                                 exit={{ height: 0, opacity: 0 }}
+                                 className="px-5 pb-4"
+                              >
+                                 <p className="text-gray-600 text-sm leading-relaxed pt-2 border-t border-[#c5a059]/10">{faq.a}</p>
+                              </motion.div>
+                           )}
+                        </AnimatePresence>
+                     </motion.div>
+                  ))}
+               </div>
+
+               {/* Contact CTA */}
+               <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  className="text-center mt-10"
+               >
+                  <p className="text-gray-500 text-sm">Still have questions?</p>
+                  <Link to="/contact" className="text-[#c5a059] font-medium text-sm hover:underline mt-1 inline-block">
+                     Contact us →
+                  </Link>
+               </motion.div>
+            </div>
+         </section>
+
+
+
+         {/* 3D Review Carousel */}
+
+         {/* Commitment Section */}
+
+         {/* Founder's Journal Excerpt */}
+
+
+      </div>
+   );
+}; export default HomePage;

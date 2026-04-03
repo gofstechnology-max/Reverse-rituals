@@ -1,0 +1,173 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Mail, Lock, User, ArrowRight } from "lucide-react";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
+
+const SignupPage = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { user, login } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user, navigate]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const API_URL =
+        import.meta.env.VITE_API_URL || "http://localhost:5001";
+
+      await axios.post(`${API_URL}/api/users`, {
+        name,
+        email,
+        password,
+      });
+
+      toast.success("Account created successfully 🌿");
+
+      await login(email, password);
+      navigate("/");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Registration failed"
+      );
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#f8faf8] flex items-center justify-center px-6">
+
+      <div className="grid md:grid-cols-2 w-full max-w-6xl bg-white rounded-3xl shadow-xl overflow-hidden">
+
+        {/* Left Branding Section */}
+        <div className="hidden md:flex flex-col justify-center bg-[#e8f5e9] p-12">
+
+          <h1 className="text-4xl font-black text-green-800 mb-4">
+            Reverse Rituals 🌿
+          </h1>
+
+          <p className="text-green-700 text-lg">
+            Join our herbal haircare journey and experience
+            natural ingredients for stronger and healthier hair.
+          </p>
+
+          <div className="mt-10">
+            <img
+              src="/Hero.png"
+              alt="haircare"
+              className=""
+            />
+          </div>
+        </div>
+
+        {/* Signup Form */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-10 md:p-14 flex flex-col justify-center"
+        >
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">
+            Create Account
+          </h2>
+
+          <p className="text-gray-500 mb-8">
+            Start your Reverse Rituals journey today
+          </p>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+
+            {/* Name */}
+            <div>
+              <label className="text-gray-600 text-sm">
+                Full Name
+              </label>
+
+              <div className="flex items-center border rounded-xl mt-2 px-4 py-3 focus-within:border-green-500">
+                <User className="text-gray-400" size={18} />
+                <input
+                  type="text"
+                  placeholder="Enter your name"
+                  className="w-full ml-3 outline-none"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Email */}
+            <div>
+              <label className="text-gray-600 text-sm">
+                Email Address
+              </label>
+
+              <div className="flex items-center border rounded-xl mt-2 px-4 py-3 focus-within:border-green-500">
+                <Mail className="text-gray-400" size={18} />
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="w-full ml-3 outline-none"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Password */}
+            <div>
+              <label className="text-gray-600 text-sm">
+                Password
+              </label>
+
+              <div className="flex items-center border rounded-xl mt-2 px-4 py-3 focus-within:border-green-500">
+                <Lock className="text-gray-400" size={18} />
+                <input
+                  type="password"
+                  placeholder="Enter your password"
+                  className="w-full ml-3 outline-none"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Button */}
+            <button
+              type="submit"
+              className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition"
+            >
+              Sign Up
+              <ArrowRight size={18} />
+            </button>
+          </form>
+
+          {/* Login Link */}
+          <div className="mt-8 text-center">
+            <p className="text-gray-500">
+              Already have an account?
+            </p>
+
+            <Link
+              to="/login"
+              className="text-green-600 font-semibold hover:underline"
+            >
+              Sign in here
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+export default SignupPage;
