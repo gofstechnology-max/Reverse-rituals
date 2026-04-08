@@ -13,23 +13,23 @@ const Layout = () => {
   }, [pathname]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white text-[#1a1a1a]">
+    <div className="flex flex-col  text-[#1a1a1a]">
       <Navbar />
-      <main className="flex-grow pt-20">
+      <main className="flex-grow">
         <Outlet />
       </main>
       <Footer />
       <ToastContainer
-         position="bottom-right"
-         autoClose={3000}
-         hideProgressBar={false}
-         newestOnTop={false}
-         closeOnClick
-         rtl={false}
-         pauseOnFocusLoss
-         draggable
-         pauseOnHover
-         theme="light"
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
       />
     </div>
   );

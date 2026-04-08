@@ -52,12 +52,30 @@ const HomePage = () => {
       const fetchProducts = async () => {
          try {
             const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
-            const { data } = await axios.get(`${API_URL}/api/products`);
+            const cached = localStorage.getItem('home_products');
+            const cachedTime = localStorage.getItem('home_products_time');
+            
+            if (cached && cachedTime && Date.now() - parseInt(cachedTime) < 1000 * 60 * 5) {
+               setProducts(JSON.parse(cached));
+               setLoading(false);
+               return;
+            }
+            
+            const { data } = await axios.get(`${API_URL}/api/products`, {
+               timeout: 10000,
+               headers: { 'Cache-Control': 'no-cache' }
+            });
+            
+            localStorage.setItem('home_products', JSON.stringify(data));
+            localStorage.setItem('home_products_time', Date.now().toString());
+            
             setProducts(data);
             setLoading(false);
          } catch (error) {
             console.error('Error fetching products:', error);
-            setProducts([]);
+            const cached = localStorage.getItem('home_products');
+            if (cached) setProducts(JSON.parse(cached));
+            else setProducts([]);
             setLoading(false);
          }
       };
@@ -93,18 +111,18 @@ const HomePage = () => {
    ];
 
    return (
-      <div className="bg-[#fdfbf7] overflow-hidden">
+      <div className=" overflow-hidden">
          <Hero />
 
          {/* Trust Badges Section */}
-         <section className="py-16 md:py-20 px-6 bg-white">
+         <section className="py-12 md:py-20 px-4 md:px-6 bg-white">
             <div className="max-w-6xl mx-auto">
-               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+               {/* Horizontal scroll on mobile, grid on desktop */}
+               <div className="flex md:grid md:grid-cols-3 gap-4 md:gap-8 overflow-x-auto md:overflow-visible pb-4 md:pb-0 scrollbar-hide">
                   {[
-                     { icon: <Star className="fill-current" size={28} />, value: "4.9/5", label: "Rating", color: "#c5a059" },
-                     { icon: <Heart className="fill-current" size={28} />, value: "50K+", label: "Happy Customers", color: "#064e3b" },
-                     { icon: <Leaf className="fill-current" size={28} />, value: "100%", label: "Natural Ingredients", color: "#22c55e" },
-                     { icon: <Shield className="fill-current" size={28} />, value: "Derma", label: "Dermatologically Safe", color: "#8b5cf6" },
+                     { icon: <Star className="fill-current" size={24} />, value: "4.9/5", label: "Rating", color: "#c5a059" },
+                     { icon: <Heart className="fill-current" size={24} />, value: "50K+", label: "Happy Customers", color: "#064e3b" },
+                     { icon: <Leaf className="fill-current" size={24} />, value: "100%", label: "Natural Ingredients", color: "#22c55e" },
                   ].map((item, i) => (
                      <motion.div
                         key={i}
@@ -112,16 +130,16 @@ const HomePage = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.1, duration: 0.5 }}
-                        className="flex flex-col items-center text-center p-6 md:p-8 rounded-3xl bg-[#fdfbf7] border border-[#064e3b]/5 hover:shadow-xl hover:border-[#064e3b]/10 transition-all duration-300 group"
+                        className="flex-shrink-0 w-40 md:w-auto flex flex-col items-center text-center p-4 md:p-8 rounded-2xl md:rounded-3xl bg-[#fdfbf7] border border-[#064e3b]/5 hover:shadow-xl hover:border-[#064e3b]/10 transition-all duration-300 group"
                      >
                         <div
-                           className="w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-4 shadow-lg"
+                           className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-4 shadow-lg"
                            style={{ backgroundColor: `${item.color}15`, color: item.color }}
                         >
                            {item.icon}
                         </div>
-                        <span className="text-2xl md:text-3xl font-serif font-black text-[#1a1a1a] mb-1">{item.value}</span>
-                        <span className="text-xs md:text-sm font-medium text-[#1a1a1a]/50 uppercase tracking-wider">{item.label}</span>
+                        <span className="text-xl md:text-3xl font-serif font-black text-[#1a1a1a] mb-1">{item.value}</span>
+                        <span className="text-xs font-medium text-[#1a1a1a]/50 uppercase tracking-wider">{item.label}</span>
                      </motion.div>
                   ))}
                </div>
@@ -155,9 +173,16 @@ const HomePage = () => {
             </motion.div>
 
             {loading ? (
-               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 text-[#064e3b]">
+               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
                   {[1, 2, 3, 4].map(n => (
-                     <div key={n} className="h-[500px] bg-white rounded-[3rem] animate-pulse border border-black/5"></div>
+                     <div key={n} className="bg-white rounded-2xl md:rounded-3xl overflow-hidden shadow-lg">
+                        <div className="aspect-[4/5] bg-gray-200 animate-pulse"></div>
+                        <div className="p-4 space-y-3">
+                           <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                           <div className="h-3 bg-gray-200 rounded animate-pulse w-1/2"></div>
+                           <div className="h-6 bg-gray-200 rounded animate-pulse w-1/3 mt-4"></div>
+                        </div>
+                     </div>
                   ))}
                </div>
             ) : (
@@ -182,8 +207,8 @@ const HomePage = () => {
                </motion.div>
             )}
          </section>
-         <section className="py-20 md:py-28 bg-gradient-to-b from-[#fafafa] to-white">
-            <div className="max-w-7xl mx-auto px-6">
+         <section className="py-12 md:py-20 bg-gradient-to-b from-[#fafafa] to-white">
+            <div className="max-w-7xl mx-auto px-4 md:px-6">
 
                {/* Header */}
                <motion.div
@@ -191,21 +216,21 @@ const HomePage = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6 }}
-                  className="text-center mb-16"
+                  className="text-center mb-8 md:mb-12"
                >
-                  <span className="text-[#c5a059] text-sm font-semibold uppercase tracking-widest">
+                  <span className="text-[#c5a059] text-xs md:text-sm font-semibold uppercase tracking-widest">
                      Real Customer Results
                   </span>
 
-                  <h2 className="text-3xl md:text-5xl font-semibold text-[#064e3b] mt-4 leading-tight">
+                  <h2 className="text-2xl md:text-4xl lg:text-5xl font-semibold text-[#064e3b] mt-3 md:mt-4 leading-tight">
                      Hair Transformation
-                     <span className="block font-serif italic text-[#c5a059] mt-2">
+                     <span className="block font-serif italic text-[#c5a059] mt-1 md:mt-2">
                         Week 1 to Week 8
                      </span>
                   </h2>
 
-                  <p className="text-gray-500 mt-4 max-w-2xl mx-auto">
-                     See real progress of customers using SS Herbs Ayurvedic Hair Oil.
+                  <p className="text-gray-500 mt-3 md:mt-4 text-sm md:text-base max-w-2xl mx-auto">
+                     See real progress of customers using Reverse Rituals products.
                      Visible hair growth, reduced hair fall, and stronger roots in just 8 weeks.
                   </p>
                </motion.div>
@@ -216,7 +241,7 @@ const HomePage = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.7 }}
-                  className="mb-14"
+                  className="mb-8 md:mb-12 max-w-3xl lg:max-w-4xl mx-auto"
                >
                   <div
                      ref={sliderRef}
@@ -227,7 +252,7 @@ const HomePage = () => {
                      onTouchStart={() => setIsDragging(true)}
                      onTouchMove={handleMove}
                      onTouchEnd={() => setIsDragging(false)}
-                     className="relative cursor-ew-resize select-none overflow-hidden rounded-3xl aspect-[16/9] shadow-2xl border border-gray-200"
+                     className="relative cursor-ew-resize select-none overflow-hidden rounded-2xl md:rounded-3xl aspect-[4/3] md:aspect-[16/9] shadow-xl md:shadow-2xl border border-gray-200"
                   >
 
                      {/* After */}
@@ -255,45 +280,43 @@ const HomePage = () => {
                      {/* Slider Line */}
                      <div
                         ref={sliderLineRef}
-                        className="absolute top-0 bottom-0 left-1/2 w-1 bg-white shadow-xl z-10"
+                        className="absolute top-0 bottom-0 left-1/2 w-0.5 md:w-1 bg-white shadow-xl z-10"
                      >
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
-                           <ArrowRight size={14} className="text-gray-500 rotate-180" />
-                           <ArrowRight size={14} className="text-gray-500" />
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 md:w-12 h-8 md:h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
+                           <ArrowRight size={10} md:size={14} className="text-gray-500 rotate-180" />
+                           <ArrowRight size={10} md:size={14} className="text-gray-500" />
                         </div>
                      </div>
 
                      {/* Labels */}
-                     <div className="absolute top-5 left-5">
-                        <span className="px-4 py-2 bg-black/70 text-white text-sm rounded-lg">
+                     <div className="absolute top-3 md:top-5 left-3 md:left-5">
+                        <span className="px-2 md:px-4 py-1 md:py-2 bg-black/70 text-white text-xs md:text-sm rounded-lg">
                            Week 1
                         </span>
                      </div>
 
-                     <div className="absolute top-5 right-5">
-                        <span className="px-4 py-2 bg-[#c5a059] text-white text-sm rounded-lg">
+                     <div className="absolute top-3 md:top-5 right-3 md:right-5">
+                        <span className="px-2 md:px-4 py-1 md:py-2 bg-[#c5a059] text-white text-xs md:text-sm rounded-lg">
                            Week 8 Result
                         </span>
                      </div>
                   </div>
 
-                  <p className="text-center text-gray-400 mt-4">
+                  <p className="text-center text-gray-400 mt-3 md:mt-4 text-sm">
                      Drag the slider to see the transformation
                   </p>
                </motion.div>
 
                {/* Weekly Progress */}
-               {/* Weekly Progress */}
-               <div className="mt-4">
+               <div className="mt-6 md:mt-8 overflow-hidden max-w-4xl mx-auto">
 
-                  <h3 className="text-center text-2xl md:text-3xl font-semibold text-[#064e3b] mb-10">
+                  <h3 className="text-center text-lg md:text-xl font-semibold text-[#064e3b] mb-4 md:mb-6">
                      Weekly Progress
                   </h3>
 
-                  <div className="relative">
-
-                     {/* Scroll Container */}
-                     <div className="flex gap-8 overflow-x-auto pb-6 px-2 scrollbar-hide ">
+                  {/* Scroll Container - Horizontal on mobile */}
+                  <div className="overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
+                     <div className="flex gap-3 md:gap-6" style={{ width: 'max-content' }}>
 
                         {[
                            { week: '01', title: 'Week 1', img: '/WEEK1.PNG' },
@@ -310,36 +333,35 @@ const HomePage = () => {
                               whileInView={{ opacity: 1, y: 0 }}
                               viewport={{ once: true }}
                               transition={{ delay: i * 0.1 }}
-                              className="min-w-[260px] md:min-w-[320px] group cursor-pointer"
+                              className="w-40 md:w-64 group cursor-pointer flex-shrink-0"
                               onClick={() => {
                                  if (beforeImageRef.current) {
                                     beforeImageRef.current.querySelector("img").src = step.img;
-                                    updateSliderPosition(50); // reset slider to center
+                                    updateSliderPosition(50);
                                  }
                               }}
                            >
 
                               {/* Card */}
-                              <div className="relative rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition duration-300">
+                              <div className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
 
                                  <img
                                     src={step.img}
                                     alt={step.title}
-                                    className="w-full h-72 object-cover group-hover:scale-110 transition duration-500"
+                                    className="w-full h-32 md:h-48 object-cover group-hover:scale-110 transition duration-500"
                                  />
 
                                  {/* Overlay */}
                                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
 
                                  {/* Week Badge */}
-                                 <div className="absolute top-4 left-4 bg-[#c5a059] text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                                 <div className="absolute top-2 left-2 md:top-3 md:left-3 bg-[#c5a059] text-white px-2 py-1 rounded-full text-xs font-semibold shadow-lg">
                                     Week {step.week}
                                  </div>
 
                                  {/* Title */}
-                                 <div className="absolute bottom-4 left-4 text-white">
-                                    <p className="text-lg font-semibold">{step.title}</p>
-                                    <p className="text-sm opacity-80">Hair Progress</p>
+                                 <div className="absolute bottom-2 left-2 md:bottom-3 md:left-3 text-white">
+                                    <p className="text-xs md:text-sm font-semibold">{step.title}</p>
                                  </div>
 
                               </div>
@@ -349,9 +371,8 @@ const HomePage = () => {
                         ))}
 
                      </div>
-
-
                   </div>
+
 
                </div>
 

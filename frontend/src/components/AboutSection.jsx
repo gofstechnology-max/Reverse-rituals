@@ -1,267 +1,195 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { 
-  Heart, Sparkles, Leaf, Award, Users, Clock, Shield, Quote,
-  ArrowRight
+import {
+  Heart, Sparkles, Leaf, Award, Shield, Quote, Check
 } from "lucide-react";
 
 const AboutSection = () => {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+  const isInView = useInView(sectionRef, { once: true, margin: "-50px" });
 
-  const timeline = [
-    { year: "2024", title: "The Beginning", desc: "Started our journey from a small home studio" },
-    { year: "2024", title: "First Product", desc: "Launched our signature Rosemary Alchemy Water" },
-    { year: "2025", title: "Growing Community", desc: "Helped 10,000+ customers transform their hair" },
-    { year: "2025", title: "Today", desc: "Continuing to innovate with natural solutions" },
-  ];
+  const fadeUp = {
+    hidden: { opacity: 0, y: 30 },
+    show: { opacity: 1, y: 0 }
+  };
 
   const values = [
-    { icon: <Shield />, title: "Honesty", desc: "No false claims, only real results" },
-    { icon: <Sparkles />, title: "Transparency", desc: "Clear ingredients, clear process" },
-    { icon: <Leaf />, title: "Quality", desc: "100% natural, clinically tested" },
-    { icon: <Heart />, title: "Results", desc: "Visible transformation guaranteed" },
+    { icon: <Shield size={16} />, title: "Honesty" },
+    { icon: <Sparkles size={16} />, title: "Transparency" },
+    { icon: <Leaf size={16} />, title: "Quality" },
+    { icon: <Heart size={16} />, title: "Results" },
   ];
 
   return (
-    <section ref={sectionRef} className="py-20 px-4 overflow-hidden relative">
-      
-      {/* Background Image */}
+    <section ref={sectionRef} className="py-12 md:py-20 px-4 overflow-hidden relative">
+
+      {/* Background */}
       <div className="absolute inset-0">
-        <img 
-          src="/bg-about.png"
-          alt="Background" 
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-[#fdfbf7]/90" />
+        <img src="/Hero.png" className="w-full h-full object-cover" alt="background" />
+        <div className="absolute inset-0 bg-[#fdfbf7]/95" />
       </div>
 
-      <div className="max-w-7xl mx-auto relative">
-        
+      <div className="max-w-6xl mx-auto relative">
+
         {/* Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 md:mb-16"
         >
-          <span className="text-[#c5a059] font-bold uppercase tracking-[0.3em] text-xs mb-4 block">Behind the Brand</span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#064e3b] leading-tight">
+          <span className="text-[#c5a059] font-bold uppercase tracking-[0.2em] text-xs md:text-sm mb-3 md:mb-4 block">
+            Behind the Brand
+          </span>
+
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-[#064e3b] leading-tight">
             The Story of <span className="italic text-[#c5a059]">Reverse Rituals</span>
           </h2>
         </motion.div>
 
-        {/* Main Content - Image Center */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
+        {/* Main Content - Stack on mobile, grid on desktop */}
+        <div className="space-y-8 md:space-y-0 md:grid md:grid-cols-12 md:gap-6 md:mb-12">
           
-          {/* Left Side - Story */}
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="lg:col-span-5 space-y-6"
+          {/* Mobile: First - Philosophy Card (Desktop: Right side) */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ delay: 0.1 }}
+            className="md:col-span-5 md:order-2 space-y-4 md:space-y-6"
           >
-            <div className="bg-white p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-lg border border-[#064e3b]/5">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-[#c5a059]/10 rounded-xl flex items-center justify-center">
-                  <Heart className="text-[#c5a059]" size={20} />
-                </div>
-                <span className="text-[#c5a059] font-bold uppercase tracking-wider text-sm">Our Beginning</span>
-              </div>
-              <h3 className="text-xl md:text-2xl font-black text-[#064e3b] mb-4">Born from Personal Experience</h3>
-              <p className="text-[#064e3b]/60 leading-relaxed">
-                Our brand was born from personal experience and a deep belief in the power of natural hair care. Our journey began with a simple goal — to solve common hair concerns like hair fall, dandruff, etc.
+            <div className="bg-[#064e3b] p-5 md:p-6 rounded-xl md:rounded-2xl text-white">
+              <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">Our Philosophy</h3>
+              <p className="text-white/70 text-sm md:text-base">
+                Every product is crafted carefully using natural ingredients and tested personally to ensure visible results.
               </p>
-            </div>
-
-            <div className="bg-white p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-lg border border-[#064e3b]/5">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-[#064e3b]/10 rounded-xl flex items-center justify-center">
-                  <Sparkles className="text-[#064e3b]" size={20} />
-                </div>
-                <span className="text-[#064e3b] font-bold uppercase tracking-wider text-sm">The Transformation</span>
-              </div>
-              <p className="text-[#064e3b]/60 leading-relaxed">
-                After struggling with common hair concerns, we began experimenting with traditional herbs. With consistent use, we experienced visible transformation — stronger roots, reduced hair fall, and healthier growth.
-              </p>
-            </div>
-          </motion.div>
-
-          {/* Center - Image/Quote */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ delay: 0.3, duration: 0.6 }}
-            className="lg:col-span-2 hidden lg:flex items-center justify-center"
-          >
-            <div className="relative">
-              <div className="w-32 h-32 bg-[#c5a059]/10 rounded-full flex items-center justify-center">
-                <Quote className="text-[#c5a059]" size={40} />
-              </div>
-              <motion.div 
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute -inset-4 border-2 border-dashed border-[#c5a059]/30 rounded-full"
-              />
-            </div>
-          </motion.div>
-
-          {/* Right Side - More Story + Founder */}
-          <motion.div 
-            initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="lg:col-span-5 space-y-6"
-          >
-            <div className="bg-[#064e3b] p-6 md:p-8 rounded-2xl md:rounded-3xl text-white">
-              <h3 className="text-xl md:text-2xl font-black mb-4">Our Philosophy</h3>
-              <p className="text-white/70 leading-relaxed mb-6">
-                Every product is thoughtfully crafted, tested, and used personally to ensure it delivers visible and consistent results. We believe in combining the power of nature with the right formulations.
-              </p>
-              <div className="flex items-center gap-4 pt-4 border-t border-white/10">
-                <div className="w-12 h-12 bg-[#c5a059] rounded-full flex items-center justify-center text-white font-bold text-lg">
+              <div className="flex items-center gap-3 mt-4 pt-4 border-t border-white/10">
+                <div className="w-10 h-10 bg-[#c5a059] rounded-full flex items-center justify-center text-white font-bold">
                   R
                 </div>
                 <div>
-                  <p className="font-bold">R. Sadiq Basha</p>
-                  <p className="text-white/50 text-sm">Founder</p>
+                  <p className="font-bold text-sm">R. Sadiq Basha</p>
+                  <p className="text-white/50 text-xs">Founder</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-lg border border-[#064e3b]/5">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                  <Award className="text-green-600" size={20} />
-                </div>
-                <span className="text-[#064e3b] font-bold uppercase tracking-wider text-sm">Our Core Values</span>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                {values.map((val, idx) => (
-                  <div key={idx} className="flex items-center gap-2">
-                    <CheckCircle className="text-green-500 flex-shrink-0" size={16} />
-                    <span className="text-[#064e3b] font-bold text-sm">{val.title}</span>
+            <div className="bg-white p-5 md:p-6 rounded-xl md:rounded-2xl shadow-lg">
+              <h3 className="text-[#064e3b] font-bold mb-3 md:mb-4 text-sm md:text-base">Core Values</h3>
+              <div className="grid grid-cols-2 gap-2 md:gap-3">
+                {values.map((val, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <Check size={14} className="text-green-500 shrink-0" />
+                    <span className="text-[#064e3b] text-xs md:text-sm">{val.title}</span>
                   </div>
                 ))}
               </div>
             </div>
           </motion.div>
+
+          {/* Mobile: Second - Quote (Desktop: Center) */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ delay: 0.2 }}
+            className="md:col-span-2 md:order-3 hidden md:flex items-center justify-center"
+          >
+            <div className="relative">
+              <div className="w-20 md:w-24 h-20 md:h-24 bg-[#c5a059]/10 rounded-full flex items-center justify-center">
+                <Quote className="text-[#c5a059]" size={24} md:size={30} />
+              </div>
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute -inset-3 md:-inset-4 border border-dashed border-[#c5a059]/30 rounded-full"
+              />
+            </div>
+          </motion.div>
+
+          {/* Mobile: Third - Story Cards (Desktop: Left side) */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ delay: 0.3 }}
+            className="md:col-span-5 md:order-1 space-y-4 md:space-y-6"
+          >
+            <div className="bg-white p-5 md:p-6 rounded-xl md:rounded-2xl shadow-lg">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 bg-[#c5a059]/10 rounded-lg flex items-center justify-center">
+                  <Heart size={14} className="text-[#c5a059]" />
+                </div>
+                <span className="text-[#c5a059] font-semibold text-xs uppercase tracking-wider">Our Beginning</span>
+              </div>
+              <h3 className="text-lg md:text-xl font-bold text-[#064e3b] mb-2 md:mb-3">
+                Born from Personal Experience
+              </h3>
+              <p className="text-[#064e3b]/60 text-sm md:text-base">
+                Our brand was born from personal experience and a deep belief in the power of natural hair care.
+              </p>
+            </div>
+
+            <div className="bg-white p-5 md:p-6 rounded-xl md:rounded-2xl shadow-lg">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 bg-[#064e3b]/10 rounded-lg flex items-center justify-center">
+                  <Sparkles size={14} className="text-[#064e3b]" />
+                </div>
+                <span className="text-[#064e3b] font-semibold text-xs uppercase tracking-wider">The Transformation</span>
+              </div>
+              <p className="text-[#064e3b]/60 text-sm md:text-base">
+                After struggling with common hair concerns, we experimented with traditional herbs and saw real results — stronger roots, reduced hair fall, and healthier growth.
+              </p>
+            </div>
+          </motion.div>
         </div>
 
-{/* Brand Meaning Section */}
-<motion.div
-  initial={{ opacity: 0 }}
-  animate={isInView ? { opacity: 1 } : {}}
-  transition={{ duration: 0.8 }}
-  className="mb-24"
->
-  <div className="relative bg-white/80 backdrop-blur-xl rounded-[2.5rem] shadow-2xl border border-[#064e3b]/5 p-10 md:p-16 overflow-hidden">
-
-    {/* subtle gradient glow */}
-    <div className="absolute -top-20 -right-20 w-72 h-72 bg-[#c5a059]/10 blur-[100px] rounded-full"></div>
-
-    {/* Header */}
-    <div className="text-center mb-14">
-      <span className="text-[#c5a059] font-semibold uppercase tracking-[0.3em] text-xs">
-        Brand Philosophy
-      </span>
-
-      <h3 className="text-3xl md:text-5xl font-semibold text-[#064e3b] mt-4 leading-tight">
-        The Meaning of{" "}
-        <span className="italic font-serif text-[#c5a059]">
-          Reverse Rituals
-        </span>
-      </h3>
-    </div>
-
-    {/* Cards */}
-    <div className="grid md:grid-cols-2 gap-8 md:gap-12">
-
-      {[
-        {
-          title: "Reverse",
-          desc: "To repair, restore and bring back your natural strength.",
-          bg: "#064e3b",
-        },
-        {
-          title: "Rituals",
-          desc: "Daily self-care practices that create lasting transformation.",
-          bg: "#c5a059",
-        },
-      ].map((item, i) => (
+        {/* Brand Philosophy Section */}
         <motion.div
-          key={i}
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: i * 0.2 }}
-          className="group relative p-8 rounded-3xl bg-[#fdfbf7] border border-[#064e3b]/5 hover:shadow-2xl transition-all duration-500"
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          className="bg-white/80 backdrop-blur-xl rounded-2xl md:rounded-3xl p-6 md:p-10 shadow-xl text-center"
         >
+          <span className="text-[#c5a059] font-semibold uppercase tracking-[0.2em] text-xs">
+            Brand Philosophy
+          </span>
 
-          {/* Icon */}
-          <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 text-white text-2xl font-bold shadow-lg group-hover:scale-110 transition"
-            style={{ background: item.bg }}
-          >
-            {item.title[0]}
+          <h3 className="text-xl md:text-3xl font-semibold text-[#064e3b] mt-3 md:mt-4 mb-4 md:mb-6 leading-tight">
+            The Meaning of <span className="italic font-serif text-[#c5a059]">Reverse Rituals</span>
+          </h3>
+
+          <div className="grid md:grid-cols-2 gap-4 md:gap-8 max-w-3xl mx-auto">
+            <div className="p-4 md:p-6 rounded-xl bg-[#fdfbf7] border border-[#064e3b]/5">
+              <div className="w-10 h-10 bg-[#064e3b] rounded-xl flex items-center justify-center text-white text-lg font-bold mb-3 mx-auto ">
+                R
+              </div>
+              <h4 className="text-lg md:text-xl font-semibold text-[#064e3b] mb-2">Reverse</h4>
+              <p className="text-[#064e3b]/60 text-sm md:text-base">
+                To repair, restore and bring back your natural strength.
+              </p>
+            </div>
+
+            <div className="p-4 md:p-6 rounded-xl bg-[#fdfbf7] border border-[#064e3b]/5">
+              <div className="w-10 h-10 bg-[#c5a059] rounded-xl flex items-center justify-center text-white text-lg font-bold mb-3 mx-auto">
+                R
+              </div>
+              <h4 className="text-lg md:text-xl font-semibold text-[#064e3b] mb-2">Rituals</h4>
+              <p className="text-[#064e3b]/60 text-sm md:text-base">
+                Daily self-care practices that create lasting transformation.
+              </p>
+            </div>
           </div>
 
-          {/* Content */}
-          <h4 className="text-2xl font-semibold text-[#064e3b] mb-3">
-            {item.title}
-          </h4>
-
-          <p className="text-[#064e3b]/60 leading-relaxed">
-            {item.desc}
+          <p className="text-[#064e3b]/80 text-sm md:text-lg italic leading-relaxed mt-6 md:mt-8 max-w-2xl mx-auto">
+            "Reverse Rituals is not just a product — it's a journey of restoring what was lost and building a daily ritual that brings your hair back to life."
           </p>
-
         </motion.div>
-      ))}
-    </div>
-
-    {/* Quote */}
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ delay: 0.5 }}
-      className="mt-14 text-center max-w-3xl mx-auto"
-    >
-      <p className="text-[#064e3b]/80 text-lg md:text-xl italic leading-relaxed">
-        “Reverse Rituals is not just a product — it’s a journey of restoring
-        what was lost and building a daily ritual that brings your hair back
-        to life.”
-      </p>
-    </motion.div>
-
-  </div>
-</motion.div>
-
-
-{/* Stats Section */}
-
 
       </div>
     </section>
   );
 };
-
-function CheckCircle({ className, size = 16 }) {
-  return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      width={size} 
-      height={size} 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="3" 
-      strokeLinecap="round" 
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-      <polyline points="22 4 12 14.01 9 11.01" />
-    </svg>
-  );
-}
 
 export default AboutSection;

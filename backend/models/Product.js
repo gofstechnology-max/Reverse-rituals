@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
+  _id: { type: String },
   name: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
   originalPrice: { type: Number },
   category: { type: String, default: 'Hair Care' },
-  image: { type: String, required: true }, // URL to image
+  image: { type: String, required: true },
   features: [{ type: String }],
   benefits: [{
     title: { type: String },

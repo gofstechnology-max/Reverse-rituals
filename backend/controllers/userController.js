@@ -51,7 +51,7 @@ const getUserProfile = async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, isAdmin } = req.body;
 
   const userExists = await User.findOne({ email });
 
@@ -64,6 +64,7 @@ const registerUser = async (req, res) => {
     name,
     email,
     password,
+    isAdmin: isAdmin || false,
   });
 
   if (user) {
@@ -79,8 +80,29 @@ const registerUser = async (req, res) => {
   }
 };
 
+// @desc    Make user admin
+// @route   PUT /api/users/:id/admin
+// @access  Private/Admin
+const makeUserAdmin = async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (user) {
+    user.isAdmin = true;
+    const updatedUser = await user.save();
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    });
+  } else {
+    res.status(404).json({ message: 'User not found' });
+  }
+};
+
 module.exports = {
   authUser,
   getUserProfile,
   registerUser,
+  makeUserAdmin,
 };

@@ -91,9 +91,45 @@ const Hero = () => {
       </div>
 
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10 w-full px-6 md:px-16 py-20">
+        
+        {/* Mobile: Image First - Desktop: Content First */}
+        {/* Mobile Order: Image (1) -> Content (2) */}
+        {/* Desktop Order: Content (1) -> Image (2) */}
+        
+        {/* Right/Top - Product Image */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          transition={{ duration: 1, delay: 0.3, type: "spring", stiffness: 100 }}
+          className="relative flex justify-center lg:order-2 order-1"
+        >
+          <div className="relative w-[280px] sm:w-[420px] md:w-[520px] lg:w-[600px] aspect-square flex items-center justify-center">
 
-        {/* Left Content */}
-        <div className="text-center lg:text-left">
+            <motion.div
+              animate={{
+                boxShadow: [
+                  "0 0 60px rgba(197,160,89,0.3)",
+                  "0 0 100px rgba(197,160,89,0.5)",
+                  "0 0 60px rgba(197,160,89,0.3)",
+                ],
+              }}
+              transition={{ duration: 3, repeat: Infinity }}
+              className="absolute inset-0 bg-[#c5a059]/10 blur-[80px] rounded-full"
+            />
+
+            <motion.img
+              src="/Hero.png"
+              alt="Hair Oil"
+              className="relative z-20 w-full object-contain drop-shadow-2xl"
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            />
+
+          </div>
+        </motion.div>
+
+        {/* Left/Bottom - Text Content */}
+        <div className="text-center lg:text-left lg:order-1 order-2">
           <AnimatePresence mode="wait">
             <motion.div
               key={current}
@@ -187,53 +223,7 @@ const Hero = () => {
               </motion.div>
             </motion.div>
           </AnimatePresence>
-
-          {/* Dots */}
-          {/* <motion.div className="flex justify-center lg:justify-start gap-3 mt-10">
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrent(i)}
-                className={`h-1.5 rounded-full transition-all duration-500 ${current === i
-                    ? "w-16 bg-[#c5a059]"
-                    : "w-4 bg-[#1a1a1a]/20 hover:w-8"
-                  }`}
-              />
-            ))}
-          </motion.div> */}
         </div>
-
-        {/* Right Product */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
-          animate={{ opacity: 1, scale: 1, rotate: 0 }}
-          transition={{ duration: 1, delay: 0.3, type: "spring", stiffness: 100 }}
-          className="relative flex justify-center"
-        >
-          <div className="relative w-[280px] sm:w-[420px] md:w-[520px] lg:w-[600px] aspect-square flex items-center justify-center">
-
-            <motion.div
-              animate={{
-                boxShadow: [
-                  "0 0 60px rgba(197,160,89,0.3)",
-                  "0 0 100px rgba(197,160,89,0.5)",
-                  "0 0 60px rgba(197,160,89,0.3)",
-                ],
-              }}
-              transition={{ duration: 3, repeat: Infinity }}
-              className="absolute inset-0 bg-[#c5a059]/10 blur-[80px] rounded-full"
-            />
-
-            <motion.img
-              src="/Hero.png"
-              alt="Hair Oil"
-              className="relative z-20 w-full object-contain drop-shadow-2xl"
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            />
-
-          </div>
-        </motion.div>
       </div>
     </section>
   );

@@ -81,8 +81,8 @@ export default function Surya() {
             </section>
 
             {/* HERO VIDEO */}
-            <div className="mt-15 flex justify-center px-4">
-                <div className="w-full max-w-6xl rounded-4xl overflow-hidden shadow-gray-500 shadow-lg relative">
+            <div className="mt-10 flex justify-center px-4 md:px-6">
+                <div className="w-full max-w-6xl rounded-2xl md:rounded-4xl overflow-hidden shadow-gray-500 shadow-lg relative">
 
                     {/* Video */}
                     <video
@@ -91,16 +91,16 @@ export default function Surya() {
                         autoPlay
                         muted
                         loop
-                        className="w-full h-65 sm:h-85 md:h-116.5 object-cover"
+                        className="w-full h-48 sm:h-64 md:h-80 lg:h-[450px] object-cover"
                     />
 
                     <div className="absolute inset-0 bg-black/30" />
 
-                    <div className="absolute bottom-6 left-6 sm:left-10 text-white">
-                        <h3 className="text-base sm:text-lg font-semibold">
+                    <div className="absolute bottom-4 md:bottom-6 left-4 md:left-10 text-white">
+                        <h3 className="text-sm md:text-lg font-semibold">
                             Watch the transformation ritual
                         </h3>
-                        <p className="text-xs sm:text-sm opacity-80">
+                        <p className="text-xs opacity-80">
                             See how easy it is to use
                         </p>
                     </div>
@@ -108,7 +108,7 @@ export default function Surya() {
                     {/* Play / Pause Button */}
                     <button
                         onClick={toggleVideo}
-                        className="absolute bottom-6 right-6 w-12 h-12 rounded-full bg-white/30 backdrop-blur flex items-center justify-center text-white text-lg hover:scale-110 transition"
+                        className="absolute bottom-4 md:bottom-6 right-4 md:right-6 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/30 backdrop-blur flex items-center justify-center text-white text-lg hover:scale-110 transition"
                     >
                         {playing ? <FiPause /> : <FiPlay />}
                     </button>
@@ -117,14 +117,14 @@ export default function Surya() {
             </div>
 
             {/* INGREDIENTS */}
-            <section className="px-6 mt-16">
+            <section className="px-4 md:px-6 mt-16">
 
                 <div className="max-w-7xl mx-auto text-center">
 
                     <h2 className="text-2xl sm:text-3xl font-bold text-[#064e3b]">
                         Powerful <span className="text-[#c5a059]">Ayurvedic</span> Ingredients
                     </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 mt-12 text-left">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-8 mt-8 md:mt-12 text-left">
 
                         {ingredients.map((item, i) => (
                             <div
@@ -151,11 +151,11 @@ export default function Surya() {
 
             {/* BENEFITS */}
 
-            <section className="px-6 mt-16">
+            <section className="px-4 md:px-6 mt-16">
 
                 <div className="max-w-7xl mx-auto text-center">
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 mt-12">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 mt-8 md:12">
 
                         {benefits.map((item, i) => (
                             <div
@@ -182,12 +182,14 @@ export default function Surya() {
 
 
             {/* HOW TO USE */}
-            <section className="px-6 mt-16">
+            <section className="px-4 md:px-6 mt-16">
                 <div className="max-w-7xl mx-auto text-center">
                     <h2 className="text-2xl sm:text-3xl font-bold text-[#064e3b]">
                         How To <span className="text-[#c5a059]">Use</span>
                     </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 mt-12 relative">
+                    
+                    {/* Mobile: vertical stack, Desktop: horizontal */}
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 mt-8 md:12 relative">
 
                         {steps.map((step, i) => (
                             <div

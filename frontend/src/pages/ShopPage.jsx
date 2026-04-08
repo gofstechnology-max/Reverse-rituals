@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
-import { alchemyProducts } from '../data/alchemyProducts';
 import { Search, Filter, Grid, List } from 'lucide-react';
 
 const ShopPage = () => {
@@ -15,15 +14,11 @@ const ShopPage = () => {
       try {
         const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
         const { data } = await axios.get(`${API_URL}/api/products`);
-        
-        const backendProducts = data.filter(p => 
-          !alchemyProducts.some(ap => ap.name === p.name)
-        );
-        setProducts([...alchemyProducts, ...backendProducts]);
+        setProducts(data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching products:', error);
-        setProducts(alchemyProducts);
+        setProducts([]);
         setLoading(false);
       }
     };

@@ -13,6 +13,8 @@ import CheckoutPage from './pages/CheckoutPage';
 import AdminPage from './pages/AdminPage';
 import AboutPage from './pages/AboutPage';
 import OrdersPage from './pages/OrdersPage';
+import TermsPage from './pages/TermsPage';
+import PrivacyPage from './pages/PrivacyPage';
 
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
               <Route path="cart" element={<CartPage />} />
               <Route path="about" element={<AboutPage />} />
               <Route path="orders" element={<OrdersPage />} />
+              <Route path="terms" element={<TermsPage />} />
+              <Route path="privacy" element={<PrivacyPage />} />
               <Route path="login" element={<LoginPage />} />
               <Route path="signup" element={<SignupPage />} />
               <Route path="checkout" element={<CheckoutPage />} />

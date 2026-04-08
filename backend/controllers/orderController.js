@@ -1,4 +1,5 @@
 const Order = require('../models/Order');
+const Product = require('../models/Product');
 const razorpay = require('../config/razorpay');
 const crypto = require('crypto');
 
@@ -14,60 +15,106 @@ try {
 // @route   POST /api/orders
 // @access  Public (Guest Checkout) or Private
 const addOrderItems = async (req, res) => {
-  const {
-    orderItems,
-    shippingAddress,
-    paymentMethod,
-    itemsPrice,
-    shippingPrice,
-    totalPrice,
-  } = req.body;
+  const { orderItems, shippingAddress, paymentMethod } = req.body;
 
-  if (orderItems && orderItems.length === 0) {
+  if (!orderItems || orderItems.length === 0) {
     res.status(400).json({ message: 'No order items' });
     return;
-  } else {
-    // Create Razorpay Order
+  }
+
+  try {
+    const productIds = orderItems.map(item => item.product);
+    
+    if (!productIds.every(id => id && typeof id === 'string' && id.length > 0)) {
+      console.log('Invalid product IDs received:', productIds);
+      res.status(400).json({ message: 'Invalid product ID format', received: productIds });
+      return;
+    }
+    
+    const products = await Product.find({ _id: { $in: productIds } });
+    
+    console.log('Found products:', products.length, 'looking for:', productIds.length);
+
+    if (products.length !== orderItems.length) {
+      res.status(400).json({ message: 'One or more products not found' });
+      return;
+    }
+
+    const productMap = new Map(products.map(p => [p._id.toString(), p]));
+    let itemsPrice = 0;
+    const orderItemsWithPrices = [];
+
+    for (const item of orderItems) {
+      const product = productMap.get(item.product);
+      
+      if (!product) {
+        res.status(400).json({ message: `Product not found: ${item.product}` });
+        return;
+      }
+
+      if (product.countInStock < item.qty) {
+        res.status(400).json({ 
+          message: `Insufficient stock for ${product.name}. Available: ${product.countInStock}` 
+        });
+        return;
+      }
+
+      const itemTotal = product.price * item.qty;
+      itemsPrice += itemTotal;
+
+      orderItemsWithPrices.push({
+        name: product.name,
+        qty: item.qty,
+        image: product.image,
+        price: product.price,
+        product: product._id
+      });
+    }
+
+    const totalPrice = itemsPrice;
+
     const options = {
-      amount: Math.round(totalPrice * 100), // amount in the smallest currency unit (paise for INR)
+      amount: Math.round(totalPrice * 100),
       currency: "INR",
       receipt: `receipt_${Date.now()}`,
     };
 
-    try {
-      const razorpayOrder = await razorpay.orders.create(options);
+    const razorpayOrder = await razorpay.orders.create(options);
 
-      const order = new Order({
-        orderItems,
-        user: req.user ? req.user._id : null,
-        shippingAddress,
-        paymentMethod,
-        itemsPrice,
-        shippingPrice,
-        totalPrice,
-        paymentResult: {
-          razorpay_order_id: razorpayOrder.id,
-        },
-      });
+    const order = new Order({
+      orderItems: orderItemsWithPrices,
+      user: req.user ? req.user._id : null,
+      shippingAddress,
+      paymentMethod,
+      itemsPrice,
+      shippingPrice: 0,
+      totalPrice,
+      paymentResult: {
+        razorpay_order_id: razorpayOrder.id,
+      },
+    });
 
-      const createdOrder = await order.save();
-      res.status(201).json({
-        order: createdOrder,
-        razorpayOrder: razorpayOrder,
-      });
-    } catch (error) {
-      console.error('ORDER ERROR:', error.name, error.message);
-      
-      if (error.name === 'ValidationError') {
-        const messages = Object.values(error.errors).map(e => e.message).join(', ');
-        return res.status(400).json({ message: messages });
-      }
-      
-      res.status(500).json({ 
-        message: 'Order creation failed', 
-        error: error.message 
-      });
+    const createdOrder = await order.save();
+    res.status(201).json({
+      order: createdOrder,
+      razorpayOrder: razorpayOrder,
+    });
+  } catch (error) {
+    console.error('ORDER ERROR:', error.name, error.message);
+    
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(e => e.message).join(', ');
+      return res.status(400).json({ message: messages });
     }
+    
+    if (error.kind === 'ObjectId') {
+      return res.status(400).json({ message: 'Invalid product ID' });
+    }
+    
+    res.status(500).json({ 
+      message: 'Order creation failed', 
+      error: error.message 
+    });
   }
 };
 

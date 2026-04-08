@@ -1,5 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const reviews = [
@@ -15,114 +14,75 @@ const reviews = [
 ];
 
 const ReviewSection = () => {
-  const scrollRef = useRef(null);
   const [selected, setSelected] = useState(null);
 
-  const scroll = (dir) => {
-    if (!scrollRef.current) return;
-
-    const width = scrollRef.current.offsetWidth;
-
-    scrollRef.current.scrollBy({
-      left: dir === "left" ? -width : width,
-      behavior: "smooth",
-    });
-  };
-
-  // auto scroll
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (scrollRef.current) {
-        scrollRef.current.scrollBy({
-          left: 300,
-          behavior: "smooth",
-        });
-      }
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <section className="py-20 bg-[#fdfbf7] overflow-hidden">
+    <section className="py-16 md:py-20 bg-[#fdfbf7] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
 
         {/* Title */}
-        <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-5xl font-bold text-[#064e3b]">
+        <div className="text-center mb-10 md:mb-14">
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-[#064e3b]">
             Happy Clients
           </h2>
-
-          <p className="mt-4 text-gray-500 max-w-2xl mx-auto">
+          <p className="mt-3 md:mt-4 text-gray-500 text-sm md:text-base max-w-2xl mx-auto">
             Real WhatsApp reviews and results from our customers.
           </p>
         </div>
 
-        {/* Carousel */}
-        <div className="relative">
+        {/* Auto-Scrolling Carousel */}
+        <div className="relative overflow-hidden">
+          {/* Gradient masks for smooth edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-[#fdfbf7] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-[#fdfbf7] to-transparent z-10 pointer-events-none" />
 
-          {/* Left Button */}
-          <button
-            onClick={() => scroll("left")}
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-3"
-          >
-            <ChevronLeft />
-          </button>
-
-          {/* Right Button */}
-          <button
-            onClick={() => scroll("right")}
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-3"
-          >
-            <ChevronRight />
-          </button>
-
-          {/* Images */}
-          <div
-            ref={scrollRef}
-            className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4"
-            style={{ scrollbarWidth: "none" }}
-          >
+          {/* Scrolling Container */}
+          <div className="flex animate-scroll gap-4 md:gap-6">
+            {/* First set */}
             {reviews.map((review) => (
-              <div
-                key={review.id}
-                className="snap-center flex-shrink-0 
-                w-[80%] sm:w-[60%] md:w-[40%] lg:w-[30%]"
+              <motion.div
+                key={`first-${review.id}`}
+                className="flex-shrink-0 w-[65%] sm:w-[45%] md:w-[32%] lg:w-[24%]"
+                whileHover={{ scale: 1.03 }}
               >
-                <motion.div
-                  whileHover={{ scale: 1.03 }}
-                  className="bg-white rounded-3xl shadow-xl overflow-hidden cursor-pointer"
+                <div
+                  className="bg-white rounded-xl md:rounded-2xl shadow-lg overflow-hidden cursor-pointer"
                   onClick={() => setSelected(review.image)}
                 >
                   <img
                     src={review.image}
                     alt="review"
                     loading="lazy"
-                    className="w-full h-full object-cover"
+                    className="w-full h-auto object-contain"
                   />
-                </motion.div>
-              </div>
+                </div>
+              </motion.div>
+            ))}
+            {/* Duplicate for infinite scroll */}
+            {reviews.map((review) => (
+              <motion.div
+                key={`second-${review.id}`}
+                className="flex-shrink-0 w-[65%] sm:w-[45%] md:w-[32%] lg:w-[24%]"
+                whileHover={{ scale: 1.03 }}
+              >
+                <div
+                  className="bg-white rounded-xl md:rounded-2xl shadow-lg overflow-hidden cursor-pointer"
+                  onClick={() => setSelected(review.image)}
+                >
+                  <img
+                    src={review.image}
+                    alt="review"
+                    loading="lazy"
+                    className="w-full h-auto object-contain"
+                  />
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
 
         {/* Stats */}
-        <div className="mt-16 flex justify-center gap-10 text-center flex-wrap">
-          <div>
-            <h3 className="text-3xl font-bold text-[#c5a059]">50K+</h3>
-            <p className="text-gray-500">Happy Clients</p>
-          </div>
-
-          <div>
-            <h3 className="text-3xl font-bold text-[#c5a059]">4.9</h3>
-            <p className="text-gray-500">Rating</p>
-          </div>
-
-          <div>
-            <h3 className="text-3xl font-bold text-[#c5a059]">98%</h3>
-            <p className="text-gray-500">Success Rate</p>
-          </div>
-        </div>
+     
       </div>
 
       {/* Fullscreen Modal */}
@@ -136,7 +96,7 @@ const ReviewSection = () => {
             onClick={() => setSelected(null)}
           >
             <motion.div
-              className="relative max-w-4xl w-full"
+              className="relative max-w-4xl w-full max-h-[90vh] flex items-center justify-center"
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.8 }}
@@ -144,20 +104,40 @@ const ReviewSection = () => {
             >
               <button
                 onClick={() => setSelected(null)}
-                className="absolute -top-12 right-0 text-white"
+                className="absolute -top-10 right-0 text-white hover:text-[#c5a059] transition"
               >
-                <X size={32} />
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
               </button>
-
               <img
                 src={selected}
                 alt="review"
-                className="rounded-2xl w-full"
+                className="rounded-xl w-full max-h-[85vh] object-contain"
               />
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* CSS for auto-scroll animation */}
+      <style>{`
+        @keyframes scroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+        .animate-scroll {
+          animation: scroll 20s linear infinite;
+        }
+        .animate-scroll:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
     </section>
   );
 };
