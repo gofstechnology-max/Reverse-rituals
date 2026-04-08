@@ -249,7 +249,7 @@ const CheckoutPage = () => {
         return;
       }
 
-      const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_SZN5DY7IbG1LzA';
+      const RAZORPAY_KEY = import.meta.env.RAZORPAY_KEY_ID || 'rzp_live_SZN5DY7IbG1LzA';
 
       const options = {
         key: RAZORPAY_KEY,
