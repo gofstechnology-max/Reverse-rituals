@@ -15,10 +15,14 @@ const LoginPage = () => {
     if (user) navigate("/");
   }, [user, navigate]);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const result = await login(email, password);
+    setIsLoading(false);
 
     if (result.success) {
       toast.success("Welcome to Reverse Rituals 🌿");
@@ -50,7 +54,8 @@ const LoginPage = () => {
             <img
               src="/Hero.png"
               alt="haircare"
-              className="rounded-2xl "
+              className="rounded-2xl"
+              loading="lazy"
             />
           </div>
         </div>
@@ -119,10 +124,14 @@ const LoginPage = () => {
             {/* Button */}
             <button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition"
+              disabled={isLoading}
+              className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              Sign In
-              <ArrowRight size={18} />
+              {isLoading ? (
+                <>Logging in...</>
+              ) : (
+                <>Sign In <ArrowRight size={18} /></>
+              )}
             </button>
           </form>
 

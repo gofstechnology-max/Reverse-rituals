@@ -25,7 +25,7 @@ const AboutSection = () => {
 
       {/* Background */}
       <div className="absolute inset-0">
-        <img src="/Hero.png" className="w-full h-full object-cover" alt="background" />
+        <img src="/Hero.png" className="w-full h-full object-cover" alt="background" loading="lazy" />
         <div className="absolute inset-0 bg-[#fdfbf7]/95" />
       </div>
 

@@ -91,6 +91,7 @@ export default function Surya() {
                         autoPlay
                         muted
                         loop
+                        preload="metadata"
                         className="w-full h-48 sm:h-64 md:h-80 lg:h-[450px] object-cover"
                     />
 

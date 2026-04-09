@@ -212,12 +212,20 @@ const CheckoutPage = () => {
     });
   };
 
+  const [isProcessing, setIsProcessing] = useState(false);
+
   const handlePayment = async (e) => {
     e.preventDefault();
     if (!agreedToTerms) { toast.error("Please agree to the terms"); return; }
+    
+    setIsProcessing(true);
 
     const res = await loadRazorpay();
-    if (!res) { toast.error('Razorpay failed to load'); return; }
+    if (!res) { 
+      toast.error('Razorpay failed to load'); 
+      setIsProcessing(false);
+      return; 
+    }
 
     try {
       const orderConfig = { headers: { 'Content-Type': 'application/json', Authorization: user ? `Bearer ${user.token}` : undefined } };
@@ -240,16 +248,18 @@ const CheckoutPage = () => {
 
       let order, razorpayOrder;
       try {
-        const { data } = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/orders`, orderData, orderConfig);
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+        const { data } = await axios.post(`${API_URL}/api/orders`, orderData, orderConfig);
         order = data.order;
         razorpayOrder = data.razorpayOrder;
       } catch (err) {
         console.error('Order error:', err.response?.data);
         toast.error(err.response?.data?.message || 'Order failed');
+        setIsProcessing(false);
         return;
       }
 
-      const RAZORPAY_KEY = import.meta.env.RAZORPAY_KEY_ID || 'rzp_live_SZN5DY7IbG1LzA';
+      const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_SZN5DY7IbG1LzA';
 
       const options = {
         key: RAZORPAY_KEY,
@@ -259,13 +269,13 @@ const CheckoutPage = () => {
         description: 'Payment for your hair transformation',
         order_id: razorpayOrder.id,
         handler: async (response) => {
+          setIsProcessing(true);
           try {
             const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
             const verifyRes = await axios.post(`${API_URL}/api/orders/verify`, { ...response, orderId: order._id });
             if (verifyRes.data.message === "Payment verified successfully") {
               toast.success('Payment Successful!');
               clearCart();
-              // Store latest order for notification
               localStorage.setItem('latestOrder', JSON.stringify({
                 ...order,
                 isPaid: true,
@@ -275,14 +285,30 @@ const CheckoutPage = () => {
               }));
               navigate('/orders');
             }
-          } catch (err) { toast.error('Payment verification failed'); }
+          } catch (err) { 
+            toast.error('Payment verification failed'); 
+            setIsProcessing(false);
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            setIsProcessing(false);
+          }
         },
         prefill: { name: formData.fullName, email: user?.email || '', contact: formData.phone },
         theme: { color: '#064e3b' },
       };
 
-      new window.Razorpay(options).open();
-    } catch (error) { toast.error(error.response?.data?.message || 'Checkout failed'); }
+      const rzp = new window.Razorpay(options);
+      rzp.on('payment.failed', function (response) {
+        toast.error('Payment failed: ' + response.error.description);
+        setIsProcessing(false);
+      });
+      rzp.open();
+    } catch (error) { 
+      toast.error(error.response?.data?.message || 'Checkout failed'); 
+      setIsProcessing(false);
+    }
   };
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -395,8 +421,16 @@ const CheckoutPage = () => {
                 </div>
 
                 {/* Pay Button */}
-                <button type="submit" className="w-full py-5 bg-[#064e3b] text-white rounded-2xl font-bold hover:bg-[#c5a059] transition-all flex items-center justify-center gap-3 text-lg">
-                  <CreditCard size={24} /> Pay ₹{finalTotal.toLocaleString()}
+                <button 
+                  type="submit" 
+                  disabled={isProcessing}
+                  className="w-full py-5 bg-[#064e3b] text-white rounded-2xl font-bold hover:bg-[#c5a059] transition-all flex items-center justify-center gap-3 text-lg disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {isProcessing ? (
+                    <><Loader2 size={24} className="animate-spin" /> Processing Ritual...</>
+                  ) : (
+                    <><CreditCard size={24} /> Pay ₹{finalTotal.toLocaleString()}</>
+                  )}
                 </button>
               </form>
             </div>

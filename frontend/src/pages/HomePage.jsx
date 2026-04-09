@@ -173,14 +173,19 @@ const HomePage = () => {
             </motion.div>
 
             {loading ? (
-               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 overflow-hidden">
                   {[1, 2, 3, 4].map(n => (
-                     <div key={n} className="bg-white rounded-2xl md:rounded-3xl overflow-hidden shadow-lg">
-                        <div className="aspect-[4/5] bg-gray-200 animate-pulse"></div>
+                     <div key={n} className="bg-white rounded-2xl md:rounded-3xl overflow-hidden border border-gray-100 shadow-sm">
+                        <div className="aspect-[4/5] bg-linear-to-br from-gray-100 to-gray-200 animate-pulse relative overflow-hidden">
+                           <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] animate-[shimmer_2s_infinite]"></div>
+                        </div>
                         <div className="p-4 space-y-3">
-                           <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
-                           <div className="h-3 bg-gray-200 rounded animate-pulse w-1/2"></div>
-                           <div className="h-6 bg-gray-200 rounded animate-pulse w-1/3 mt-4"></div>
+                           <div className="h-4 bg-gray-200 rounded-full animate-pulse w-3/4"></div>
+                           <div className="h-3 bg-gray-100 rounded-full animate-pulse w-1/2"></div>
+                           <div className="flex justify-between items-center mt-4">
+                              <div className="h-6 bg-gray-200 rounded-lg animate-pulse w-1/3"></div>
+                              <div className="h-8 w-16 bg-green-50 rounded-full animate-pulse"></div>
+                           </div>
                         </div>
                      </div>
                   ))}
@@ -260,6 +265,7 @@ const HomePage = () => {
                         src="/WEEK8.PNG"
                         className="absolute inset-0 w-full h-full object-cover"
                         alt="After 8 weeks"
+                        loading="lazy"
                      />
 
                      {/* Before */}
@@ -274,6 +280,7 @@ const HomePage = () => {
                            src="/WEEK1.PNG"
                            className="w-full h-full object-cover"
                            alt="Before"
+                           loading="lazy"
                         />
                      </div>
 
@@ -349,6 +356,7 @@ const HomePage = () => {
                                     src={step.img}
                                     alt={step.title}
                                     className="w-full h-32 md:h-48 object-cover group-hover:scale-110 transition duration-500"
+                                    loading="lazy"
                                  />
 
                                  {/* Overlay */}

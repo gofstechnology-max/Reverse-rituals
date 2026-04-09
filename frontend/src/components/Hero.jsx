@@ -123,6 +123,7 @@ const Hero = () => {
               className="relative z-20 w-full object-contain drop-shadow-2xl"
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              fetchpriority="high"
             />
 
           </div>
