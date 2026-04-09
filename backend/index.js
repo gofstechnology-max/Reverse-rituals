@@ -24,6 +24,17 @@ app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 
+// Pincode Proxy to avoid CORS
+const axios = require('axios');
+app.get('/api/pincode/:code', async (req, res) => {
+  try {
+    const { data } = await axios.get(`https://api.postalpincode.in/pincode/${req.params.code}`);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: 'Pincode fetch failed' });
+  }
+});
+
 app.get('/', (req, res) => {
   res.send('API is running...');
 });

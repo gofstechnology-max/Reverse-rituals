@@ -77,7 +77,8 @@ const CheckoutPage = () => {
     if (code.length === 6) {
       setIsFetchingPincode(true);
       try {
-        const { data } = await axios.get(`https://api.postalpincode.in/pincode/${code}`);
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+        const { data } = await axios.get(`${API_URL}/api/pincode/${code}`);
         if (data && data[0].Status === "Success") {
           const postoffice = data[0].PostOffice[0];
           setFormData({
@@ -128,9 +129,8 @@ const CheckoutPage = () => {
           // 🔥 STEP 3: Verify using PINCODE API (VERY IMPORTANT)
           if (pincode) {
             try {
-              const pinRes = await fetch(
-                `https://api.postalpincode.in/pincode/${pincode}`
-              );
+              const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+              const pinRes = await fetch(`${API_URL}/api/pincode/${pincode}`);
               const pinData = await pinRes.json();
 
               if (pinData[0].Status === "Success") {
