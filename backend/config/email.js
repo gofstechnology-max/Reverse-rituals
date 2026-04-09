@@ -86,16 +86,21 @@ const sendOrderEmail = async (toEmail, orderDetails) => {
 
   const mailOptions = {
     from: process.env.MAIL_FROM || 'greensignaltamil@gmail.com',
-    to: process.env.ADMIN_NOTIFY_EMAIL || 'greensignaltamil@gmail.com',
-    subject: `New Order #${orderId} - ₹${total}`,
+    to: toEmail, // Send to customer
+    cc: process.env.ADMIN_NOTIFY_EMAIL || 'greensignaltamil@gmail.com', // CC to admin
+    subject: `Your Reverse Rituals Order #${orderId} - ₹${total}`,
     html: htmlContent,
   };
 
   try {
+    console.log(`Attempting to send order email to: ${toEmail}`);
     await transport.sendMail(mailOptions);
-    console.log('Order notification email sent successfully');
+    console.log('Order notification email sent successfully to customer and admin');
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error('CRITICAL EMAIL ERROR:', error.message);
+    if (error.code === 'EAUTH') {
+      console.error('Authentication failed. Check if Gmail App Password is still valid.');
+    }
   }
 };
 

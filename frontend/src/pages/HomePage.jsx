@@ -22,6 +22,7 @@ const HomePage = () => {
    const sliderRef = useRef(null);
    const sliderLineRef = useRef(null);
    const beforeImageRef = useRef(null);
+   const [selectedWeek, setSelectedWeek] = useState("Week 1");
 
    const updateSliderPosition = (pos) => {
 
@@ -37,16 +38,42 @@ const HomePage = () => {
    useEffect(() => {
       updateSliderPosition(50); // center on load
    }, []);
-   const handleMove = (e) => {
-      if (!isDragging || !sliderRef.current) return;
-      const rect = sliderRef.current.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const pos = ((clientX - rect.left) / rect.width) * 100;
-      updateSliderPosition(Math.max(0, Math.min(100, pos)));
+   const handleMouseDown = (e) => {
+      setIsDragging(true);
+      // Optional: Prevent text selection while dragging
+      e.preventDefault();
    };
 
-   const handleMouseDown = () => setIsDragging(true);
    const handleMouseUp = () => setIsDragging(false);
+
+   useEffect(() => {
+      const onMove = (e) => {
+         if (!isDragging || !sliderRef.current) return;
+         
+         const rect = sliderRef.current.getBoundingClientRect();
+         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+         const pos = ((clientX - rect.left) / rect.width) * 100;
+         const clampedPos = Math.max(0, Math.min(100, pos));
+         
+         requestAnimationFrame(() => {
+            updateSliderPosition(clampedPos);
+         });
+      };
+
+      if (isDragging) {
+         window.addEventListener('mousemove', onMove);
+         window.addEventListener('mouseup', handleMouseUp);
+         window.addEventListener('touchmove', onMove);
+         window.addEventListener('touchend', handleMouseUp);
+      }
+
+      return () => {
+         window.removeEventListener('mousemove', onMove);
+         window.removeEventListener('mouseup', handleMouseUp);
+         window.removeEventListener('touchmove', onMove);
+         window.removeEventListener('touchend', handleMouseUp);
+      };
+   }, [isDragging]);
 
    useEffect(() => {
       const fetchProducts = async () => {
@@ -111,7 +138,7 @@ const HomePage = () => {
    ];
 
    return (
-      <div className=" overflow-hidden">
+      <div className="overflow-hidden">
          <Hero />
 
          {/* Trust Badges Section */}
@@ -230,7 +257,7 @@ const HomePage = () => {
                   <h2 className="text-2xl md:text-4xl lg:text-5xl font-semibold text-[#064e3b] mt-3 md:mt-4 leading-tight">
                      Hair Transformation
                      <span className="block font-serif italic text-[#c5a059] mt-1 md:mt-2">
-                        Week 1 to Week 8
+                        Week 1 to Week 14
                      </span>
                   </h2>
 
@@ -241,78 +268,85 @@ const HomePage = () => {
                </motion.div>
 
                {/* Before After Slider */}
-               <motion.div
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.7 }}
-                  className="mb-8 md:mb-12 max-w-3xl lg:max-w-4xl mx-auto"
-               >
-                  <div
-                     ref={sliderRef}
-                     onMouseDown={handleMouseDown}
-                     onMouseMove={handleMove}
-                     onMouseUp={handleMouseUp}
-                     onMouseLeave={handleMouseUp}
-                     onTouchStart={() => setIsDragging(true)}
-                     onTouchMove={handleMove}
-                     onTouchEnd={() => setIsDragging(false)}
-                     className="relative cursor-ew-resize select-none overflow-hidden rounded-2xl md:rounded-3xl aspect-[4/3] md:aspect-[16/9] shadow-xl md:shadow-2xl border border-gray-200"
-                  >
-
-                     {/* After */}
-                     <img
-                        src="/WEEK8.PNG"
-                        className="absolute inset-0 w-full h-full object-cover"
-                        alt="After 8 weeks"
-                        loading="lazy"
-                     />
-
-                     {/* Before */}
-                     <div
-                        ref={beforeImageRef}
-                        className="absolute inset-0 overflow-hidden"
-                        style={{
-                           clipPath: `inset(0 ${100 - sliderPos}% 0 0)`
-                        }}
-                     >
-                        <img
-                           src="/WEEK1.PNG"
-                           className="w-full h-full object-cover"
-                           alt="Before"
-                           loading="lazy"
-                        />
-                     </div>
-
-                     {/* Slider Line */}
-                     <div
-                        ref={sliderLineRef}
-                        className="absolute top-0 bottom-0 left-1/2 w-0.5 md:w-1 bg-white shadow-xl z-10"
-                     >
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 md:w-12 h-8 md:h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
-                           <ArrowRight size={10} md:size={14} className="text-gray-500 rotate-180" />
-                           <ArrowRight size={10} md:size={14} className="text-gray-500" />
-                        </div>
-                     </div>
-
-                     {/* Labels */}
-                     <div className="absolute top-3 md:top-5 left-3 md:left-5">
-                        <span className="px-2 md:px-4 py-1 md:py-2 bg-black/70 text-white text-xs md:text-sm rounded-lg">
-                           Week 1
-                        </span>
-                     </div>
-
-                     <div className="absolute top-3 md:top-5 right-3 md:right-5">
-                        <span className="px-2 md:px-4 py-1 md:py-2 bg-[#c5a059] text-white text-xs md:text-sm rounded-lg">
-                           Week 8 Result
-                        </span>
-                     </div>
-                  </div>
-
-                  <p className="text-center text-gray-400 mt-3 md:mt-4 text-sm">
-                     Drag the slider to see the transformation
-                  </p>
-               </motion.div>
+                <motion.div
+                   initial={{ opacity: 0, scale: 0.95 }}
+                   whileInView={{ opacity: 1, scale: 1 }}
+                   viewport={{ once: true }}
+                   transition={{ duration: 0.8 }}
+                   className="mb-12 md:mb-20 max-w-4xl mx-auto"
+                >
+                   <div
+                      ref={sliderRef}
+                      onMouseDown={handleMouseDown}
+                      onTouchStart={handleMouseDown}
+                      className="relative cursor-ew-resize select-none overflow-hidden rounded-3xl md:rounded-[40px] aspect-[4/5] md:aspect-video shadow-2xl border-4 border-white group"
+                   >
+ 
+                      {/* After Image (Base) */}
+                      <img
+                         src="/WEEK14.JPG"
+                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                         alt="After 14 weeks"
+                         loading="lazy"
+                      />
+ 
+                      {/* Before Image (Overlay) */}
+                      <div
+                         ref={beforeImageRef}
+                         className="absolute inset-0 overflow-hidden"
+                         style={{
+                            clipPath: `inset(0 ${100 - sliderPos}% 0 0)`
+                         }}
+                      >
+                         <img
+                            src="/WEEK1.PNG"
+                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                            alt="Before"
+                            loading="lazy"
+                         />
+                      </div>
+ 
+                      {/* Comparison Line & Handle */}
+                      <div
+                         ref={sliderLineRef}
+                         className="absolute top-0 bottom-0 w-1 bg-white/80 backdrop-blur-sm z-10 pointer-events-none"
+                         style={{ transform: 'translateX(-50%)', left: '50%' }}
+                      >
+                         {/* Glowing Handle */}
+                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.5)] border border-white/40 active:scale-95 transition-transform">
+                            <div className="flex items-center gap-1">
+                               <div className="w-1 h-4 md:h-6 bg-white rounded-full opacity-60"></div>
+                               <div className="w-1 h-6 md:h-8 bg-white rounded-full"></div>
+                               <div className="w-1 h-4 md:h-6 bg-white rounded-full opacity-60"></div>
+                            </div>
+                         </div>
+                      </div>
+ 
+                      {/* Floating Badges */}
+                      <div className="absolute inset-x-3 md:inset-x-6 top-3 md:top-6 flex justify-between gap-2 pointer-events-none">
+                         <div className="px-3 md:px-5 py-1.5 md:py-2.5 rounded-full bg-black/40 backdrop-blur-md text-white text-[10px] md:text-xs font-black border border-white/20 tracking-tighter md:tracking-widest uppercase shadow-lg">
+                            {selectedWeek}
+                         </div>
+                         <div className="px-3 md:px-5 py-1.5 md:py-2.5 rounded-full bg-[#c5a059]/90 backdrop-blur-md text-white text-[10px] md:text-xs font-black border border-white/20 tracking-tighter md:tracking-widest uppercase shadow-lg">
+                            Goal: Week 14
+                         </div>
+                      </div>
+ 
+                      {/* Label Overlays */}
+                      <div className="absolute bottom-4 md:bottom-8 left-4 md:left-8 pointer-events-none">
+                         <p className="text-white text-xl md:text-5xl font-serif font-black opacity-10 md:opacity-20 select-none tracking-tighter">BEFORE</p>
+                      </div>
+                      <div className="absolute bottom-4 md:bottom-8 right-4 md:right-8 pointer-events-none text-right">
+                         <p className="text-white text-xl md:text-5xl font-serif font-black opacity-10 md:opacity-20 select-none tracking-tighter">AFTER</p>
+                      </div>
+                   </div>
+ 
+                   <div className="mt-8 flex items-center justify-center gap-4 text-[#064e3b]/40">
+                      <div className="h-px w-12 bg-current"></div>
+                      <p className="text-sm font-black uppercase tracking-[0.3em] font-serif italic text-[#c5a059]">Slide the Ritual Transformation</p>
+                      <div className="h-px w-12 bg-current"></div>
+                   </div>
+                </motion.div>
 
                {/* Weekly Progress */}
                <div className="mt-6 md:mt-8 overflow-hidden max-w-4xl mx-auto">
@@ -328,10 +362,9 @@ const HomePage = () => {
                         {[
                            { week: '01', title: 'Week 1', img: '/WEEK1.PNG' },
                            { week: '02', title: 'Week 2', img: '/WEEK2.PNG' },
-                           { week: '03', title: 'Week 3', img: '/WEEK3.PNG' },
                            { week: '04', title: 'Week 4', img: '/WEEK4.PNG' },
-                           { week: '05', title: 'Week 5', img: '/WEEK5.PNG' },
                            { week: '08', title: 'Week 8', img: '/WEEK8.PNG' },
+                           { week: '14', title: 'Week 14', img: '/WEEK14.JPG' },
                         ].map((step, i) => (
 
                            <motion.div
@@ -344,6 +377,7 @@ const HomePage = () => {
                               onClick={() => {
                                  if (beforeImageRef.current) {
                                     beforeImageRef.current.querySelector("img").src = step.img;
+                                    setSelectedWeek(step.title);
                                     updateSliderPosition(50);
                                  }
                               }}
