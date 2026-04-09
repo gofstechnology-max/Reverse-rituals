@@ -43,7 +43,7 @@ const AboutSection = () => {
             Behind the Brand
           </span>
 
-          <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-[#064e3b] leading-tight">
+          <h2 className="text-2xl md:text-3xl lg:text-5xl font-black text-[#064e3b] leading-tight">
             The Story of <span className="italic text-[#c5a059]">Reverse Rituals</span>
           </h2>
         </motion.div>
@@ -156,7 +156,7 @@ const AboutSection = () => {
             Brand Philosophy
           </span>
 
-          <h3 className="text-xl md:text-3xl font-semibold text-[#064e3b] mt-3 md:mt-4 mb-4 md:mb-6 leading-tight">
+          <h3 className="text-lg md:text-2xl lg:text-3xl font-semibold text-[#064e3b] mt-2 md:mt-4 mb-3 md:mb-6 leading-tight">
             The Meaning of <span className="italic font-serif text-[#c5a059]">Reverse Rituals</span>
           </h3>
 

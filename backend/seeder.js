@@ -12,7 +12,7 @@ const products = [
   {
     _id: 'alchemy-water',
     name: 'Rosemary Alchemy Water',
-    price: 299,
+    price: 1,
     originalPrice: 299,
     description: 'A potent Rosemary infusion for hair growth and scalp health. Crafted with traditional Ayurvedic heritage and clinically proven ingredients to reduce hair fall, stimulate follicles, and restore scalp health.',
     image: 'https://8upload.com/image/c687fcd4a74c72d7/IMG_4138__1_.jpg',

@@ -55,28 +55,29 @@ const Navbar = () => {
     }
   }, [user]);
 
-  // Auto-dismiss notification after 15 seconds
   useEffect(() => {
-    if (lastOrder && lastOrder.isPaid) {
-      const timer = setTimeout(() => {
-        setLastOrder(null);
-      }, 15000);
-      return () => clearTimeout(timer);
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
     }
-  }, [lastOrder]);
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMenuOpen]);
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-4 bg-transparent">
+      <nav className="fixed top-0 left-0 right-0 z-[100] px-4 md:px-6 py-3 md:py-4 bg-white/80 backdrop-blur-md border-b border-black/5">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link to="/" className="text-xl md:text-2xl font-serif font-black flex items-center gap-2 md:gap-3 group">
-            <div className="w-15 flex items-center justify-center  ">
+          <Link to="/" className="text-lg md:text-2xl font-serif font-black flex items-center gap-2 md:gap-3 group">
+            <div className="w-10 md:w-15 flex items-center justify-center">
               <img src="/rr-logo.png" alt="" className='w-full h-full object-cover' />
             </div>
             <span className="text-[#064e3b] tracking-tighter hidden xs:inline">Reverse Rituals</span>
           </Link>
 
-          <div className="flex items-center gap-4 md:gap-8">
+          <div className="flex items-center gap-3 md:gap-8">
             <div className="hidden md:flex items-center gap-8 font-medium text-sm uppercase tracking-widest text-[#1a1a1a]/60">
               {navLinks.map((link) => (
                 <Link key={link.name} to={link.path} className="hover:text-[#064e3b] transition-colors">{link.name}</Link>
@@ -85,32 +86,32 @@ const Navbar = () => {
 
             <div className="h-6 w-px bg-black/10 hidden md:block"></div>
 
-            <div className="flex items-center gap-2 md:gap-4">
+            <div className="flex items-center gap-1 md:gap-4">
               <Link to="/cart" className="relative group p-2 rounded-full hover:bg-black/5 transition-colors">
-                <ShoppingCart size={22} className="group-hover:text-[#064e3b] transition-colors" />
+                <ShoppingCart size={20} className="group-hover:text-[#064e3b] transition-colors" />
                 {cartCount > 0 && (
-                  <span className="absolute top-0 right-0 bg-[#064e3b] text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center ring-2 ring-white">
+                  <span className="absolute top-0 right-0 bg-[#064e3b] text-white text-[9px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center ring-2 ring-white">
                     {cartCount}
                   </span>
                 )}
               </Link>
 
               {user ? (
-                <div className="flex items-center gap-2 md:gap-4">
+                <div className="flex items-center gap-1 md:gap-4">
                   <Link to="/orders" className="p-2 rounded-full hover:bg-black/5 transition-colors group hidden sm:flex">
-                    <Package size={22} className="group-hover:text-[#064e3b]" />
+                    <Package size={20} className="group-hover:text-[#064e3b]" />
                   </Link>
-                  <Link to={user.isAdmin ? "/admin" : "/orders"} className="flex items-center gap-2 px-3 md:px-4 py-2 bg-[#064e3b]/5 rounded-full text-[#064e3b] text-xs md:text-sm font-bold hover:bg-[#064e3b] hover:text-white transition-all">
-                    <User size={18} />
+                  <Link to={user.isAdmin ? "/admin" : "/orders"} className="flex items-center gap-2 px-3 md:px-4 py-1.5 bg-[#064e3b]/5 rounded-full text-[#064e3b] text-[10px] md:text-sm font-bold hover:bg-[#064e3b] hover:text-white transition-all">
+                    <User size={16} />
                     <span className="hidden sm:inline">{user.name}</span>
                   </Link>
                   <button onClick={logout} className="p-2 rounded-full hover:bg-red-50 text-red-500 transition-colors hidden sm:block">
-                    <LogOut size={22} />
+                    <LogOut size={20} />
                   </button>
                 </div>
               ) : (
-                <Link to="/login" className="flex items-center gap-2 text-[#064e3b] font-black text-[10px] md:text-xs uppercase tracking-[0.3em] hover:text-[#c5a059] transition-colors">
-                  <User size={20} className="text-[#c5a059]" />
+                <Link to="/login" className="flex items-center gap-2 text-[#064e3b] font-black text-[9px] md:text-xs uppercase tracking-[0.2em] hover:text-[#c5a059] transition-colors">
+                  <User size={18} className="text-[#c5a059]" />
                   <span className="hidden md:inline">Login</span>
                 </Link>
               )}
@@ -120,7 +121,7 @@ const Navbar = () => {
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="md:hidden p-2 text-[#064e3b] hover:bg-black/5 rounded-full transition-colors"
               >
-                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
             </div>
           </div>
@@ -135,29 +136,29 @@ const Navbar = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setIsMenuOpen(false)}
-                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-100 md:hidden"
+                className="fixed inset-0 bg-black/40 backdrop-blur-md z-[110]"
               />
               <motion.div
                 initial={{ x: '100%' }}
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
-                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="fixed top-0 right-0 h-screen w-[80%] max-w-sm bg-white z-101 shadow-2xl p-8 flex flex-col md:hidden"
+                transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                className="fixed top-0 right-0 h-full w-[85%] max-w-xs bg-white z-[120] shadow-2xl p-6 flex flex-col"
               >
-                <div className="flex justify-between items-center mb-12">
-                  <span className="text-xl font-serif font-black text-[#064e3b]">Navigation</span>
+                <div className="flex justify-between items-center mb-10">
+                  <span className="text-lg font-serif font-black text-[#064e3b]">Navigation</span>
                   <button onClick={() => setIsMenuOpen(false)} className="p-2 bg-[#064e3b]/5 rounded-full">
-                    <X size={24} className="text-[#064e3b]" />
+                    <X size={20} className="text-[#064e3b]" />
                   </button>
                 </div>
 
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-4">
                   {navLinks.map((link) => (
                     <Link
                       key={link.name}
                       to={link.path}
                       onClick={() => setIsMenuOpen(false)}
-                      className="text-3xl font-black text-[#064e3b] hover:text-[#c5a059] transition-colors tracking-tighter"
+                      className="text-2xl font-bold text-[#064e3b] hover:text-[#c5a059] transition-colors"
                     >
                       {link.name}
                     </Link>

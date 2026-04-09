@@ -13,7 +13,7 @@ const Layout = () => {
   }, [pathname]);
 
   return (
-    <div className="flex flex-col  text-[#1a1a1a]">
+    <div className="flex flex-col min-h-screen text-[#1a1a1a] overflow-x-hidden">
       <Navbar />
       <main className="flex-grow">
         <Outlet />

@@ -153,20 +153,20 @@ const Hero = () => {
 
               {/* Title */}
               <motion.h1
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-black  text-[#064e3b] leading-tight mb-6 whitespace-pre-line"
+                className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-serif font-black text-[#064e3b] leading-[1.1] mb-4 whitespace-pre-line"
               >
                 {slides[current].title}
               </motion.h1>
 
               {/* Description */}
               <motion.p
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.8 }}
-                className=" text-[#064e3b]/80 text-lg md:text-xl max-w-xl mx-auto lg:mx-0 mb-8"
+                className="text-[#064e3b]/80 text-sm md:text-base lg:text-xl max-w-lg mx-auto lg:mx-0 mb-6"
               >
                 {slides[current].desc}
               </motion.p>
@@ -202,10 +202,10 @@ const Hero = () => {
                 className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start"
               >
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={scrollToProducts}
-                  className="px-10 py-5 rounded-full bg-[#ffff] text-[#064e3b] font-bold text-lg flex items-center justify-center gap-3 hover:bg-white transition-all  group"
+                  className="px-8 py-4 md:px-10 md:py-5 rounded-full bg-[#064e3b] text-white font-bold text-base md:text-lg flex items-center justify-center gap-3 hover:bg-[#064e3b]/90 transition-all group"
                 >
                   Shop Now
                   <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -213,9 +213,9 @@ const Hero = () => {
 
                 <Link to="/about">
                   <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="px-10 py-5 rounded-full border border-[#c5a059]/30 text-[#1a1a1a] font-bold text-lg hover:bg-[#c5a059] hover:text-[#064e3b] transition-all"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="px-8 py-4 md:px-10 md:py-5 rounded-full border border-[#c5a059]/30 text-[#1a1a1a] font-bold text-base md:text-lg hover:bg-[#c5a059]/10 transition-all"
                   >
                     Our Story
                   </motion.button>

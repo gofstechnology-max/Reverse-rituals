@@ -32,7 +32,9 @@ body {
   min-height: 100vh;
   background-color: var(--bg-main) !important;
   overflow-x: hidden;
+  position: relative;
   font-family: 'Outfit', sans-serif !important;
+  -webkit-overflow-scrolling: touch;
 }
 
 #root {
@@ -81,12 +83,12 @@ h1, h2, h3, h4, th, .font-serif {
 }
 
 .section-title {
-  @apply text-4xl sm:text-5xl md:text-7xl font-bold mb-6 md:mb-8 tracking-tight leading-[1.1];
+  @apply text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-4 md:mb-8 tracking-tight leading-[1.2];
   color: var(--primary);
 }
 
 .section-subtitle {
-  @apply text-[#d4af37] font-bold uppercase tracking-[0.3em] text-[8px] md:text-[10px] mb-4 md:mb-6 block;
+  @apply text-[#d4af37] font-bold uppercase tracking-[0.2em] text-[9px] md:text-[10px] mb-2 md:mb-6 block;
 }
 
 /* Floating Animation */

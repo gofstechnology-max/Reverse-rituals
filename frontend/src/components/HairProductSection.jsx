@@ -71,7 +71,7 @@ export default function Surya() {
                     THE TRANSFORMATION RITUAL
                 </p>
 
-                <h1 className="text-4xl md:text-5xl font-extrabold text-[#064e3b] leading-tight">
+                <h1 className="text-3xl md:text-5xl font-extrabold text-[#064e3b] leading-tight">
                     Rosemary <span className="text-[#c5a059]">Alchemy</span> Water
                 </h1>
 
@@ -124,22 +124,22 @@ export default function Surya() {
                     <h2 className="text-2xl sm:text-3xl font-bold text-[#064e3b]">
                         Powerful <span className="text-[#c5a059]">Ayurvedic</span> Ingredients
                     </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-8 mt-8 md:mt-12 text-left">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-8 mt-6 md:mt-12 text-left">
 
                         {ingredients.map((item, i) => (
                             <div
                                 key={i}
-                                className="flex flex-col  bg-[#f9f7f2] rounded-3xl p-5 items-start gap-3 hover:shadow-md hover:bg-white hover:border-[#c5a059] hover:border-2 transition"
+                                className="flex flex-col bg-white/50 backdrop-blur-sm rounded-2xl p-4 md:p-6 items-start gap-2 md:gap-3 hover:shadow-md hover:bg-white border border-transparent hover:border-[#c5a059]/30 transition-all duration-300"
                             >
-                                <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-xl ${bgColors[i]}`}>
+                                <div className={`w-10 h-10 md:w-14 md:h-14 rounded-xl flex items-center justify-center text-lg md:text-xl ${bgColors[i]}`}>
                                     {icons[i]}
                                 </div>
 
-                                <h3 className="font-bold text-[#064e3b] text-sm">
+                                <h3 className="font-bold text-[#064e3b] text-xs md:text-sm">
                                     {item.title}
                                 </h3>
 
-                                <p className="text-xs font-medium text-gray-400">
+                                <p className="text-[10px] md:text-xs font-medium text-gray-500 leading-relaxed">
                                     {item.desc}
                                 </p>
                             </div>
@@ -217,7 +217,7 @@ export default function Surya() {
 
                     {/* CTA */}
                     <div className="flex justify-center mt-6">
-                        <button className="mt-12 bg-[#064e3b] text-white text-sm font-bold px-6 py-4 rounded-full shadow-[0_8px_20px_rgba(6,78,59,0.4)] hover:shadow-[0_10px_25px_rgba(6,78,59,0.6)]  flex items-center gap-2">
+                        <button className="mt-8 md:mt-12 bg-[#064e3b] text-white text-xs md:text-sm font-bold px-8 py-4 rounded-full shadow-lg hover:shadow-xl hover:bg-[#064e3b]/90 flex items-center gap-2 transition-all">
                             Start Your Ritual
                             <FiArrowRight className="text-base" />
                         </button>
