@@ -98,23 +98,29 @@ const Hero = () => {
         
         {/* Right/Top - Product Image */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="relative flex justify-center lg:order-2 order-1 w-full"
+           initial={{ opacity: 0, scale: 0.9, y: 30 }}
+           animate={{ opacity: 1, scale: 1, y: 0 }}
+           transition={{ 
+             type: "spring",
+             stiffness: 100,
+             damping: 20,
+             delay: 0.2 
+           }}
+           className="relative flex justify-center lg:order-2 order-1 w-full translate-z-0"
         >
           <div className="relative w-[280px] sm:w-[420px] md:w-[520px] lg:w-[600px] aspect-square flex items-center justify-center">
 
             <motion.div
               className="absolute inset-0 bg-[#c5a059]/10 blur-[80px] rounded-full hidden md:block"
               animate={{
-                boxShadow: [
-                  "0 0 60px rgba(197,160,89,0.3)",
-                  "0 0 100px rgba(197,160,89,0.5)",
-                  "0 0 60px rgba(197,160,89,0.3)",
-                ],
+                scale: [1, 1.1, 1],
+                opacity: [0.3, 0.6, 0.3],
               }}
-              transition={{ duration: 3, repeat: Infinity }}
+              transition={{ 
+                duration: 5, 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
             />
             {/* Simple glow for mobile */}
             <div className="absolute inset-0 bg-[#c5a059]/5 blur-[60px] rounded-full md:hidden" />
@@ -122,9 +128,13 @@ const Hero = () => {
             <motion.img
               src="/Hero.png"
               alt="Hair Oil"
-              className="relative z-20 w-full object-contain drop-shadow-2xl"
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="relative z-20 w-full object-contain drop-shadow-2xl will-change-transform"
+              animate={{ y: [0, -15, 0] }}
+              transition={{ 
+                duration: 6, 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
               fetchpriority="high"
             />
 
@@ -136,16 +146,22 @@ const Hero = () => {
           <AnimatePresence mode="wait">
             <motion.div
               key={current}
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 50 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              initial={{ opacity: 0, x: -30, filter: "blur(10px)" }}
+              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, x: 30, filter: "blur(10px)" }}
+              transition={{ 
+                type: "spring",
+                stiffness: 100,
+                damping: 25,
+                mass: 1
+              }}
+              className="translate-z-0"
             >
               {/* Badge */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
+                transition={{ delay: 0.2, type: "spring" }}
                 className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-[#c5a059]/10 backdrop-blur-sm text-[#c5a059] border border-[#c5a059]/20 mb-6"
               >
                 <Sparkles size={14} className="animate-pulse" />
@@ -158,8 +174,8 @@ const Hero = () => {
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.8 }}
-                className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-serif font-black text-[#064e3b] leading-[1.2] mb-4 whitespace-pre-line"
+                transition={{ delay: 0.3, type: "spring", stiffness: 100 }}
+                className="text-3xl sm:text-5xl md:text-6xl lg:text-8xl font-serif font-black text-[#064e3b] leading-[1.1] mb-6 whitespace-pre-line tracking-tight"
               >
                 {slides[current].title}
               </motion.h1>
@@ -168,11 +184,12 @@ const Hero = () => {
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.8 }}
-                className="text-[#064e3b]/80 text-xs md:text-base lg:text-xl max-w-lg mx-auto lg:mx-0 mb-6"
+                transition={{ delay: 0.4, type: "spring" }}
+                className="text-[#064e3b]/80 text-sm md:text-base lg:text-xl max-w-lg mx-auto lg:mx-0 mb-8 font-medium leading-relaxed"
               >
                 {slides[current].desc}
               </motion.p>
+
 
               {/* Trust Icons */}
               <motion.div

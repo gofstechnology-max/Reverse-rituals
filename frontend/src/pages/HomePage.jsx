@@ -22,7 +22,6 @@ const HomePage = () => {
    const sliderRef = useRef(null);
    const sliderLineRef = useRef(null);
    const beforeImageRef = useRef(null);
-   const [selectedWeek, setSelectedWeek] = useState("Week 1");
 
    const updateSliderPosition = (pos) => {
       sliderPosRef.current = pos;
@@ -145,293 +144,228 @@ const HomePage = () => {
          <Hero />
 
          {/* Trust Badges Section */}
-         <section className="py-12 md:py-20 px-4 md:px-6 bg-white">
+         <section className="py-12 md:py-24 px-4 md:px-6 bg-white overflow-hidden">
             <div className="max-w-6xl mx-auto">
-               {/* Horizontal scroll on mobile, grid on desktop */}
-               <div className="flex md:grid md:grid-cols-3 gap-4 md:gap-8 overflow-x-auto md:overflow-visible pb-4 md:pb-0 scrollbar-hide">
-                  {[
-                     { icon: <Star className="fill-current" size={24} />, value: "4.9/5", label: "Rating", color: "#c5a059" },
-                     { icon: <Heart className="fill-current" size={24} />, value: "50K+", label: "Happy Customers", color: "#064e3b" },
-                     { icon: <Leaf className="fill-current" size={24} />, value: "100%", label: "Natural Ingredients", color: "#22c55e" },
-                  ].map((item, i) => (
-                     <motion.div
-                        key={i}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, amount: 0.1 }}
-                        transition={{ delay: i * 0.05, duration: 0.4 }}
-                        className="flex-shrink-0 w-40 md:w-auto flex flex-col items-center text-center p-4 md:p-8 rounded-2xl md:rounded-3xl bg-[#fdfbf7] border border-[#064e3b]/5 hover:shadow-xl hover:border-[#064e3b]/10 transition-all duration-300 group"
-                     >
-                        <div
-                           className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-4 shadow-lg"
-                           style={{ backgroundColor: `${item.color}15`, color: item.color }}
-                        >
-                           {item.icon}
-                        </div>
-                        <span className="text-xl md:text-3xl font-serif font-black text-[#1a1a1a] mb-1">{item.value}</span>
-                        <span className="text-xs font-medium text-[#1a1a1a]/50 uppercase tracking-wider">{item.label}</span>
-                     </motion.div>
-                  ))}
-               </div>
+                {/* Trust Badges - Mobile Optimized Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-8">
+                   {[
+                      { icon: <Star className="fill-current" size={20} />, value: "4.9/5", label: "Rating", color: "#c5a059" },
+                      { icon: <Heart className="fill-current" size={20} />, value: "50K+", label: "Happy Customers", color: "#064e3b" },
+                      { icon: <Leaf className="fill-current" size={20} />, value: "100%", label: "Natural Ingredients", color: "#22c55e" },
+                   ].map((item, i) => (
+                      <motion.div
+                         key={i}
+                         initial={{ opacity: 0, y: 20 }}
+                         whileInView={{ opacity: 1, y: 0 }}
+                         viewport={{ once: true }}
+                         transition={{ delay: i * 0.1 }}
+                         className="flex items-center sm:flex-col gap-4 sm:gap-4 p-5 md:p-10 rounded-2xl md:rounded-3xl bg-[#fdfbf7] border border-[#064e3b]/5 transition-all duration-500 translate-z-0"
+                      >
+                         <div
+                            className="w-12 h-12 md:w-20 md:h-20 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0"
+                            style={{ backgroundColor: `${item.color}15`, color: item.color }}
+                         >
+                            {item.icon}
+                         </div>
+                         <div className="text-left sm:text-center">
+                            <p className="text-xl md:text-4xl font-serif font-bold text-[#1a1a1a] leading-tight">{item.value}</p>
+                            <p className="text-[10px] md:text-sm font-bold text-[#1a1a1a]/40 uppercase tracking-widest">{item.label}</p>
+                         </div>
+                      </motion.div>
+                   ))}
+                </div>
             </div>
          </section>
-         <section id="products" className="py-10 px-6">
+
+         <section id="products" className="py-20 md:py-32 px-6 overflow-hidden">
             <motion.div
                initial={{ opacity: 0, y: 40 }}
                whileInView={{ opacity: 1, y: 0 }}
-               viewport={{ once: true, margin: "-20px" }}
-               transition={{ duration: 0.8, ease: "easeOut" }}
+               viewport={{ once: true, margin: "-100px" }}
+               transition={{ type: "spring", stiffness: 50, damping: 20 }}
                className="max-w-7xl mx-auto"
             >
-               <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-16 md:mb-32 gap-8 md:gap-12">
-                  <div className="max-w-3xl">
+               <div className="flex flex-col md:flex-row items-baseline justify-between mb-16 md:mb-24 gap-8 md:gap-12">
+                  <div className="max-w-2xl">
                      <motion.span
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.1 }}
+                        transition={{ delay: 0.2 }}
                         className="section-subtitle"
                      >Our Iconic Concentrates</motion.span>
-                     <h2 className="section-title">The <span className="italic font-medium">Reverse</span> Collection</h2>
-                     <p className="text-[#064e3b]/50 text-xl md:text-2xl font-medium leading-relaxed">Each formulation is a precisely engineered ritual, designed to reverse damage and restore biological vitality.</p>
+                     <h2 className="section-title">The <span className="italic font-medium text-[#c5a059]">Reverse</span> Collection</h2>
+                     <p className="text-[#064e3b]/60 text-lg md:text-2xl font-medium leading-relaxed max-w-xl">Each formulation is a precisely engineered ritual, designed to reverse damage and restore biological vitality.</p>
                   </div>
-                  <Link to="/shop" className="flex items-center gap-4 md:gap-6 bg-white px-6 md:px-8 py-3 md:py-4 rounded-full border border-black/5 shadow-2xl hover:scale-105 transition-transform group text-[#064e3b]">
-                     <ShoppingBag size={20} md:size={24} className="text-[#c5a059]" />
-                     <span className="font-black text-[10px] md:text-xs uppercase tracking-[0.3em]">{products.length} Masterpieces</span>
-                  </Link>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                     <Link to="/shop" className="flex items-center gap-4 bg-white px-8 py-4 rounded-full border border-black/5 shadow-xl hover:shadow-2xl transition-all group text-[#064e3b]">
+                        <ShoppingBag size={20} className="text-[#c5a059]" />
+                        <span className="font-black text-[10px] md:text-xs uppercase tracking-[0.3em]">{products.length} Masterpieces</span>
+                     </Link>
+                  </motion.div>
                </div>
             </motion.div>
 
             {loading ? (
-               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 overflow-hidden">
+               <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
                   {[1, 2, 3, 4].map(n => (
-                     <div key={n} className="bg-white rounded-2xl md:rounded-3xl overflow-hidden border border-gray-100 shadow-sm">
-                        <div className="aspect-[4/5] bg-linear-to-br from-gray-100 to-gray-200 animate-pulse relative overflow-hidden">
-                           <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] animate-[shimmer_2s_infinite]"></div>
+                     <div key={n} className="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm animate-pulse">
+                        <div className="aspect-[4/5] bg-gray-100 relative">
+                           <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
                         </div>
-                        <div className="p-4 space-y-3">
-                           <div className="h-4 bg-gray-200 rounded-full animate-pulse w-3/4"></div>
-                           <div className="h-3 bg-gray-100 rounded-full animate-pulse w-1/2"></div>
-                           <div className="flex justify-between items-center mt-4">
-                              <div className="h-6 bg-gray-200 rounded-lg animate-pulse w-1/3"></div>
-                              <div className="h-8 w-16 bg-green-50 rounded-full animate-pulse"></div>
-                           </div>
+                        <div className="p-6 space-y-4">
+                           <div className="h-4 bg-gray-200 rounded-full w-3/4"></div>
+                           <div className="h-3 bg-gray-100 rounded-full w-1/2"></div>
+                           <div className="h-10 bg-gray-200 rounded-xl w-full"></div>
                         </div>
                      </div>
                   ))}
                </div>
             ) : (
-               <motion.div
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12"
-               >
+               <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
                   {products.map((product, idx) => (
                      <motion.div
                         key={product._id}
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, amount: 0.1 }}
-                        transition={{ delay: idx * 0.05, duration: 0.4, ease: "easeOut" }}
+                        transition={{ 
+                           type: "spring",
+                           stiffness: 100,
+                           damping: 20,
+                           delay: idx * 0.05 
+                        }}
+                        className="translate-z-0"
                      >
                         <ProductCard product={product} />
                      </motion.div>
                   ))}
-               </motion.div>
+               </div>
             )}
          </section>
-         <section className="py-12 md:py-20 bg-gradient-to-b from-[#fafafa] to-white">
+
+         <section className="py-20 md:py-32 bg-gradient-to-b from-[#fafafa] to-white overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 md:px-6">
 
                {/* Header */}
                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                  className="text-center mb-8 md:mb-12"
+                  transition={{ type: "spring", stiffness: 50, damping: 20 }}
+                  className="text-center mb-16 md:mb-24"
                >
-                  <span className="text-[#c5a059] text-xs md:text-sm font-semibold uppercase tracking-widest">
-                     Real Customer Results
+                  <span className="text-[#c5a059] text-xs md:text-sm font-black uppercase tracking-[0.4em] mb-4 block">
+                     Clinical Transformation
                   </span>
 
-                  <h2 className="text-2xl md:text-4xl lg:text-5xl font-semibold text-[#064e3b] mt-3 md:mt-4 leading-tight">
-                     Hair Transformation
-                     <span className="block font-serif italic text-[#c5a059] mt-1 md:mt-2">
-                        Week 1 to Week 14
+                  <h2 className="text-3xl md:text-5xl lg:text-7xl font-black text-[#064e3b] mt-4 leading-[1.1] tracking-tight">
+                     Biological <span className="font-serif italic text-[#c5a059]">Architecture</span>
+                     <span className="block text-xl md:text-2xl font-medium text-[#064e3b]/40 mt-6 tracking-normal">
+                        Documented Progress: Week 1 — Week 14
                      </span>
                   </h2>
-
-                  <p className="text-gray-500 mt-3 md:mt-4 text-sm md:text-base max-w-2xl mx-auto">
-                     See real progress of customers using Reverse Rituals products.
-                     Visible hair growth, reduced hair fall, and stronger roots in just 8 weeks.
-                  </p>
                </motion.div>
 
-               {/* Before After Slider */}
+               {/* Before After Slider - Mobile Optimized */}
                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.8 }}
-                  className="mb-12 md:mb-20 max-w-4xl mx-auto"
+                  className="mb-10 md:mb-32 max-w-5xl mx-auto"
                >
                   <div
                      ref={sliderRef}
                      onMouseDown={handleMouseDown}
                      onTouchStart={handleMouseDown}
-                     className="relative cursor-ew-resize select-none overflow-hidden rounded-3xl md:rounded-[40px] aspect-[4/5] md:aspect-video shadow-2xl border-4 border-white group"
+                     className="relative cursor-ew-resize select-none overflow-hidden rounded-3xl md:rounded-[60px] aspect-square md:aspect-video shadow-xl md:shadow-2xl border-2 md:border-8 border-white translate-z-0"
                   >
-
-                     {/* After Image (Base) */}
+ 
+                     {/* After Image */}
                      <img
                         src="/WEEK14.JPG"
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-                        alt="After 14 weeks"
+                        className="absolute inset-0 w-full h-full object-cover"
+                        alt="After"
                         loading="lazy"
                      />
-
-                     {/* Before Image (Overlay) */}
+ 
+                     {/* Before Image - Fixed to Week 1 */}
                      <div
                         ref={beforeImageRef}
                         className="absolute inset-0 overflow-hidden"
-                        style={{
-                           clipPath: `inset(0 ${100 - sliderPos}% 0 0)`
-                        }}
+                        style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
                      >
                         <img
                            src="/WEEK1.PNG"
-                           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                           className="absolute inset-0 w-full h-full object-cover"
                            alt="Before"
                            loading="lazy"
                         />
                      </div>
-
-                     {/* Comparison Line & Handle */}
+ 
+                     {/* Comparison Handle */}
                      <div
                         ref={sliderLineRef}
-                        className="absolute top-0 bottom-0 w-1 bg-white/80 backdrop-blur-sm z-10 pointer-events-none"
+                        className="absolute top-0 bottom-0 w-0.5 md:w-1 bg-white z-10 pointer-events-none"
                         style={{ transform: 'translateX(-50%)', left: '50%' }}
                      >
-                        {/* Glowing Handle */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.5)] border border-white/40 active:scale-95 transition-transform">
-                           <div className="flex items-center gap-1">
-                              <div className="w-1 h-4 md:h-6 bg-white rounded-full opacity-60"></div>
-                              <div className="w-1 h-6 md:h-8 bg-white rounded-full"></div>
-                              <div className="w-1 h-4 md:h-6 bg-white rounded-full opacity-60"></div>
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 md:w-20 md:h-20 bg-white rounded-full flex items-center justify-center shadow-xl border-2 border-[#064e3b]/10">
+                           <div className="flex items-center gap-0.5 md:gap-1">
+                              <div className="w-0.5 md:w-1 h-2 md:h-8 bg-[#064e3b]/20 rounded-full"></div>
+                              <div className="w-0.5 md:w-1.5 h-4 md:h-12 bg-[#c5a059] rounded-full"></div>
+                              <div className="w-0.5 md:w-1 h-2 md:h-8 bg-[#064e3b]/20 rounded-full"></div>
                            </div>
                         </div>
                      </div>
-
-                     {/* Floating Badges */}
-                     <div className="absolute inset-x-3 md:inset-x-6 top-3 md:top-6 flex justify-between gap-2 pointer-events-none">
-                        <div className="px-3 md:px-5 py-1.5 md:py-2.5 rounded-full bg-black/40 backdrop-blur-md text-white text-[10px] md:text-xs font-black border border-white/20 tracking-tighter md:tracking-widest uppercase shadow-lg">
-                           {selectedWeek}
+ 
+                     {/* Labels */}
+                     <div className="absolute inset-x-3 md:inset-x-6 top-3 md:top-6 flex justify-between gap-2 md:gap-4 pointer-events-none">
+                        <div className="px-3 md:px-6 py-1.5 md:py-3 rounded-full bg-black/20 md:bg-white/10 backdrop-blur-xl text-white text-[8px] md:text-xs font-black border border-white/20 tracking-widest uppercase">
+                           Week 1
                         </div>
-                        <div className="px-3 md:px-5 py-1.5 md:py-2.5 rounded-full bg-[#c5a059]/90 backdrop-blur-md text-white text-[10px] md:text-xs font-black border border-white/20 tracking-tighter md:tracking-widest uppercase shadow-lg">
-                           Goal: Week 14
+                        <div className="px-3 md:px-6 py-1.5 md:py-3 rounded-full bg-[#c5a059]/90 backdrop-blur-xl text-white text-[8px] md:text-xs font-black border border-white/20 tracking-widest uppercase">
+                           Week 14
                         </div>
                      </div>
-
-                     {/* Label Overlays */}
-                     <div className="absolute bottom-4 md:bottom-8 left-4 md:left-8 pointer-events-none">
-                        <p className="text-white text-xl md:text-5xl font-serif font-black opacity-10 md:opacity-20 select-none tracking-tighter">BEFORE</p>
-                     </div>
-                     <div className="absolute bottom-4 md:bottom-8 right-4 md:right-8 pointer-events-none text-right">
-                        <p className="text-white text-xl md:text-5xl font-serif font-black opacity-10 md:opacity-20 select-none tracking-tighter">AFTER</p>
-                     </div>
-                  </div>
-
-                  <div className="mt-8 flex items-center justify-center gap-4 text-[#064e3b]/40">
-                     <div className="h-px w-12 bg-current"></div>
-                     <p className="text-sm font-black uppercase tracking-[0.3em] font-serif italic text-[#c5a059]">Slide the Ritual Transformation</p>
-                     <div className="h-px w-12 bg-current"></div>
                   </div>
                </motion.div>
-
-               {/* Weekly Progress */}
-               <div className="mt-6 md:mt-8 overflow-hidden max-w-4xl mx-auto">
-
-                  <h3 className="text-center text-lg md:text-xl font-semibold text-[#064e3b] mb-4 md:mb-6">
-                     Weekly Progress
-                  </h3>
-
-                  {/* Scroll Container - Horizontal on mobile */}
-                  <div className="overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
-                     <div className="flex gap-3 md:gap-6" style={{ width: 'max-content' }}>
-
-                        {[
-                           { week: '01', title: 'Week 1', img: '/WEEK1.PNG' },
-                           { week: '02', title: 'Week 2', img: '/WEEK2.PNG' },
-                           { week: '04', title: 'Week 4', img: '/WEEK4.PNG' },
-                           { week: '08', title: 'Week 8', img: '/WEEK8.PNG' },
-                           { week: '14', title: 'Week 14', img: '/WEEK14.JPG' },
-                        ].map((step, i) => (
-
-                           <motion.div
-                              key={i}
-                              initial={{ opacity: 0, y: 30 }}
-                              whileInView={{ opacity: 1, y: 0 }}
-                              viewport={{ once: true }}
-                              transition={{ delay: i * 0.1 }}
-                              className="w-40 md:w-64 group cursor-pointer flex-shrink-0"
-                              onClick={() => {
-                                 if (beforeImageRef.current) {
-                                    beforeImageRef.current.querySelector("img").src = step.img;
-                                    setSelectedWeek(step.title);
-                                    updateSliderPosition(50);
-                                 }
-                              }}
-                           >
-
-                              {/* Card */}
-                              <div className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
-
-                                 <img
-                                    src={step.img}
-                                    alt={step.title}
-                                    className="w-full h-32 md:h-48 object-cover group-hover:scale-110 transition duration-500"
-                                    loading="lazy"
-                                 />
-
-                                 {/* Overlay */}
-                                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-
-                                 {/* Week Badge */}
-                                 <div className="absolute top-2 left-2 md:top-3 md:left-3 bg-[#c5a059] text-white px-2 py-1 rounded-full text-xs font-semibold shadow-lg">
-                                    Week {step.week}
-                                 </div>
-
-                                 {/* Title */}
-                                 <div className="absolute bottom-2 left-2 md:bottom-3 md:left-3 text-white">
-                                    <p className="text-xs md:text-sm font-semibold">{step.title}</p>
-                                 </div>
-
+ 
+               {/* Weekly Evolution Gallery - Static */}
+               <div className="max-w-5xl mx-auto px-2">
+                  <div className="flex overflow-x-auto gap-4 pb-8 scrollbar-hide justify-start sm:justify-center">
+                     {[
+                        { week: '01', title: 'Phase 01', img: '/WEEK1.PNG' },
+                        { week: '02', title: 'Phase 02', img: '/WEEK2.PNG' },
+                        { week: '04', title: 'Phase 03', img: '/WEEK4.PNG' },
+                        { week: '08', title: 'Phase 04', img: '/WEEK8.PNG' },
+                        { week: '14', title: 'Result', img: '/WEEK14.JPG' },
+                     ].map((step, i) => (
+                        <div
+                           key={i}
+                           className="relative min-w-[130px] md:min-w-[180px] group translate-z-0"
+                        >
+                           <div className="relative rounded-2xl md:rounded-[32px] overflow-hidden shadow-lg border border-[#c5a059]/10 bg-white">
+                              <img src={step.img} className="w-full h-28 md:h-40 object-cover" alt="" />
+                              <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
+                              <div className="absolute top-3 left-3 bg-[#c5a059] text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-tight shadow-md">
+                                 Week {step.week}
                               </div>
-
-                           </motion.div>
-
-                        ))}
-
-                     </div>
+                              <div className="absolute bottom-3 left-3 text-white">
+                                 <p className="text-[10px] md:text-sm font-black uppercase tracking-tighter opacity-80">{step.title}</p>
+                              </div>
+                           </div>
+                        </div>
+                     ))}
                   </div>
-
-
                </div>
 
             </div>
          </section>
+
          <IngredientsSection />
-
-         {/* <AboutSection /> */}
          <ReviewSection />
+         {/* <HairProductSection /> */}
 
-
-
-
-         <HairProductSection />
 
 
 
