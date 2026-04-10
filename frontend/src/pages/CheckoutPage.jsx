@@ -462,12 +462,16 @@ const CheckoutPage = () => {
                   </div>
                   <div className="flex justify-between text-[#064e3b]/60">
                     <span className="flex items-center gap-2"><Truck size={14} /> Shipping</span>
-                    <span className={'text-green-500 font-bold'}>
-                      <><span className="line-through text-red-400 text-sm">₹99</span> FREE</>
+                    <span className="text-green-600 font-black">
+                      FREE
                     </span>
                   </div>
 
-                  <p className="text-xs text-[#c5a059]">Add ₹{99 - cartTotal} more for FREE shipping!</p>
+                  {cartTotal < 99 && (
+                    <p className="text-[10px] text-[#c5a059] font-black uppercase tracking-widest">
+                      Add ₹{99 - cartTotal} more for FREE shipping
+                    </p>
+                  )}
 
                   <div className="flex justify-between pt-3 border-t border-[#064e3b]/10">
                     <span className="font-bold text-[#064e3b]">Total</span>

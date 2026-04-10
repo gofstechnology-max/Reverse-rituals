@@ -15,7 +15,7 @@ const Layout = () => {
   return (
     <div className="flex flex-col min-h-screen text-[#1a1a1a] overflow-x-hidden">
       <Navbar />
-      <main className="flex-grow">
+      <main className="grow mt-10">
         <Outlet />
       </main>
       <Footer />

@@ -1,5 +1,7 @@
 import React from 'react';
 import { Leaf, FlaskConical, Globe, Award, Target, Heart, Check, Droplets, Sparkles, Users } from 'lucide-react';
+import ReviewSection from '../components/ReviewSection';
+import AboutSection from '../components/AboutSection';
 
 const AboutPage = () => {
   return (
@@ -28,10 +30,7 @@ const AboutPage = () => {
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="absolute -bottom-6 -right-6 bg-[#064e3b] text-white px-6 py-4 rounded-xl shadow-lg">
-              <p className="text-2xl font-serif font-bold">5+</p>
-              <p className="text-xs opacity-70">Years Experience</p>
-            </div>
+
           </div>
 
           <div>
@@ -39,30 +38,27 @@ const AboutPage = () => {
             <h2 className="text-3xl md:text-4xl font-serif text-[#064e3b] mb-6">
               R. Sadiq Basha
             </h2>
-            <p className="text-[#064e3b]/70 leading-relaxed mb-4">
-              Reverse Rituals was born from a personal journey into the world of botanical hair care. After years of researching traditional Ayurvedic remedies and witnessing their remarkable effects on hair health, I set out to create products that bridge ancient wisdom with modern expectations.
-            </p>
-            <p className="text-[#064e3b]/70 leading-relaxed mb-6">
-              Our formulations combine time-tested ingredients like Rosemary, Bhringraj, Fenugreek, and Black Seeds—each selected for their proven benefits in promoting hair growth, reducing hair fall, and maintaining scalp health.
-            </p>
-            <p className="text-[#064e3b]/70 leading-relaxed mb-8">
-              Every product we create undergoes careful testing to ensure it delivers real results without harsh chemicals or synthetic additives. We believe in transparency, quality, and the power of nature to transform hair from the root.
-            </p>
+            <div className="space-y-6 text-[#064e3b]/80 leading-relaxed font-medium">
+              <p className="text-xl md:text-2xl font-serif text-[#064e3b] leading-tight italic">
+                Our brand was born from personal experience and a deep belief in the power of natural hair care.
+              </p>
 
-            <div className="flex flex-wrap gap-6">
-              <div className="flex items-center gap-3">
-                <Award size={24} className="text-[#c5a059]" />
-                <span className="text-[#064e3b] font-medium">Certified Formulator</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Users size={24} className="text-[#c5a059]" />
-                <span className="text-[#064e3b] font-medium">5000+ Happy Customers</span>
-              </div>
+              <p>
+                Our journey began with a simple goal — to solve common hair concerns like hair fall, dandruff, etc. After struggling with these common concerns, we began experimenting with traditional herbal remedies.
+              </p>
+
+              <p>
+                With consistent use, we experienced a visible transformation — stronger roots, reduced hair fall, and healthier growth. Every product is now thoughtfully crafted, tested, and used personally to ensure it delivers visible and consistent results.
+              </p>
+
+              <p>
+                We believe in combining the power of nature with the right formulations to promote healthy, strong, and beautiful hair. At our core, we stand for honesty, transparency, quality, and results you can truly see and feel.
+              </p>
             </div>
           </div>
         </div>
       </section>
-
+      <AboutSection />
       {/* Why Choose Us */}
       <section className="bg-white py-20 mb-24">
         <div className="max-w-6xl mx-auto px-6">
@@ -105,7 +101,7 @@ const AboutPage = () => {
               </div>
               <h3 className="text-lg font-medium text-[#064e3b] mb-2">Visible Results</h3>
               <p className="text-[#064e3b]/50 text-sm">
-                Most customers see improvements within 3-4 weeks of use.
+                Most customers see improvements within 2-3 weeks of use.
               </p>
             </div>
           </div>
@@ -173,60 +169,7 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="max-w-6xl mx-auto px-6 mb-24">
-        <div className="text-center mb-12">
-          <p className="text-[#c5a059] font-medium uppercase tracking-widest text-sm mb-4">What We Stand For</p>
-          <h2 className="text-3xl font-serif text-[#064e3b]">Our Values</h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-8 border border-[#064e3b]/10 rounded-xl">
-            <Leaf size={32} className="text-[#c5a059] mb-4" />
-            <h3 className="text-lg font-medium text-[#064e3b] mb-3">100% Natural</h3>
-            <p className="text-[#064e3b]/50 text-sm">
-              No harsh chemicals, no sulfates, no parabens. Just pure botanical power for your hair.
-            </p>
-          </div>
-          <div className="p-8 border border-[#064e3b]/10 rounded-xl">
-            <FlaskConical size={32} className="text-[#c5a059] mb-4" />
-            <h3 className="text-lg font-medium text-[#064e3b] mb-3">Science-Backed</h3>
-            <p className="text-[#064e3b]/50 text-sm">
-              Each ingredient is selected based on traditional use and modern research for proven results.
-            </p>
-          </div>
-          <div className="p-8 border border-[#064e3b]/10 rounded-xl">
-            <Globe size={32} className="text-[#c5a059] mb-4" />
-            <h3 className="text-lg font-medium text-[#064e3b] mb-3">Ethically Sourced</h3>
-            <p className="text-[#064e3b]/50 text-sm">
-              We partner with sustainable farms that practice responsible harvesting and fair trade.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Stats */}
-      <section className="max-w-4xl mx-auto px-6 mb-24">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          <div>
-            <p className="text-4xl font-serif text-[#c5a059] font-bold">5000+</p>
-            <p className="text-[#064e3b]/50 text-sm">Happy Customers</p>
-          </div>
-          <div>
-            <p className="text-4xl font-serif text-[#c5a059] font-bold">4.8</p>
-            <p className="text-[#064e3b]/50 text-sm">Average Rating</p>
-          </div>
-          <div>
-            <p className="text-4xl font-serif text-[#c5a059] font-bold">50+</p>
-            <p className="text-[#064e3b]/50 text-sm">Products Sold</p>
-          </div>
-          <div>
-            <p className="text-4xl font-serif text-[#c5a059] font-bold">98%</p>
-            <p className="text-[#064e3b]/50 text-sm">Satisfaction Rate</p>
-          </div>
-        </div>
-      </section>
-
+      <ReviewSection />
       {/* CTA */}
       <section className="max-w-4xl mx-auto px-6">
         <div className="p-12 bg-[#064e3b] rounded-3xl text-center">

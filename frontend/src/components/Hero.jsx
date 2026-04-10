@@ -16,11 +16,13 @@ const Hero = () => {
       subtitle: "Natural Hair Recovery System",
       title: "Stop Hair Fall.\nRegrow .",
       desc: "Scientifically blended Ayurvedic ingredients designed to reduce hair fall, activate dormant follicles, and restore scalp health.",
+      image: "/Hero.png"
     },
     {
       subtitle: "Chemical-Free Hair Care",
       title: "Stronger Roots.\nHealthier Hair.",
       desc: "A complete ritual that detoxifies scalp, improves blood circulation, and promotes thicker and healthier hair growth.",
+      image: "/ingredient.png"
     },
   ];
 
@@ -56,7 +58,7 @@ const Hero = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative flex items-center overflow-hidden min-h-[90vh] md:min-h-screen bg-white"
+      className="relative flex items-center  md:pt-2 pb-12 overflow-hidden bg-[#fdfbf7]"
       style={{
         backgroundImage: "url('/leaves-bg.png')",
         backgroundSize: "cover",
@@ -91,71 +93,67 @@ const Hero = () => {
       </div>
 
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10 w-full px-6 md:px-16 py-20">
-        
+
         {/* Mobile: Image First - Desktop: Content First */}
         {/* Mobile Order: Image (1) -> Content (2) */}
         {/* Desktop Order: Content (1) -> Image (2) */}
-        
+
         {/* Right/Top - Product Image */}
-        <motion.div
-           initial={{ opacity: 0, scale: 0.9, y: 30 }}
-           animate={{ opacity: 1, scale: 1, y: 0 }}
-           transition={{ 
-             type: "spring",
-             stiffness: 100,
-             damping: 20,
-             delay: 0.2 
-           }}
-           className="relative flex justify-center lg:order-2 order-1 w-full translate-z-0"
-        >
+        <div className="relative flex justify-center lg:order-2 order-1 w-full transform-gpu">
           <div className="relative w-[280px] sm:w-[420px] md:w-[520px] lg:w-[600px] aspect-square flex items-center justify-center">
+
+            <AnimatePresence mode="popLayout">
+              <motion.div
+                key={current}
+                initial={{ opacity: 0, x: 20, scale: 0.95 }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                  scale: 1,
+                }}
+                exit={{ opacity: 0, x: -20, scale: 1.05 }}
+                transition={{
+                  duration: 0.8,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="absolute inset-0 flex items-center justify-center p-4 will-change-[transform,opacity]"
+              >
+                <img
+                  src={slides[current].image}
+                  alt={slides[current].title}
+                  className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(6,78,59,0.25)]"
+                />
+              </motion.div>
+            </AnimatePresence>
 
             <motion.div
               className="absolute inset-0 bg-[#c5a059]/10 blur-[80px] rounded-full hidden md:block"
               animate={{
-                scale: [1, 1.1, 1],
-                opacity: [0.3, 0.6, 0.3],
+                scale: [1, 1.05, 1],
+                opacity: [0.3, 0.5, 0.3],
               }}
-              transition={{ 
-                duration: 5, 
-                repeat: Infinity, 
-                ease: "easeInOut" 
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut"
               }}
             />
-            {/* Simple glow for mobile */}
-            <div className="absolute inset-0 bg-[#c5a059]/5 blur-[60px] rounded-full md:hidden" />
-
-            <motion.img
-              src="/Hero.png"
-              alt="Hair Oil"
-              className="relative z-20 w-full object-contain drop-shadow-2xl will-change-transform"
-              animate={{ y: [0, -15, 0] }}
-              transition={{ 
-                duration: 6, 
-                repeat: Infinity, 
-                ease: "easeInOut" 
-              }}
-              fetchpriority="high"
-            />
-
           </div>
-        </motion.div>
+        </div>
 
         {/* Left/Bottom - Text Content */}
-        <div className="text-center lg:text-left lg:order-1 order-2">
-          <AnimatePresence mode="wait">
+        <div className="text-center lg:text-left lg:order-1 order-2 transform-gpu">
+          <AnimatePresence mode="popLayout">
             <motion.div
               key={current}
-              initial={{ opacity: 0, x: -30, filter: "blur(10px)" }}
-              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, x: 30, filter: "blur(10px)" }}
-              transition={{ 
-                type: "spring",
-                stiffness: 100,
-                damping: 25,
-                mass: 1
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 30 }}
+              transition={{
+                duration: 0.8,
+                ease: [0.16, 1, 0.3, 1],
               }}
-              className="translate-z-0"
+              className="will-change-[transform,opacity]"
             >
               {/* Badge */}
               <motion.div
@@ -175,7 +173,7 @@ const Hero = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, type: "spring", stiffness: 100 }}
-                className="text-3xl sm:text-5xl md:text-6xl lg:text-8xl font-serif font-black text-[#064e3b] leading-[1.1] mb-6 whitespace-pre-line tracking-tight"
+                className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-black text-[#064e3b] leading-[1.1] mb-6 whitespace-pre-line tracking-tight"
               >
                 {slides[current].title}
               </motion.h1>
@@ -198,10 +196,10 @@ const Hero = () => {
                 transition={{ delay: 0.5 }}
                 className="flex flex-wrap justify-center lg:justify-start gap-6 mb-10"
               >
-                <motion.div whileHover={{ scale: 1.05 }} className="flex items-center gap-2 text-[#1a1a1a]/80">
-                  <Leaf size={18} className="text-[#c5a059]" />
-                  <span className="text-sm font-medium">100% Natural</span>
-                </motion.div>
+                <div className="w-10 md:w-20 flex items-center justify-center transition-transform group-hover:scale-110">
+                  <img src="/rr-logo.png" alt="" className='w-full h-full object-cover' fetchPriority="high" />
+                </div>
+                <span className="text-[#064e3b] tracking-tighter hidden xs:inline uppercase text-[14px] md:text-[18px] font-black">Reverse Rituals</span>
 
                 <motion.div whileHover={{ scale: 1.05 }} className="flex items-center gap-2 text-[#1a1a1a]/80">
                   <ShieldCheck size={18} className="text-[#c5a059]" />

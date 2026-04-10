@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, User, LogOut, Package, Menu, X, MessageCircle, ArrowRight } from 'lucide-react';
+import { ShoppingCart, User, LogOut, Package, Menu, X, MessageCircle, ArrowRight, MoreHorizontal } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -68,61 +68,79 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-[100] px-4 md:px-6 py-2 md:py-3 bg-white md:bg-white/80 md:backdrop-blur-md border-b border-[#064e3b]/5 shadow-sm">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link to="/" className="text-base md:text-xl font-serif font-black flex items-center gap-2 md:gap-3 group">
-            <div className="w-8 md:w-12 flex items-center justify-center transition-transform group-hover:scale-110">
-              <img src="/rr-logo.png" alt="" className='w-full h-full object-cover' fetchpriority="high" />
+      <nav className="fixed top-0 left-0 right-0 z-[100] px-4 md:px-6 py-2 md:py-3 bg-white md:bg-white/80 md:backdrop-blur-md border-b border-[#064e3b]/5  ">
+        <div className="max-w-7xl mx-auto">
+          {/* Mobile Layout: [Cart/Profile] [Logo] [Menu] */}
+          <div className="grid grid-cols-3 items-center md:hidden h-12">
+            {/* Left: Cart & Profile (Mobile Only) */}
+            <div className="flex justify-start items-center gap-1">
+              <Link to="/cart" className="relative p-2 rounded-full text-[#064e3b]">
+                <ShoppingCart size={20} />
+                {cartCount > 0 && (
+                  <span className="absolute top-1 right-1 bg-[#c5a059] text-white text-[8px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center ring-1 ring-white">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
+              <Link to={user ? (user.isAdmin ? "/admin" : "/orders") : "/login"} className="p-2 rounded-full text-[#064e3b]">
+                <User size={20} />
+              </Link>
             </div>
-            <span className="text-[#064e3b] tracking-tighter hidden xs:inline uppercase text-[12px] md:text-[14px] font-black">Reverse Rituals</span>
-          </Link>
 
-          <div className="flex items-center gap-2 md:gap-6">
-            <div className="hidden md:flex items-center gap-6 font-bold text-[10px] uppercase tracking-[0.2em] text-[#064e3b]/60">
+            {/* Center: Logo (Mobile Only) */}
+            <div className="flex justify-center">
+              <Link to="/" className="w-13">
+                <img src="/rr-logo.png" alt="Logo" className="w-full object-contain" />
+              </Link>
+            </div>
+
+            {/* Right: Menu Toggle (Mobile Only) */}
+            <div className="flex justify-end">
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="p-2 text-[#064e3b]"
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
+          </div>
+
+          {/* Desktop Layout: [Logo] [Links] [Cart/Profile] */}
+          <div className="hidden md:flex justify-between items-center">
+            <Link to="/" className="flex items-center group">
+              <div className="w-14 lg:w-16 flex items-center justify-center transition-transform group-hover:scale-110">
+                <img src="/rr-logo.png" alt="Reverse Rituals" className='w-full h-full object-contain' />
+              </div>
+            </Link>
+
+            <div className="flex items-center gap-10 font-black text-[12px] lg:text-[14px] uppercase tracking-[0.25em] text-[#064e3b]">
               {navLinks.map((link) => (
-                <Link key={link.name} to={link.path} className="hover:text-[#c5a059] transition-colors">{link.name}</Link>
+                <Link key={link.name} to={link.path} className="hover:text-[#c5a059] transition-all hover:tracking-[0.3em]">{link.name}</Link>
               ))}
             </div>
 
-            <div className="h-5 w-px bg-[#064e3b]/10 hidden md:block"></div>
-
-            <div className="flex items-center gap-1 md:gap-3">
-              <Link to="/cart" className="relative group p-1.5 md:p-2 rounded-full hover:bg-[#064e3b]/5 transition-colors">
-                <ShoppingCart size={18} className="text-[#064e3b] group-hover:text-[#c5a059] transition-colors" />
+            <div className="flex items-center gap-4">
+              <Link to="/cart" className="relative group p-2 rounded-full hover:bg-[#064e3b]/5 transition-colors">
+                <ShoppingCart size={22} className="text-[#064e3b] group-hover:text-[#c5a059]" />
                 {cartCount > 0 && (
-                  <span className="absolute top-0 right-0 bg-[#c5a059] text-white text-[8px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center ring-2 ring-white">
+                  <span className="absolute top-0 right-0 bg-[#c5a059] text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center ring-2 ring-white">
                     {cartCount}
                   </span>
                 )}
               </Link>
 
               {user ? (
-                <div className="flex items-center gap-1 md:gap-3">
-                  <Link to="/orders" className="p-1.5 md:p-2 rounded-full hover:bg-[#064e3b]/5 transition-colors group hidden sm:flex">
-                    <Package size={18} className="text-[#064e3b] group-hover:text-[#c5a059]" />
-                  </Link>
-                  <Link to={user.isAdmin ? "/admin" : "/orders"} className="flex items-center gap-2 px-3 py-1.5 bg-[#064e3b] rounded-full text-white text-[9px] md:text-xs font-bold hover:bg-[#c5a059] transition-all shadow-md">
+                <div className="flex items-center gap-3">
+                  <Link to={user.isAdmin ? "/admin" : "/orders"} className="flex items-center gap-2 px-5 py-2.5 bg-[#064e3b] rounded-full text-white text-xs font-black uppercase tracking-widest hover:bg-[#c5a059] transition-all shadow-md">
                     <User size={14} />
-                    <span className="hidden sm:inline">{user.name}</span>
+                    <span>{user.name}</span>
                   </Link>
-                  <button onClick={logout} className="p-1.5 md:p-2 rounded-full hover:bg-red-50 text-red-500 transition-colors hidden sm:block">
-                    <LogOut size={18} />
-                  </button>
                 </div>
               ) : (
-                <Link to="/login" className="flex items-center gap-2 text-[#064e3b] font-black text-[9px] md:text-xs uppercase tracking-[0.25em] bg-[#064e3b]/5 px-3 md:px-4 py-1.5 rounded-full hover:bg-[#064e3b] hover:text-white transition-all">
-                  <User size={16} className="text-[#c5a059]" />
-                  <span>Login</span>
+                <Link to="/login" className="flex items-center gap-2 px-7 py-2.5 border-2 border-[#064e3b] rounded-full text-[#064e3b] text-xs font-black uppercase tracking-[0.2em] hover:bg-[#064e3b] hover:text-white transition-all">
+                  <span>Sign In</span>
                 </Link>
               )}
-
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="md:hidden p-1.5 text-[#064e3b] hover:bg-[#064e3b]/5 rounded-full transition-colors"
-              >
-                {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-              </button>
             </div>
           </div>
         </div>
@@ -152,8 +170,8 @@ const Navbar = () => {
                   </button>
                 </div>
 
-                <div className="flex-grow overflow-y-auto px-6 py-10 scrollbar-hide">
-                  <motion.div 
+                <div className="grow overflow-y-auto px-6 py-10 scrollbar-hide">
+                  <motion.div
                     initial="closed"
                     animate="open"
                     className="flex flex-col gap-8"
@@ -196,7 +214,7 @@ const Navbar = () => {
                         Track My Ritual
                       </Link>
 
-                      <a 
+                      <a
                         href={`https://wa.me/${WHATSAPP_NUMBER}`}
                         target="_blank"
                         rel="noopener noreferrer"

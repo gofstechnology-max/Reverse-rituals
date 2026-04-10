@@ -116,12 +116,16 @@ const CartPage = () => {
                 </div>
                 <div className="flex justify-between items-center text-[#064e3b]/60">
                   <span>Shipping</span>
-                  <span className={'text-green-500 font-bold'}>
-                    <><span className="line-through text-red-400 text-sm">₹99</span> FREE</>
+                  <span className="text-green-600 font-black">
+                    FREE
                   </span>
                 </div>
 
-                <p className="text-xs text-[#c5a059] font-medium">Add ₹{99 - cartTotal} more for FREE shipping!</p>
+                {cartTotal < 99 && (
+                  <p className="text-[10px] text-[#c5a059] font-black uppercase tracking-widest">
+                    Add ₹{99 - cartTotal} more for FREE shipping
+                  </p>
+                )}
 
               </div>
 
@@ -140,11 +144,6 @@ const CartPage = () => {
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </button>
 
-              <div className="mt-6 flex items-center justify-center gap-4 text-[#064e3b]/30">
-                <div className="w-8 h-5 bg-current rounded opacity-30"></div>
-                <div className="w-8 h-5 bg-current rounded opacity-30"></div>
-                <div className="w-8 h-5 bg-current rounded opacity-30"></div>
-              </div>
               <p className="text-center text-[#064e3b]/30 text-xs mt-3">Secure checkout with Razorpay</p>
             </div>
           </div>

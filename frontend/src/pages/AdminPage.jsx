@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { 
-  ShoppingBag, Package, Truck, CheckCircle, Trash2, Edit3, Plus, X, 
+import {
+  ShoppingBag, Package, Truck, CheckCircle, Trash2, Edit3, Plus, X,
   DollarSign, Users, BarChart3, Calendar, Search, Home, Settings,
   LogOut, Bell, Menu, ChevronRight, Image, CreditCard, MapPin, Phone, Mail
 } from 'lucide-react';
@@ -39,7 +39,7 @@ const AdminPage = () => {
     setLoading(true);
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
-      
+
       // Fetch products from backend only (no frontend fallback)
       let productsRes = { data: [] };
       try {
@@ -47,9 +47,9 @@ const AdminPage = () => {
       } catch (err) {
         console.log('Products fetch error:', err.message);
       }
-      
+
       setProducts(productsRes.data || []);
-      
+
       // Try to get orders if user is logged in
       let ordersRes = { data: [] };
       if (user?.token) {
@@ -62,7 +62,7 @@ const AdminPage = () => {
         }
       }
       setOrders(ordersRes.data || []);
-      
+
     } catch (error) {
       console.error('Error fetching data:', error);
       setProducts([]);
@@ -150,7 +150,7 @@ const AdminPage = () => {
   const deliveredOrders = orders.filter(o => o.isDelivered).length;
   const lowStockProducts = products.filter(p => p.countInStock < 5).length;
 
-  const filteredOrders = orders.filter(order => 
+  const filteredOrders = orders.filter(order =>
     order.shippingAddress.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
     order._id.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -195,7 +195,7 @@ const AdminPage = () => {
       <AnimatePresence>
         {isSidebarOpen && (
           <>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               className="lg:hidden fixed inset-0 bg-black/50 z-50" onClick={() => setIsSidebarOpen(false)}
             />
@@ -212,9 +212,8 @@ const AdminPage = () => {
                   <button
                     key={item.id}
                     onClick={() => { setActiveTab(item.id); setIsSidebarOpen(false); }}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all text-sm ${
-                      activeTab === item.id ? 'bg-[#064e3b] text-white' : 'text-[#064e3b]/60 hover:bg-[#064e3b]/5'
-                    }`}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all text-sm ${activeTab === item.id ? 'bg-[#064e3b] text-white' : 'text-[#064e3b]/60 hover:bg-[#064e3b]/5'
+                      }`}
                   >
                     {item.icon}
                     {item.label}
@@ -245,9 +244,8 @@ const AdminPage = () => {
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all ${
-                activeTab === item.id ? 'bg-[#064e3b] text-white shadow-lg shadow-[#064e3b]/20' : 'text-[#064e3b]/60 hover:bg-[#064e3b]/5'
-              }`}
+              className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all ${activeTab === item.id ? 'bg-[#064e3b] text-white shadow-lg shadow-[#064e3b]/20' : 'text-[#064e3b]/60 hover:bg-[#064e3b]/5'
+                }`}
             >
               {item.icon}
               {item.label}
@@ -423,7 +421,7 @@ const AdminPage = () => {
                   key={order._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                   className="bg-white rounded-xl sm:rounded-2xl border border-[#064e3b]/5 overflow-hidden"
                 >
-                  <div 
+                  <div
                     className="p-4 sm:p-5 lg:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 cursor-pointer hover:bg-[#fdfbf7]/50 transition-all"
                     onClick={() => setExpandedOrder(expandedOrder === order._id ? null : order._id)}
                   >
@@ -655,28 +653,28 @@ const AdminPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-sm font-bold text-[#064e3b]/40 mb-2">Product Name</label>
-                    <input type="text" required value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059]" />
+                    <input type="text" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059]" />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-[#064e3b]/40 mb-2">Category</label>
-                    <input type="text" required value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059]" />
+                    <input type="text" required value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059]" />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-[#064e3b]/40 mb-2">Price (₹)</label>
-                    <input type="number" required value={formData.price} onChange={(e) => setFormData({...formData, price: e.target.value})} className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059]" />
+                    <input type="number" required value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059]" />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-[#064e3b]/40 mb-2">Stock</label>
-                    <input type="number" required value={formData.countInStock} onChange={(e) => setFormData({...formData, countInStock: e.target.value})} className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059]" />
+                    <input type="number" required value={formData.countInStock} onChange={(e) => setFormData({ ...formData, countInStock: e.target.value })} className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059]" />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-[#064e3b]/40 mb-2">Image URL</label>
-                  <input type="text" required value={formData.image} onChange={(e) => setFormData({...formData, image: e.target.value})} className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059]" />
+                  <input type="text" required value={formData.image} onChange={(e) => setFormData({ ...formData, image: e.target.value })} className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059]" />
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-[#064e3b]/40 mb-2">Description</label>
-                  <textarea required rows="3" value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059] resize-none"></textarea>
+                  <textarea required rows="3" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059] resize-none"></textarea>
                 </div>
                 <div className="flex gap-4 pt-2">
                   <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-4 border border-[#064e3b]/10 rounded-xl font-bold text-[#064e3b] hover:bg-[#064e3b]/5 transition-all">Cancel</button>

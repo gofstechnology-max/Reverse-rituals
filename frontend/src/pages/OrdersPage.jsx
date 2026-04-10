@@ -110,7 +110,7 @@ const OrdersPage = () => {
                     </div>
 
                     {/* Order Details */}
-                    <div className="flex-grow space-y-4">
+                    <div className="grow space-y-4">
                       <div>
                         <h3 className="font-semibold text-[#064e3b]">
                           {order.orderItems.map(item => item.name).join(', ')}

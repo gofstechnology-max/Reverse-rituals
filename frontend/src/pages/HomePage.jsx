@@ -22,6 +22,8 @@ const HomePage = () => {
    const sliderRef = useRef(null);
    const sliderLineRef = useRef(null);
    const beforeImageRef = useRef(null);
+   const [selectedWeek, setSelectedWeek] = useState("Week 1");
+   const [beforeImg, setBeforeImg] = useState("/WEEK1.PNG");
 
    const updateSliderPosition = (pos) => {
       sliderPosRef.current = pos;
@@ -144,38 +146,38 @@ const HomePage = () => {
          <Hero />
 
          {/* Trust Badges Section */}
-         <section className="py-12 md:py-24 px-4 md:px-6 bg-white overflow-hidden">
+         {/* <section className="py-12 md:py-24 px-4 md:px-6 bg-white overflow-hidden">
             <div className="max-w-6xl mx-auto">
-                {/* Trust Badges - Mobile Optimized Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-8">
-                   {[
-                      { icon: <Star className="fill-current" size={20} />, value: "4.9/5", label: "Rating", color: "#c5a059" },
-                      { icon: <Heart className="fill-current" size={20} />, value: "50K+", label: "Happy Customers", color: "#064e3b" },
-                      { icon: <Leaf className="fill-current" size={20} />, value: "100%", label: "Natural Ingredients", color: "#22c55e" },
-                   ].map((item, i) => (
-                      <motion.div
-                         key={i}
-                         initial={{ opacity: 0, y: 20 }}
-                         whileInView={{ opacity: 1, y: 0 }}
-                         viewport={{ once: true }}
-                         transition={{ delay: i * 0.1 }}
-                         className="flex items-center sm:flex-col gap-4 sm:gap-4 p-5 md:p-10 rounded-2xl md:rounded-3xl bg-[#fdfbf7] border border-[#064e3b]/5 transition-all duration-500 translate-z-0"
-                      >
-                         <div
-                            className="w-12 h-12 md:w-20 md:h-20 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0"
-                            style={{ backgroundColor: `${item.color}15`, color: item.color }}
-                         >
-                            {item.icon}
-                         </div>
-                         <div className="text-left sm:text-center">
-                            <p className="text-xl md:text-4xl font-serif font-bold text-[#1a1a1a] leading-tight">{item.value}</p>
-                            <p className="text-[10px] md:text-sm font-bold text-[#1a1a1a]/40 uppercase tracking-widest">{item.label}</p>
-                         </div>
-                      </motion.div>
-                   ))}
-                </div>
-            </div>
-         </section>
+               {/* Trust Badges - Mobile Optimized Grid */}
+         {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-8">
+                  {[
+                     { icon: <Star className="fill-current" size={20} />, value: "4.9/5", label: "Rating", color: "#c5a059" },
+                     { icon: <Heart className="fill-current" size={20} />, value: "50K+", label: "Happy Customers", color: "#064e3b" },
+                     { icon: <Leaf className="fill-current" size={20} />, value: "100%", label: "Natural Ingredients", color: "#22c55e" },
+                  ].map((item, i) => (
+                     <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.1 }}
+                        className="flex items-center sm:flex-col gap-4 sm:gap-4 p-5 md:p-10 rounded-2xl md:rounded-3xl bg-[#fdfbf7] border border-[#064e3b]/5 transition-all duration-500 translate-z-0"
+                     >
+                        <div
+                           className="w-12 h-12 md:w-20 md:h-20 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0"
+                           style={{ backgroundColor: `${item.color}15`, color: item.color }}
+                        >
+                           {item.icon}
+                        </div>
+                        <div className="text-left sm:text-center">
+                           <p className="text-xl md:text-4xl font-serif font-bold text-[#1a1a1a] leading-tight">{item.value}</p>
+                           <p className="text-[10px] md:text-sm font-bold text-[#1a1a1a]/40 uppercase tracking-widest">{item.label}</p>
+                        </div>
+                     </motion.div>
+                  ))}
+               </div>
+            </div> */}
+
 
          <section id="products" className="py-20 md:py-32 px-6 overflow-hidden">
             <motion.div
@@ -229,11 +231,11 @@ const HomePage = () => {
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, amount: 0.1 }}
-                        transition={{ 
+                        transition={{
                            type: "spring",
                            stiffness: 100,
                            damping: 20,
-                           delay: idx * 0.05 
+                           delay: idx * 0.05
                         }}
                         className="translate-z-0"
                      >
@@ -260,27 +262,27 @@ const HomePage = () => {
                   </span>
 
                   <h2 className="text-3xl md:text-5xl lg:text-7xl font-black text-[#064e3b] mt-4 leading-[1.1] tracking-tight">
-                     Biological <span className="font-serif italic text-[#c5a059]">Architecture</span>
-                     <span className="block text-xl md:text-2xl font-medium text-[#064e3b]/40 mt-6 tracking-normal">
-                        Documented Progress: Week 1 — Week 14
-                     </span>
+                    Biological <span className="font-serif italic text-[#c5a059]">Architecture</span>
+                    <span className="block text-[14px] md:text-2xl font-medium text-[#064e3b]/40 mt-6 tracking-normal ">
+                      Real Customers Results: Hair transformation (reduced hair fall)
+                    </span>
                   </h2>
-               </motion.div>
+                </motion.div>
 
-               {/* Before After Slider - Mobile Optimized */}
-               <motion.div
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  className="mb-10 md:mb-32 max-w-5xl mx-auto"
-               >
-                  <div
-                     ref={sliderRef}
-                     onMouseDown={handleMouseDown}
-                     onTouchStart={handleMouseDown}
-                     className="relative cursor-ew-resize select-none overflow-hidden rounded-3xl md:rounded-[60px] aspect-square md:aspect-video shadow-xl md:shadow-2xl border-2 md:border-8 border-white translate-z-0"
+                {/* Before After Slider - Mobile Optimized */}
+                <motion.div
+                   initial={{ opacity: 0 }}
+                   whileInView={{ opacity: 1 }}
+                   viewport={{ once: true }}
+                   className="mb-10 md:mb-32 max-w-5xl mx-auto"
+                >
+                   <div
+                      ref={sliderRef}
+                      onMouseDown={handleMouseDown}
+                      onTouchStart={handleMouseDown}
+                      className="relative cursor-ew-resize select-none overflow-hidden rounded-3xl md:rounded-[60px] aspect-square md:aspect-video shadow-xl md:shadow-2xl border-2 md:border-8 border-white translate-z-0 touch-none"
                   >
- 
+
                      {/* After Image */}
                      <img
                         src="/WEEK14.JPG"
@@ -288,7 +290,7 @@ const HomePage = () => {
                         alt="After"
                         loading="lazy"
                      />
- 
+
                      {/* Before Image - Fixed to Week 1 */}
                      <div
                         ref={beforeImageRef}
@@ -302,7 +304,7 @@ const HomePage = () => {
                            loading="lazy"
                         />
                      </div>
- 
+
                      {/* Comparison Handle */}
                      <div
                         ref={sliderLineRef}
@@ -317,7 +319,7 @@ const HomePage = () => {
                            </div>
                         </div>
                      </div>
- 
+
                      {/* Labels */}
                      <div className="absolute inset-x-3 md:inset-x-6 top-3 md:top-6 flex justify-between gap-2 md:gap-4 pointer-events-none">
                         <div className="px-3 md:px-6 py-1.5 md:py-3 rounded-full bg-black/20 md:bg-white/10 backdrop-blur-xl text-white text-[8px] md:text-xs font-black border border-white/20 tracking-widest uppercase">
@@ -329,7 +331,7 @@ const HomePage = () => {
                      </div>
                   </div>
                </motion.div>
- 
+
                {/* Weekly Evolution Gallery - Static */}
                <div className="max-w-5xl mx-auto px-2">
                   <div className="flex overflow-x-auto gap-4 pb-8 scrollbar-hide justify-start sm:justify-center">
@@ -342,10 +344,10 @@ const HomePage = () => {
                      ].map((step, i) => (
                         <div
                            key={i}
-                           className="relative min-w-[130px] md:min-w-[180px] group translate-z-0"
+                           className="relative min-w-[240px] md:min-w-[180px] group translate-z-0"
                         >
                            <div className="relative rounded-2xl md:rounded-[32px] overflow-hidden shadow-lg border border-[#c5a059]/10 bg-white">
-                              <img src={step.img} className="w-full h-28 md:h-40 object-cover" alt="" />
+                              <img src={step.img} className="w-full h-48 md:h-40 object-cover" alt="" />
                               <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
                               <div className="absolute top-3 left-3 bg-[#c5a059] text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-tight shadow-md">
                                  Week {step.week}
@@ -364,6 +366,7 @@ const HomePage = () => {
 
          <IngredientsSection />
          <ReviewSection />
+
          {/* <HairProductSection /> */}
 
 
