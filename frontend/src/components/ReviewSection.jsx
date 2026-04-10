@@ -37,7 +37,7 @@ const ReviewSection = () => {
           <div className="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-[#fdfbf7] to-transparent z-10 pointer-events-none" />
 
           {/* Scrolling Container */}
-          <div className="flex animate-scroll gap-4 md:gap-6">
+          <div className="flex animate-scroll gap-4 md:gap-6 will-change-transform">
             {/* First set */}
             {reviews.map((review) => (
               <motion.div
@@ -89,7 +89,7 @@ const ReviewSection = () => {
       <AnimatePresence>
         {selected && (
           <motion.div
-            className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black/95 flex items-center justify-center z-[200] p-4 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -97,16 +97,17 @@ const ReviewSection = () => {
           >
             <motion.div
               className="relative max-w-4xl w-full max-h-[90vh] flex items-center justify-center"
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.8 }}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={() => setSelected(null)}
-                className="absolute -top-10 right-0 text-white hover:text-[#c5a059] transition"
+                className="absolute -top-12 right-0 md:-right-12 text-white hover:text-[#c5a059] transition p-2 bg-white/10 rounded-full backdrop-blur-md"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18"></line>
                   <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
@@ -114,7 +115,7 @@ const ReviewSection = () => {
               <img
                 src={selected}
                 alt="review"
-                className="rounded-xl w-full max-h-[85vh] object-contain"
+                className="rounded-xl w-full max-h-[80vh] object-contain shadow-2xl"
               />
             </motion.div>
           </motion.div>
@@ -125,14 +126,19 @@ const ReviewSection = () => {
       <style>{`
         @keyframes scroll {
           0% {
-            transform: translateX(0);
+            transform: translate3d(0, 0, 0);
           }
           100% {
-            transform: translateX(-50%);
+            transform: translate3d(-50%, 0, 0);
           }
         }
         .animate-scroll {
-          animation: scroll 20s linear infinite;
+          animation: scroll 30s linear infinite;
+        }
+        @media (max-width: 768px) {
+          .animate-scroll {
+            animation-duration: 20s;
+          }
         }
         .animate-scroll:hover {
           animation-play-state: paused;

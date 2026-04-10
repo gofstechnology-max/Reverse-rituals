@@ -65,7 +65,7 @@ const Hero = () => {
       }}
     >
       {/* Soft White Overlay */}
-      <div className="absolute inset-0 bg-white/20 "></div>
+      <div className="absolute inset-0 bg-white/40 md:bg-white/20 "></div>
 
       {/* Animated Particles/Orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -106,6 +106,7 @@ const Hero = () => {
           <div className="relative w-[280px] sm:w-[420px] md:w-[520px] lg:w-[600px] aspect-square flex items-center justify-center">
 
             <motion.div
+              className="absolute inset-0 bg-[#c5a059]/10 blur-[80px] rounded-full hidden md:block"
               animate={{
                 boxShadow: [
                   "0 0 60px rgba(197,160,89,0.3)",
@@ -114,8 +115,9 @@ const Hero = () => {
                 ],
               }}
               transition={{ duration: 3, repeat: Infinity }}
-              className="absolute inset-0 bg-[#c5a059]/10 blur-[80px] rounded-full"
             />
+            {/* Simple glow for mobile */}
+            <div className="absolute inset-0 bg-[#c5a059]/5 blur-[60px] rounded-full md:hidden" />
 
             <motion.img
               src="/Hero.png"
@@ -157,7 +159,7 @@ const Hero = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
-                className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-serif font-black text-[#064e3b] leading-[1.1] mb-4 whitespace-pre-line"
+                className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-serif font-black text-[#064e3b] leading-[1.2] mb-4 whitespace-pre-line"
               >
                 {slides[current].title}
               </motion.h1>
@@ -167,7 +169,7 @@ const Hero = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.8 }}
-                className="text-[#064e3b]/80 text-sm md:text-base lg:text-xl max-w-lg mx-auto lg:mx-0 mb-6"
+                className="text-[#064e3b]/80 text-xs md:text-base lg:text-xl max-w-lg mx-auto lg:mx-0 mb-6"
               >
                 {slides[current].desc}
               </motion.p>

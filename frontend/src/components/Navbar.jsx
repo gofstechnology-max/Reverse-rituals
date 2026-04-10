@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, User, LogOut, Package, Menu, X, MessageCircle } from 'lucide-react';
+import { ShoppingCart, User, LogOut, Package, Menu, X, MessageCircle, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -68,60 +68,60 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-[100] px-4 md:px-6 py-3 md:py-4 bg-white/80 backdrop-blur-md border-b border-black/5">
+      <nav className="fixed top-0 left-0 right-0 z-[100] px-4 md:px-6 py-2 md:py-3 bg-white md:bg-white/80 md:backdrop-blur-md border-b border-[#064e3b]/5 shadow-sm">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link to="/" className="text-lg md:text-2xl font-serif font-black flex items-center gap-2 md:gap-3 group">
-            <div className="w-10 md:w-15 flex items-center justify-center">
+          <Link to="/" className="text-base md:text-xl font-serif font-black flex items-center gap-2 md:gap-3 group">
+            <div className="w-8 md:w-12 flex items-center justify-center transition-transform group-hover:scale-110">
               <img src="/rr-logo.png" alt="" className='w-full h-full object-cover' fetchpriority="high" />
             </div>
-            <span className="text-[#064e3b] tracking-tighter hidden xs:inline">Reverse Rituals</span>
+            <span className="text-[#064e3b] tracking-tighter hidden xs:inline uppercase text-[12px] md:text-[14px] font-black">Reverse Rituals</span>
           </Link>
 
-          <div className="flex items-center gap-3 md:gap-8">
-            <div className="hidden md:flex items-center gap-8 font-medium text-sm uppercase tracking-widest text-[#1a1a1a]/60">
+          <div className="flex items-center gap-2 md:gap-6">
+            <div className="hidden md:flex items-center gap-6 font-bold text-[10px] uppercase tracking-[0.2em] text-[#064e3b]/60">
               {navLinks.map((link) => (
-                <Link key={link.name} to={link.path} className="hover:text-[#064e3b] transition-colors">{link.name}</Link>
+                <Link key={link.name} to={link.path} className="hover:text-[#c5a059] transition-colors">{link.name}</Link>
               ))}
             </div>
 
-            <div className="h-6 w-px bg-black/10 hidden md:block"></div>
+            <div className="h-5 w-px bg-[#064e3b]/10 hidden md:block"></div>
 
-            <div className="flex items-center gap-1 md:gap-4">
-              <Link to="/cart" className="relative group p-2 rounded-full hover:bg-black/5 transition-colors">
-                <ShoppingCart size={20} className="group-hover:text-[#064e3b] transition-colors" />
+            <div className="flex items-center gap-1 md:gap-3">
+              <Link to="/cart" className="relative group p-1.5 md:p-2 rounded-full hover:bg-[#064e3b]/5 transition-colors">
+                <ShoppingCart size={18} className="text-[#064e3b] group-hover:text-[#c5a059] transition-colors" />
                 {cartCount > 0 && (
-                  <span className="absolute top-0 right-0 bg-[#064e3b] text-white text-[9px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center ring-2 ring-white">
+                  <span className="absolute top-0 right-0 bg-[#c5a059] text-white text-[8px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center ring-2 ring-white">
                     {cartCount}
                   </span>
                 )}
               </Link>
 
               {user ? (
-                <div className="flex items-center gap-1 md:gap-4">
-                  <Link to="/orders" className="p-2 rounded-full hover:bg-black/5 transition-colors group hidden sm:flex">
-                    <Package size={20} className="group-hover:text-[#064e3b]" />
+                <div className="flex items-center gap-1 md:gap-3">
+                  <Link to="/orders" className="p-1.5 md:p-2 rounded-full hover:bg-[#064e3b]/5 transition-colors group hidden sm:flex">
+                    <Package size={18} className="text-[#064e3b] group-hover:text-[#c5a059]" />
                   </Link>
-                  <Link to={user.isAdmin ? "/admin" : "/orders"} className="flex items-center gap-2 px-3 md:px-4 py-1.5 bg-[#064e3b]/5 rounded-full text-[#064e3b] text-[10px] md:text-sm font-bold hover:bg-[#064e3b] hover:text-white transition-all">
-                    <User size={16} />
+                  <Link to={user.isAdmin ? "/admin" : "/orders"} className="flex items-center gap-2 px-3 py-1.5 bg-[#064e3b] rounded-full text-white text-[9px] md:text-xs font-bold hover:bg-[#c5a059] transition-all shadow-md">
+                    <User size={14} />
                     <span className="hidden sm:inline">{user.name}</span>
                   </Link>
-                  <button onClick={logout} className="p-2 rounded-full hover:bg-red-50 text-red-500 transition-colors hidden sm:block">
-                    <LogOut size={20} />
+                  <button onClick={logout} className="p-1.5 md:p-2 rounded-full hover:bg-red-50 text-red-500 transition-colors hidden sm:block">
+                    <LogOut size={18} />
                   </button>
                 </div>
               ) : (
-                <Link to="/login" className="flex items-center gap-2 text-[#064e3b] font-black text-[9px] md:text-xs uppercase tracking-[0.2em] hover:text-[#c5a059] transition-colors">
-                  <User size={18} className="text-[#c5a059]" />
-                  <span className="hidden md:inline">Login</span>
+                <Link to="/login" className="flex items-center gap-2 text-[#064e3b] font-black text-[9px] md:text-xs uppercase tracking-[0.25em] bg-[#064e3b]/5 px-3 md:px-4 py-1.5 rounded-full hover:bg-[#064e3b] hover:text-white transition-all">
+                  <User size={16} className="text-[#c5a059]" />
+                  <span>Login</span>
                 </Link>
               )}
 
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="md:hidden p-2 text-[#064e3b] hover:bg-black/5 rounded-full transition-colors"
+                className="md:hidden p-1.5 text-[#064e3b] hover:bg-[#064e3b]/5 rounded-full transition-colors"
               >
-                {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+                {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
             </div>
           </div>
@@ -136,63 +136,111 @@ const Navbar = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setIsMenuOpen(false)}
-                className="fixed inset-0 bg-black/40 backdrop-blur-md z-[110]"
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[110]"
               />
               <motion.div
-                initial={{ x: '100%' }}
-                animate={{ x: 0 }}
-                exit={{ x: '100%' }}
-                transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-                className="fixed top-0 right-0 h-full w-[85%] max-w-xs bg-white z-[120] shadow-2xl p-6 flex flex-col"
+                initial={{ x: '100%', opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: '100%', opacity: 0 }}
+                transition={{ type: 'tween', duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+                className="fixed top-0 right-0 h-full w-full sm:w-[85%] max-w-sm bg-[#fdfbf7] z-[120] shadow-2xl flex flex-col will-change-transform"
               >
-                <div className="flex justify-between items-center mb-10">
-                  <span className="text-lg font-serif font-black text-[#064e3b]">Navigation</span>
-                  <button onClick={() => setIsMenuOpen(false)} className="p-2 bg-[#064e3b]/5 rounded-full">
-                    <X size={20} className="text-[#064e3b]" />
+                <div className="flex justify-between items-center p-6 border-b border-[#064e3b]/5">
+                  <span className="text-xl font-serif font-black text-[#064e3b]">Ritual Menu</span>
+                  <button onClick={() => setIsMenuOpen(false)} className="p-3 bg-[#064e3b]/5 rounded-full text-[#064e3b] hover:bg-[#064e3b] hover:text-white transition-all">
+                    <X size={24} />
                   </button>
                 </div>
 
-                <div className="flex flex-col gap-4">
-                  {navLinks.map((link) => (
-                    <Link
-                      key={link.name}
-                      to={link.path}
-                      onClick={() => setIsMenuOpen(false)}
-                      className="text-2xl font-bold text-[#064e3b] hover:text-[#c5a059] transition-colors"
-                    >
-                      {link.name}
-                    </Link>
-                  ))}
+                <div className="flex-grow overflow-y-auto px-6 py-10 scrollbar-hide">
+                  <motion.div 
+                    initial="closed"
+                    animate="open"
+                    className="flex flex-col gap-8"
+                  >
+                    {navLinks.map((link, i) => (
+                      <motion.div
+                        key={link.name}
+                        variants={{
+                          open: { opacity: 1, x: 0, transition: { delay: 0.1 + i * 0.1 } },
+                          closed: { opacity: 0, x: -10 }
+                        }}
+                      >
+                        <Link
+                          to={link.path}
+                          onClick={() => setIsMenuOpen(false)}
+                          className="text-lg font-serif font-black uppercase tracking-[0.2em] text-[#064e3b] flex items-center justify-between group py-1"
+                        >
+                          <span className="relative">
+                            {link.name}
+                            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#c5a059] transition-all duration-300 group-hover:w-full"></span>
+                          </span>
+                          <ArrowRight size={16} className="text-[#c5a059]/40 group-hover:text-[#c5a059] group-hover:translate-x-1 transition-all" />
+                        </Link>
+                      </motion.div>
+                    ))}
 
-                  <div className="h-px w-full bg-[#064e3b]/10 my-4" />
+                    <div className="h-px w-full bg-[#064e3b]/10 my-2" />
 
-                  <Link to="/orders" onClick={() => setIsMenuOpen(false)} className="text-xl font-bold text-[#064e3b]/60 flex items-center gap-3">
-                    <Package size={22} />
-                    My Orders
-                  </Link>
-
-                  {user && (
-                    <button
-                      onClick={() => {
-                        logout();
-                        setIsMenuOpen(false);
+                    <motion.div
+                      variants={{
+                        open: { opacity: 1, y: 0, transition: { delay: 0.4 } },
+                        closed: { opacity: 0, y: 10 }
                       }}
-                      className="text-xl font-bold text-red-500 flex items-center gap-3 mt-4"
+                      className="space-y-4"
                     >
-                      <LogOut size={22} />
-                      Logout
-                    </button>
-                  )}
+                      <Link to="/orders" onClick={() => setIsMenuOpen(false)} className="text-sm font-bold text-[#064e3b]/60 flex items-center gap-3 hover:text-[#064e3b] transition-colors">
+                        <div className="w-8 h-8 rounded-lg bg-[#064e3b]/5 flex items-center justify-center">
+                          <Package size={16} className="text-[#c5a059]" />
+                        </div>
+                        Track My Ritual
+                      </Link>
+
+                      <a 
+                        href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm font-bold text-[#064e3b]/60 flex items-center gap-3 hover:text-[#064e3b] transition-colors"
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-[#25D366]/10 flex items-center justify-center">
+                          <MessageCircle size={16} className="text-[#128C7E]" />
+                        </div>
+                        Ritual Support
+                      </a>
+                    </motion.div>
+
+                    {user && (
+                      <motion.div
+                        variants={{
+                          open: { opacity: 1, y: 0, transition: { delay: 0.5 } },
+                          closed: { opacity: 0, y: 10 }
+                        }}
+                      >
+                        <button
+                          onClick={() => {
+                            logout();
+                            setIsMenuOpen(false);
+                          }}
+                          className="text-sm font-bold text-red-500/80 flex items-center gap-3 mt-2 hover:text-red-600 transition-colors"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center">
+                            <LogOut size={16} />
+                          </div>
+                          End Ritual
+                        </button>
+                      </motion.div>
+                    )}
+                  </motion.div>
                 </div>
 
-                <div className="mt-auto pt-8 border-t border-[#064e3b]/10 text-center">
-                  <p className="text-xs font-bold text-[#064e3b]/40 uppercase tracking-widest mb-4">Start Your Ritual</p>
+                <div className="p-6 bg-white border-t border-[#064e3b]/5">
+                  <p className="text-[10px] font-black text-[#064e3b]/40 uppercase tracking-[0.3em] mb-4 text-center">Your Selection</p>
                   <Link
                     to="/cart"
                     onClick={() => setIsMenuOpen(false)}
-                    className="w-full bg-[#064e3b] text-white py-5 rounded-2xl font-black flex items-center justify-center gap-3 shadow-xl"
+                    className="w-full bg-[#064e3b] text-white py-5 rounded-2xl font-black flex items-center justify-center gap-3 shadow-xl hover:bg-[#064e3b]/90 transition-all active:scale-[0.98]"
                   >
-                    View Cart <ShoppingCart size={20} />
+                    Checkout Ritual <ShoppingCart size={22} />
                   </Link>
                 </div>
               </motion.div>

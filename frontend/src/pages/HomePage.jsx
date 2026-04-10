@@ -48,15 +48,19 @@ const HomePage = () => {
    };
 
    useEffect(() => {
+      let rafId;
       const onMove = (e) => {
          if (!isDragging || !sliderRef.current) return;
-         
+
          const rect = sliderRef.current.getBoundingClientRect();
          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
          const pos = ((clientX - rect.left) / rect.width) * 100;
          const clampedPos = Math.max(0, Math.min(100, pos));
-         
-         updateSliderPosition(clampedPos);
+
+         if (rafId) cancelAnimationFrame(rafId);
+         rafId = requestAnimationFrame(() => {
+            updateSliderPosition(clampedPos);
+         });
       };
 
       if (isDragging) {
@@ -80,21 +84,21 @@ const HomePage = () => {
             const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
             const cached = localStorage.getItem('home_products');
             const cachedTime = localStorage.getItem('home_products_time');
-            
+
             if (cached && cachedTime && Date.now() - parseInt(cachedTime) < 1000 * 60 * 5) {
                setProducts(JSON.parse(cached));
                setLoading(false);
                return;
             }
-            
+
             const { data } = await axios.get(`${API_URL}/api/products`, {
                timeout: 10000,
                headers: { 'Cache-Control': 'no-cache' }
             });
-            
+
             localStorage.setItem('home_products', JSON.stringify(data));
             localStorage.setItem('home_products_time', Date.now().toString());
-            
+
             setProducts(data);
             setLoading(false);
          } catch (error) {
@@ -154,8 +158,8 @@ const HomePage = () => {
                         key={i}
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.1, duration: 0.5 }}
+                        viewport={{ once: true, amount: 0.1 }}
+                        transition={{ delay: i * 0.05, duration: 0.4 }}
                         className="flex-shrink-0 w-40 md:w-auto flex flex-col items-center text-center p-4 md:p-8 rounded-2xl md:rounded-3xl bg-[#fdfbf7] border border-[#064e3b]/5 hover:shadow-xl hover:border-[#064e3b]/10 transition-all duration-300 group"
                      >
                         <div
@@ -227,10 +231,10 @@ const HomePage = () => {
                   {products.map((product, idx) => (
                      <motion.div
                         key={product._id}
-                        initial={{ opacity: 0, y: 30 }}
+                        initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: idx * 0.1, duration: 0.5, ease: "easeOut" }}
+                        viewport={{ once: true, amount: 0.1 }}
+                        transition={{ delay: idx * 0.05, duration: 0.4, ease: "easeOut" }}
                      >
                         <ProductCard product={product} />
                      </motion.div>
@@ -267,85 +271,85 @@ const HomePage = () => {
                </motion.div>
 
                {/* Before After Slider */}
-                <motion.div
-                   initial={{ opacity: 0, scale: 0.95 }}
-                   whileInView={{ opacity: 1, scale: 1 }}
-                   viewport={{ once: true }}
-                   transition={{ duration: 0.8 }}
-                   className="mb-12 md:mb-20 max-w-4xl mx-auto"
-                >
-                   <div
-                      ref={sliderRef}
-                      onMouseDown={handleMouseDown}
-                      onTouchStart={handleMouseDown}
-                      className="relative cursor-ew-resize select-none overflow-hidden rounded-3xl md:rounded-[40px] aspect-[4/5] md:aspect-video shadow-2xl border-4 border-white group"
-                   >
- 
-                      {/* After Image (Base) */}
-                      <img
-                         src="/WEEK14.JPG"
-                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-                         alt="After 14 weeks"
-                         loading="lazy"
-                      />
- 
-                      {/* Before Image (Overlay) */}
-                      <div
-                         ref={beforeImageRef}
-                         className="absolute inset-0 overflow-hidden"
-                         style={{
-                            clipPath: `inset(0 ${100 - sliderPos}% 0 0)`
-                         }}
-                      >
-                         <img
-                            src="/WEEK1.PNG"
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-                            alt="Before"
-                            loading="lazy"
-                         />
-                      </div>
- 
-                      {/* Comparison Line & Handle */}
-                      <div
-                         ref={sliderLineRef}
-                         className="absolute top-0 bottom-0 w-1 bg-white/80 backdrop-blur-sm z-10 pointer-events-none"
-                         style={{ transform: 'translateX(-50%)', left: '50%' }}
-                      >
-                         {/* Glowing Handle */}
-                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.5)] border border-white/40 active:scale-95 transition-transform">
-                            <div className="flex items-center gap-1">
-                               <div className="w-1 h-4 md:h-6 bg-white rounded-full opacity-60"></div>
-                               <div className="w-1 h-6 md:h-8 bg-white rounded-full"></div>
-                               <div className="w-1 h-4 md:h-6 bg-white rounded-full opacity-60"></div>
-                            </div>
-                         </div>
-                      </div>
- 
-                      {/* Floating Badges */}
-                      <div className="absolute inset-x-3 md:inset-x-6 top-3 md:top-6 flex justify-between gap-2 pointer-events-none">
-                         <div className="px-3 md:px-5 py-1.5 md:py-2.5 rounded-full bg-black/40 backdrop-blur-md text-white text-[10px] md:text-xs font-black border border-white/20 tracking-tighter md:tracking-widest uppercase shadow-lg">
-                            {selectedWeek}
-                         </div>
-                         <div className="px-3 md:px-5 py-1.5 md:py-2.5 rounded-full bg-[#c5a059]/90 backdrop-blur-md text-white text-[10px] md:text-xs font-black border border-white/20 tracking-tighter md:tracking-widest uppercase shadow-lg">
-                            Goal: Week 14
-                         </div>
-                      </div>
- 
-                      {/* Label Overlays */}
-                      <div className="absolute bottom-4 md:bottom-8 left-4 md:left-8 pointer-events-none">
-                         <p className="text-white text-xl md:text-5xl font-serif font-black opacity-10 md:opacity-20 select-none tracking-tighter">BEFORE</p>
-                      </div>
-                      <div className="absolute bottom-4 md:bottom-8 right-4 md:right-8 pointer-events-none text-right">
-                         <p className="text-white text-xl md:text-5xl font-serif font-black opacity-10 md:opacity-20 select-none tracking-tighter">AFTER</p>
-                      </div>
-                   </div>
- 
-                   <div className="mt-8 flex items-center justify-center gap-4 text-[#064e3b]/40">
-                      <div className="h-px w-12 bg-current"></div>
-                      <p className="text-sm font-black uppercase tracking-[0.3em] font-serif italic text-[#c5a059]">Slide the Ritual Transformation</p>
-                      <div className="h-px w-12 bg-current"></div>
-                   </div>
-                </motion.div>
+               <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
+                  className="mb-12 md:mb-20 max-w-4xl mx-auto"
+               >
+                  <div
+                     ref={sliderRef}
+                     onMouseDown={handleMouseDown}
+                     onTouchStart={handleMouseDown}
+                     className="relative cursor-ew-resize select-none overflow-hidden rounded-3xl md:rounded-[40px] aspect-[4/5] md:aspect-video shadow-2xl border-4 border-white group"
+                  >
+
+                     {/* After Image (Base) */}
+                     <img
+                        src="/WEEK14.JPG"
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                        alt="After 14 weeks"
+                        loading="lazy"
+                     />
+
+                     {/* Before Image (Overlay) */}
+                     <div
+                        ref={beforeImageRef}
+                        className="absolute inset-0 overflow-hidden"
+                        style={{
+                           clipPath: `inset(0 ${100 - sliderPos}% 0 0)`
+                        }}
+                     >
+                        <img
+                           src="/WEEK1.PNG"
+                           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                           alt="Before"
+                           loading="lazy"
+                        />
+                     </div>
+
+                     {/* Comparison Line & Handle */}
+                     <div
+                        ref={sliderLineRef}
+                        className="absolute top-0 bottom-0 w-1 bg-white/80 backdrop-blur-sm z-10 pointer-events-none"
+                        style={{ transform: 'translateX(-50%)', left: '50%' }}
+                     >
+                        {/* Glowing Handle */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.5)] border border-white/40 active:scale-95 transition-transform">
+                           <div className="flex items-center gap-1">
+                              <div className="w-1 h-4 md:h-6 bg-white rounded-full opacity-60"></div>
+                              <div className="w-1 h-6 md:h-8 bg-white rounded-full"></div>
+                              <div className="w-1 h-4 md:h-6 bg-white rounded-full opacity-60"></div>
+                           </div>
+                        </div>
+                     </div>
+
+                     {/* Floating Badges */}
+                     <div className="absolute inset-x-3 md:inset-x-6 top-3 md:top-6 flex justify-between gap-2 pointer-events-none">
+                        <div className="px-3 md:px-5 py-1.5 md:py-2.5 rounded-full bg-black/40 backdrop-blur-md text-white text-[10px] md:text-xs font-black border border-white/20 tracking-tighter md:tracking-widest uppercase shadow-lg">
+                           {selectedWeek}
+                        </div>
+                        <div className="px-3 md:px-5 py-1.5 md:py-2.5 rounded-full bg-[#c5a059]/90 backdrop-blur-md text-white text-[10px] md:text-xs font-black border border-white/20 tracking-tighter md:tracking-widest uppercase shadow-lg">
+                           Goal: Week 14
+                        </div>
+                     </div>
+
+                     {/* Label Overlays */}
+                     <div className="absolute bottom-4 md:bottom-8 left-4 md:left-8 pointer-events-none">
+                        <p className="text-white text-xl md:text-5xl font-serif font-black opacity-10 md:opacity-20 select-none tracking-tighter">BEFORE</p>
+                     </div>
+                     <div className="absolute bottom-4 md:bottom-8 right-4 md:right-8 pointer-events-none text-right">
+                        <p className="text-white text-xl md:text-5xl font-serif font-black opacity-10 md:opacity-20 select-none tracking-tighter">AFTER</p>
+                     </div>
+                  </div>
+
+                  <div className="mt-8 flex items-center justify-center gap-4 text-[#064e3b]/40">
+                     <div className="h-px w-12 bg-current"></div>
+                     <p className="text-sm font-black uppercase tracking-[0.3em] font-serif italic text-[#c5a059]">Slide the Ritual Transformation</p>
+                     <div className="h-px w-12 bg-current"></div>
+                  </div>
+               </motion.div>
 
                {/* Weekly Progress */}
                <div className="mt-6 md:mt-8 overflow-hidden max-w-4xl mx-auto">
@@ -421,7 +425,7 @@ const HomePage = () => {
          </section>
          <IngredientsSection />
 
-         <AboutSection />
+         {/* <AboutSection /> */}
          <ReviewSection />
 
 

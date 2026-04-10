@@ -35,8 +35,13 @@ body {
   position: relative;
   font-family: 'Outfit', sans-serif !important;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
+  touch-action: auto;
   backface-visibility: hidden;
+  overscroll-behavior-y: none;
+}
+
+.will-animate {
+    will-change: transform, opacity;
 }
 
 #root {
@@ -134,12 +139,12 @@ h1, h2, h3, h4, th, .font-serif {
   perspective: 1000px;
 }
 
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.hide-scrollbar {
+.hide-scrollbar, .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar, .scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
