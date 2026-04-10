@@ -25,7 +25,6 @@ const HomePage = () => {
    const [selectedWeek, setSelectedWeek] = useState("Week 1");
 
    const updateSliderPosition = (pos) => {
-
       sliderPosRef.current = pos;
       if (sliderLineRef.current) {
          sliderLineRef.current.style.left = `${pos}%`;
@@ -33,7 +32,6 @@ const HomePage = () => {
       if (beforeImageRef.current) {
          beforeImageRef.current.style.clipPath = `inset(0 ${100 - pos}% 0 0)`;
       }
-      setSliderPos(pos);
    };
    useEffect(() => {
       updateSliderPosition(50); // center on load
@@ -44,7 +42,10 @@ const HomePage = () => {
       e.preventDefault();
    };
 
-   const handleMouseUp = () => setIsDragging(false);
+   const handleMouseUp = () => {
+      setIsDragging(false);
+      setSliderPos(sliderPosRef.current);
+   };
 
    useEffect(() => {
       const onMove = (e) => {
@@ -55,9 +56,7 @@ const HomePage = () => {
          const pos = ((clientX - rect.left) / rect.width) * 100;
          const clampedPos = Math.max(0, Math.min(100, pos));
          
-         requestAnimationFrame(() => {
-            updateSliderPosition(clampedPos);
-         });
+         updateSliderPosition(clampedPos);
       };
 
       if (isDragging) {
@@ -176,7 +175,7 @@ const HomePage = () => {
             <motion.div
                initial={{ opacity: 0, y: 40 }}
                whileInView={{ opacity: 1, y: 0 }}
-               viewport={{ once: true, margin: "-100px" }}
+               viewport={{ once: true, margin: "-20px" }}
                transition={{ duration: 0.8, ease: "easeOut" }}
                className="max-w-7xl mx-auto"
             >

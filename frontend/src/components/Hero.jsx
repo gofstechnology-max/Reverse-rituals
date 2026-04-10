@@ -56,7 +56,7 @@ const Hero = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative flex items-center overflow-hidden min-h-screen bg-white"
+      className="relative flex items-center overflow-hidden min-h-[90vh] md:min-h-screen bg-white"
       style={{
         backgroundImage: "url('/leaves-bg.png')",
         backgroundSize: "cover",
@@ -98,10 +98,10 @@ const Hero = () => {
         
         {/* Right/Top - Product Image */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
-          animate={{ opacity: 1, scale: 1, rotate: 0 }}
-          transition={{ duration: 1, delay: 0.3, type: "spring", stiffness: 100 }}
-          className="relative flex justify-center lg:order-2 order-1"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          className="relative flex justify-center lg:order-2 order-1 w-full"
         >
           <div className="relative w-[280px] sm:w-[420px] md:w-[520px] lg:w-[600px] aspect-square flex items-center justify-center">
 

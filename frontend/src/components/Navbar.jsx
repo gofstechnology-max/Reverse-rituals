@@ -72,7 +72,7 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <Link to="/" className="text-lg md:text-2xl font-serif font-black flex items-center gap-2 md:gap-3 group">
             <div className="w-10 md:w-15 flex items-center justify-center">
-              <img src="/rr-logo.png" alt="" className='w-full h-full object-cover' />
+              <img src="/rr-logo.png" alt="" className='w-full h-full object-cover' fetchpriority="high" />
             </div>
             <span className="text-[#064e3b] tracking-tighter hidden xs:inline">Reverse Rituals</span>
           </Link>

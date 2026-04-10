@@ -70,8 +70,53 @@ const ProductShowcase = () => {
 
                     {/* LEFT - PRODUCT + ROTATION */}
                     <div className="relative flex justify-center items-center">
-
-                        <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} className="relative flex justify-center items-center" > {/* Glow Circle */} <div className="absolute w-80 h-80 rounded-full bg-[#c5a059]/10 blur-3xl" /> {/* Rotating Ingredients (UNCHANGED LOGIC) */} <motion.div className="absolute w-96 h-96" animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} > {ingredients.map((ing) => { const rad = (ing.angle * Math.PI) / 180; const x = Math.cos(rad) * 180; const y = Math.sin(rad) * 180; return (<motion.div key={ing.name} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" style={{ x, y }} animate={{ rotate: -360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear", }} > <div className="bg-[#0f2f25]/80 backdrop-blur-md border border-[#c5a059]/20 rounded-full px-3 py-2 text-xs whitespace-nowrap flex items-center gap-2 shadow-lg hover:scale-110 transition"> <span>{ing.emoji}</span> <span className="text-white/80 font-medium"> {ing.name} </span> </div> </motion.div>); })} </motion.div> {/* Product Bottle */} <motion.img src="/ingredient.png" alt="Hair Oil" className="relative z-10 w-64 md:w-80 drop-shadow-2xl" animate={{ y: [0, -15, 0] }} transition={{ duration: 4, repeat: Infinity }} whileHover={{ scale: 1.05 }} /> </motion.div>
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.9 }} 
+                            whileInView={{ opacity: 1, scale: 1 }} 
+                            viewport={{ once: true }}
+                            className="relative flex justify-center items-center" 
+                        >
+                            {/* Glow Circle */}
+                            <div className="absolute w-64 md:w-80 h-64 md:h-80 rounded-full bg-[#c5a059]/10 blur-3xl" />
+                            
+                            {/* Rotating Ingredients */}
+                            <motion.div 
+                                className="absolute w-72 md:w-96 h-72 md:h-96" 
+                                animate={{ rotate: 360 }} 
+                                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                            >
+                                {ingredients.map((ing) => {
+                                    const rad = (ing.angle * Math.PI) / 180;
+                                    const x = Math.cos(rad) * 140; // Reduced radius for mobile
+                                    const y = Math.sin(rad) * 140;
+                                    
+                                    return (
+                                        <motion.div 
+                                            key={ing.name} 
+                                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" 
+                                            style={{ x, y }} 
+                                            animate={{ rotate: -360 }} 
+                                            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                                        >
+                                            <div className="bg-[#0f2f25]/80 backdrop-blur-md border border-[#c5a059]/20 rounded-full px-2 md:px-3 py-1 md:py-2 text-[10px] md:text-xs whitespace-nowrap flex items-center gap-1 md:gap-2 shadow-lg hover:scale-110 transition">
+                                                <span>{ing.emoji}</span>
+                                                <span className="text-white/80 font-medium">{ing.name}</span>
+                                            </div>
+                                        </motion.div>
+                                    );
+                                })}
+                            </motion.div>
+                            
+                            {/* Product Bottle */}
+                            <motion.img 
+                                src="/ingredient.png" 
+                                alt="Hair Oil" 
+                                className="relative z-10 w-48 md:w-80 drop-shadow-2xl" 
+                                animate={{ y: [0, -10, 0] }} 
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} 
+                                whileHover={{ scale: 1.05 }} 
+                            />
+                        </motion.div>
                     </div>
 
                     {/* RIGHT */}

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import Layout from './components/Layout';
+import Preloader from './components/Preloader';
 import HomePage from './pages/HomePage';
 import ShopPage from './pages/ShopPage';
 import ProductPage from './pages/ProductPage';
@@ -21,6 +22,7 @@ function App() {
   return (
     <AuthProvider>
       <CartProvider>
+        <Preloader />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />}>

@@ -33,11 +33,12 @@ const AboutSection = () => {
 
         {/* Header */}
         <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          transition={{ duration: 0.6 }}
-          className="text-center mb-10 md:mb-16"
+           variants={fadeUp}
+           initial="hidden"
+           whileInView="show"
+           viewport={{ once: true }}
+           transition={{ duration: 0.6 }}
+           className="text-center mb-10 md:mb-16"
         >
           <span className="text-[#c5a059] font-bold uppercase tracking-[0.2em] text-xs md:text-sm mb-3 md:mb-4 block">
             Behind the Brand
@@ -55,7 +56,8 @@ const AboutSection = () => {
           <motion.div
             variants={fadeUp}
             initial="hidden"
-            animate="show"
+            whileInView="show"
+            viewport={{ once: true }}
             transition={{ delay: 0.1 }}
             className="md:col-span-5 md:order-2 space-y-4 md:space-y-6"
           >
@@ -92,7 +94,8 @@ const AboutSection = () => {
           <motion.div
             variants={fadeUp}
             initial="hidden"
-            animate="show"
+            whileInView="show"
+            viewport={{ once: true }}
             transition={{ delay: 0.2 }}
             className="md:col-span-2 md:order-3 hidden md:flex items-center justify-center"
           >
@@ -112,7 +115,8 @@ const AboutSection = () => {
           <motion.div
             variants={fadeUp}
             initial="hidden"
-            animate="show"
+            whileInView="show"
+            viewport={{ once: true }}
             transition={{ delay: 0.3 }}
             className="md:col-span-5 md:order-1 space-y-4 md:space-y-6"
           >
@@ -149,7 +153,8 @@ const AboutSection = () => {
         <motion.div
           variants={fadeUp}
           initial="hidden"
-          animate="show"
+          whileInView="show"
+          viewport={{ once: true }}
           className="bg-white/80 backdrop-blur-xl rounded-2xl md:rounded-3xl p-6 md:p-10 shadow-xl text-center"
         >
           <span className="text-[#c5a059] font-semibold uppercase tracking-[0.2em] text-xs">

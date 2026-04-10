@@ -35,6 +35,8 @@ body {
   position: relative;
   font-family: 'Outfit', sans-serif !important;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  backface-visibility: hidden;
 }
 
 #root {
