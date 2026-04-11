@@ -16,7 +16,7 @@ const Hero = () => {
       subtitle: "Natural Hair Recovery System",
       title: "Stop Hair Fall.\nRegrow .",
       desc: "Scientifically blended Ayurvedic ingredients designed to reduce hair fall, activate dormant follicles, and restore scalp health.",
-      image: "/Hero.png"
+      image: "/ingredient.png"
     },
     {
       subtitle: "Chemical-Free Hair Care",
@@ -110,7 +110,7 @@ const Hero = () => {
                   />
                 </div>
 
-               
+
 
                 <div className="flex items-center gap-2">
                   <ShieldCheck size={18} className="text-[#c5a059]" />
