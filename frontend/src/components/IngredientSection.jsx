@@ -153,13 +153,13 @@ const ProductShowcase = () => {
                                     return (
                                         <motion.div
                                             key={ing.name}
-                                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 will-change-transform"
                                             style={{ x, y }}
                                             animate={{ rotate: -360 }}
                                             transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
                                             onClick={() => setSelected(ing)}
                                         >
-                                            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-full px-3 md:px-8 py-1.5 md:py-4 text-[9px] md:text-sm whitespace-nowrap flex items-center gap-2 md:gap-4 shadow-2xl cursor-pointer hover:border-[#c5a059]/40 transition">
+                                            <div className="bg-white/10 md:bg-white/5 border border-white/10 rounded-full px-3 md:px-8 py-1.5 md:py-4 text-[9px] md:text-sm whitespace-nowrap flex items-center gap-2 md:gap-4 shadow-2xl cursor-pointer hover:border-[#c5a059]/40 transition">
 
                                                 <span className="text-base md:text-3xl">
                                                     {ing.emoji}
@@ -194,7 +194,7 @@ const ProductShowcase = () => {
                     <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
 
                         <motion.div
-                            className="absolute inset-0 bg-[#063b2c]/95 backdrop-blur-xl"
+                            className="absolute inset-0 bg-[#063b2c]/98" // Solid opacity for better mobile perf
                             onClick={() => setSelected(null)}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -202,7 +202,7 @@ const ProductShowcase = () => {
                         />
 
                         <motion.div
-                            className="relative w-full max-w-2xl max-h-[90vh] bg-[#0f4b3b] border border-white/10 rounded-[2.5rem] overflow-hidden flex flex-col"
+                            className="relative w-full max-w-2xl max-h-[90vh] bg-[#0f4b3b] border border-white/10 rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl will-change-transform"
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}

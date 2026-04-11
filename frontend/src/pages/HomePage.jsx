@@ -209,14 +209,14 @@ const HomePage = () => {
                <motion.div
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  className="mb-10 md:mb-32 max-w-5xl mx-auto"
+                  viewport={{ once: true, amount: 0.1 }} // Optimize viewport check
+                  className="mb-10 md:mb-32 max-w-5xl mx-auto will-change-transform"
                >
                   <div
                      ref={sliderRef}
                      onMouseDown={handleMouseDown}
                      onTouchStart={handleMouseDown}
-                     className="relative cursor-ew-resize select-none overflow-hidden rounded-3xl md:rounded-[60px] aspect-square md:aspect-video shadow-xl md:shadow-2xl border-2 md:border-8 border-white translate-z-0 touch-none"
+                     className="relative cursor-ew-resize select-none overflow-hidden rounded-3xl md:rounded-[60px] aspect-square md:aspect-video shadow-xl md:shadow-2xl border-2 md:border-8 border-white translate-z-0 touch-none will-change-transform"
                   >
 
                      {/* After Image */}
@@ -230,7 +230,7 @@ const HomePage = () => {
                      {/* Before Image - Fixed to Week 1 */}
                      <div
                         ref={beforeImageRef}
-                        className="absolute inset-0 overflow-hidden"
+                        className="absolute inset-0 overflow-hidden will-change-[clip-path]"
                         style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
                      >
                         <img
@@ -244,7 +244,7 @@ const HomePage = () => {
                      {/* Comparison Handle */}
                      <div
                         ref={sliderLineRef}
-                        className="absolute top-0 bottom-0 w-0.5 md:w-1 bg-white z-10 pointer-events-none"
+                        className="absolute top-0 bottom-0 w-0.5 md:w-1 bg-white z-10 pointer-events-none will-change-[left]"
                         style={{ transform: 'translateX(-50%)', left: '50%' }}
                      >
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 md:w-20 md:h-20 bg-white rounded-full flex items-center justify-center shadow-xl border-2 border-[#064e3b]/10">
@@ -256,12 +256,12 @@ const HomePage = () => {
                         </div>
                      </div>
 
-                     {/* Labels */}
+                     {/* Labels - Simplified for performance */}
                      <div className="absolute inset-x-3 md:inset-x-6 top-3 md:top-6 flex justify-between gap-2 md:gap-4 pointer-events-none">
-                        <div className="px-3 md:px-6 py-1.5 md:py-3 rounded-full bg-black/20 md:bg-white/10 backdrop-blur-xl text-white text-[8px] md:text-xs font-black border border-white/20 tracking-widest uppercase">
+                        <div className="px-3 md:px-6 py-1.5 md:py-3 rounded-full bg-black/40 md:bg-white/10 text-white text-[8px] md:text-xs font-black border border-white/20 tracking-widest uppercase">
                            Week 1
                         </div>
-                        <div className="px-3 md:px-6 py-1.5 md:py-3 rounded-full bg-[#c5a059]/90 backdrop-blur-xl text-white text-[8px] md:text-xs font-black border border-white/20 tracking-widest uppercase">
+                        <div className="px-3 md:px-6 py-1.5 md:py-3 rounded-full bg-[#c5a059] text-white text-[8px] md:text-xs font-black border border-white/20 tracking-widest uppercase">
                            Week 14
                         </div>
                      </div>

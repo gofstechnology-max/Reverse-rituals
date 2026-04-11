@@ -68,7 +68,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-[100] px-4 md:px-6 py-2 md:py-3 bg-white md:bg-white/80 md:backdrop-blur-md border-b border-[#064e3b]/5  ">
+      <nav className="fixed top-0 left-0 right-0 z-[100] px-4 md:px-6 py-2 md:py-3 bg-white md:bg-white/80 md:backdrop-blur-md border-b border-[#064e3b]/5 will-change-transform">
         <div className="max-w-7xl mx-auto">
           {/* Mobile Layout: [Cart/Profile] [Logo] [Menu] */}
           <div className="grid grid-cols-3 items-center md:hidden h-12">
@@ -154,7 +154,7 @@ const Navbar = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setIsMenuOpen(false)}
-                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[110]"
+                className="fixed inset-0 bg-black/60 z-[110]"
               />
               <motion.div
                 initial={{ x: '100%', opacity: 0 }}

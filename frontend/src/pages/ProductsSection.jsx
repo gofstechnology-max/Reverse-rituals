@@ -9,23 +9,18 @@ const ProductsSection = ({ products, loading }) => {
     const sliderRef = useRef(null);
 
     useEffect(() => {
-        if (!sliderRef.current || products.length === 0) return;
+        // Disable auto-scroll on mobile to prevent stuttering/jank
+        if (typeof window !== 'undefined' && window.innerWidth < 768) return;
+        if (!sliderRef.current || !products?.length) return;
 
         let index = 0;
-
         const interval = setInterval(() => {
-            index++;
-
-            if (index >= products.length) {
-                index = 0;
-            }
-
+            index = (index + 1) % products.length;
             sliderRef.current.scrollTo({
                 left: sliderRef.current.clientWidth * index,
                 behavior: "smooth"
             });
-
-        }, 2000);
+        }, 4000); // Increased delay for better UX
 
         return () => clearInterval(interval);
     }, [products]);
