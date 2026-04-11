@@ -20,10 +20,10 @@ const reviews = [
 
 const ReviewSection = () => {
   return (
-    <section className="py-20 bg-[#fdfbf7]">
+    <section className="py-6 bg-[#fdfbf7]">
 
       {/* Title */}
-      <div className="text-center mb-14">
+      <div className="text-center mb-8 md:mb-10">
         <h2 className="text-3xl md:text-5xl font-serif font-bold text-[#064e3b]">
           Honest <span className="italic text-[#c5a059]">Reflections</span>
         </h2>

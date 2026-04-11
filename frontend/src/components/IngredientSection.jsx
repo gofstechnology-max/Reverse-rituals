@@ -107,7 +107,7 @@ const ProductShowcase = () => {
     const radius = isMobile ? Math.min(screenWidth * 0.35, 130) : 320;
 
     return (
-        <section className="relative py-24 md:py-32 bg-[#063b2c] overflow-hidden text-white">
+        <section className="relative py-12 md:py-20 bg-[#063b2c] overflow-hidden text-white">
 
             {/* Background glow */}
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#c5a059]/5 blur-[150px] -mr-64 -mt-64 rounded-full" />

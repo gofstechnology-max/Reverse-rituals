@@ -58,7 +58,7 @@ const Hero = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative flex items-center  md:pt-2 pb-12 overflow-hidden bg-[#fdfbf7]"
+      className="relative flex items-center  md:pt-2 pb-0 overflow-hidden bg-[#fdfbf7]"
       style={{
         backgroundImage: "url('/leaves-bg.png')",
         backgroundSize: "cover",
@@ -92,48 +92,32 @@ const Hero = () => {
         />
       </div>
 
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10 w-full px-6 md:px-16 py-20">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 items-center relative z-10 w-full px-6 md:px-16 py-12 md:py-20">
 
-        {/* Mobile: Image First - Desktop: Content First */}
-        {/* Mobile Order: Image (1) -> Content (2) */}
-        {/* Desktop Order: Content (1) -> Image (2) */}
-
-        {/* Right/Top - Product Image */}
-        <div className="relative flex justify-center lg:order-2 order-1 w-full transform-gpu">
-          <div className="relative w-[280px] sm:w-[420px] md:w-[520px] lg:w-[600px] aspect-square flex items-center justify-center">
-
-            <AnimatePresence mode="popLayout">
-              <motion.div
-                key={current}
-                initial={{ opacity: 0, x: 20, scale: 0.95 }}
-                animate={{
-                  opacity: 1,
-                  x: 0,
-                  scale: 1,
-                }}
-                exit={{ opacity: 0, x: -20, scale: 1.05 }}
-                transition={{
-                  duration: 0.8,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className="absolute inset-0 flex items-center justify-center p-4 will-change-[transform,opacity]"
-              >
-                <img
-                  src={slides[current].image}
-                  alt={slides[current].title}
-                  className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(6,78,59,0.25)]"
-                />
-              </motion.div>
-            </AnimatePresence>
+        {/* Right - Static Image for Better Mobile Performance */}
+        <div className="relative flex justify-center lg:order-2 order-1 w-full">
+          <div className="relative w-[260px] sm:w-[380px] md:w-[480px] lg:w-[550px] aspect-square flex items-center justify-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1 }}
+              className="absolute inset-0 flex items-center justify-center p-4"
+            >
+              <img
+                src="/ingredient.png"
+                alt="Rosemary Alchemy"
+                className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(6,78,59,0.25)]"
+              />
+            </motion.div>
 
             <motion.div
-              className="absolute inset-0 bg-[#c5a059]/10 blur-[80px] rounded-full hidden md:block"
+              className="absolute inset-0 bg-[#c5a059]/10 blur-[60px] rounded-full hidden md:block"
               animate={{
                 scale: [1, 1.05, 1],
-                opacity: [0.3, 0.5, 0.3],
+                opacity: [0.2, 0.4, 0.2],
               }}
               transition={{
-                duration: 4,
+                duration: 5,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}

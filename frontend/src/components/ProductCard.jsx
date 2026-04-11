@@ -13,46 +13,65 @@ const ProductCard = ({ product }) => {
     toast.success(`${product.name} added to cart!`, {
       position: "bottom-right",
       autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
       theme: "light",
     });
   };
 
   return (
-    <div className="bg-white rounded-xl md:rounded-2xl overflow-hidden flex flex-col border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 group h-full">
-      <Link to={`/product/${product._id}`} className="relative block aspect-4/5 overflow-hidden">
+    <div className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+
+      {/* Product Image */}
+      <Link
+        to={`/product/${product._id}`}
+        className="relative block aspect-[4/5] overflow-hidden bg-[#fdfbf7]"
+      >
         <img
           src={product.image}
           alt={product.name}
           loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
-  
+
+        {/* subtle overlay */}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-500" />
       </Link>
 
-      <div className="p-3 md:p-5 flex flex-col grow">
+      {/* Content */}
+      <div className="p-4 md:p-5 flex flex-col grow">
+
+        {/* Product Title */}
         <Link to={`/product/${product._id}`}>
-          <h3 className="text-sm md:text-lg font-medium text-gray-900 mb-1 group-hover:text-[#c5a059] transition-colors line-clamp-1">
+          <h3 className="text-sm md:text-lg font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-[#c5a059] transition-colors">
             {product.name}
           </h3>
         </Link>
-        
+
+        {/* Category (optional) */}
+        {product.category && (
+          <p className="text-xs text-gray-400 mb-3">
+            {product.category}
+          </p>
+        )}
+
+        {/* Bottom Section */}
         <div className="mt-auto flex items-center justify-between">
-          <div>
-            <span className="text-base md:text-xl font-serif text-gray-900">₹{product.price}</span>
-            
+
+          {/* Price */}
+          <div className="flex flex-col">
+            <span className="text-lg md:text-xl font-serif text-[#064e3b] font-bold">
+              ₹{product.price}
+            </span>
           </div>
-          
-          <button 
+
+          {/* Add to Cart */}
+          <button
             onClick={handleAddToCart}
-            className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-1.5 md:py-2 bg-[#064e3b] text-white text-xs md:text-sm rounded-full hover:bg-[#c5a059] transition-colors"
+            className="flex items-center gap-2 px-3 md:px-4 py-2 bg-[#064e3b] text-white text-xs md:text-sm rounded-full hover:bg-[#c5a059] transition-all duration-300 shadow-sm hover:shadow-md"
           >
-            <ShoppingCart size={14} md:size={16} />
+            <ShoppingCart size={16} />
             <span>Add</span>
           </button>
+
         </div>
       </div>
     </div>

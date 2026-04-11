@@ -143,7 +143,7 @@ export default function Surya() {
             </motion.div>
 
             {/* INGREDIENTS */}
-            <section className="px-4 md:px-6 mt-32 md:mt-48">
+            <section className="px-4 md:px-6 mt-16 md:mt-24">
 
                 <div className="max-w-7xl mx-auto text-center">
 
@@ -155,7 +155,7 @@ export default function Surya() {
                     >
                         Powerful <span className="italic font-serif text-[#c5a059]">Ayurvedic</span> Fusion
                     </motion.h2>
-                    <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 md:gap-10 mt-16 md:mt-24">
+                    <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 md:gap-10 mt-10 md:mt-16">
 
                         {ingredients.map((item, i) => (
                             <motion.div
@@ -164,18 +164,18 @@ export default function Surya() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: i * 0.1, type: "spring" }}
-                                className="flex flex-col bg-white rounded-3xl p-8 items-start gap-4 hover:shadow-2xl border border-black/5 hover:border-[#c5a059]/20 transition-all duration-500 group translate-z-0"
+                                className="flex flex-col bg-white rounded-3xl p-6 md:p-8 items-start gap-3 md:gap-4 hover:shadow-2xl border border-black/5 hover:border-[#c5a059]/20 transition-all duration-500 group translate-z-0"
                             >
-                                <div className={`w-14 h-14 md:w-20 md:h-20 rounded-2xl flex items-center justify-center text-2xl md:text-3xl group-hover:scale-110 transition-transform duration-500 ${bgColors[i]}`}>
+                                <div className={`w-12 h-12 md:w-20 md:h-20 rounded-2xl flex items-center justify-center text-xl md:text-3xl group-hover:scale-110 transition-transform duration-500 ${bgColors[i]}`}>
                                     {icons[i]}
                                 </div>
 
-                                <div className="mt-2 md:mt-4">
-                                    <h3 className="font-black text-[#064e3b] text-sm md:text-lg uppercase tracking-tight mb-1 md:mb-2">
+                                <div className="mt-2 text-left">
+                                    <h3 className="font-black text-[#064e3b] text-[12px] md:text-lg uppercase tracking-tight mb-1 md:mb-2 leading-tight">
                                         {item.title}
                                     </h3>
 
-                                    <p className="text-[10px] md:text-sm font-medium text-gray-500 leading-relaxed">
+                                    <p className="text-[10px] md:text-sm font-medium text-gray-500 leading-relaxed overflow-hidden line-clamp-2 md:line-clamp-none">
                                         {item.desc}
                                     </p>
                                 </div>
@@ -187,7 +187,7 @@ export default function Surya() {
             </section>
 
             {/* BENEFITS */}
-            <section className="px-4 md:px-6 mt-32 md:mt-48">
+            <section className="px-4 md:px-6 mt-16 md:mt-24">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
 
@@ -219,13 +219,13 @@ export default function Surya() {
 
 
             {/* HOW TO USE */}
-            <section className="px-4 md:px-6 mt-32 md:mt-48">
+            <section className="px-4 md:px-6 mt-16 md:mt-24">
                 <div className="max-w-7xl mx-auto text-center">
                     <motion.h2 
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-3xl md:text-5xl lg:text-6xl font-black text-[#064e3b] mb-20 md:mb-32"
+                        className="text-3xl md:text-5xl lg:text-6xl font-black text-[#064e3b] mb-12 md:mb-20"
                     >
                         Master the <span className="italic font-serif text-[#c5a059]">Ritual</span>
                     </motion.h2>

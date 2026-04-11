@@ -21,7 +21,7 @@ const AboutSection = () => {
   ];
 
   return (
-    <section ref={sectionRef} className="py-12 md:py-20 px-4 overflow-hidden relative">
+    <section ref={sectionRef} className="py-12 md:py-16 px-4 overflow-hidden relative">
 
       {/* Background */}
       <div className="absolute inset-0">
@@ -38,7 +38,7 @@ const AboutSection = () => {
            whileInView="show"
            viewport={{ once: true }}
            transition={{ duration: 0.6 }}
-           className="text-center mb-10 md:mb-16"
+           className="text-center mb-8 md:mb-12"
         >
           <span className="text-[#c5a059] font-bold uppercase tracking-[0.2em] text-xs md:text-sm mb-3 md:mb-4 block">
             Behind the Brand

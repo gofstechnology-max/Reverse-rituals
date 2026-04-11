@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { ShoppingBag, Star, Zap, Leaf, Shield, Heart, Award, CheckCircle2, Play, BookOpen, FlaskConical, Globe, HelpCircle, ChevronDown, ArrowRight } from 'lucide-react';
 import HairProductSection from '../components/HairProductSection';
 import IngredientsSection from '../components/IngredientSection';
+import ProductsSection from './ProductsSection';
 
 
 const HomePage = () => {
@@ -179,74 +180,9 @@ const HomePage = () => {
             </div> */}
 
 
-         <section id="products" className="py-20 md:py-32 px-6 overflow-hidden">
-            <motion.div
-               initial={{ opacity: 0, y: 40 }}
-               whileInView={{ opacity: 1, y: 0 }}
-               viewport={{ once: true, margin: "-100px" }}
-               transition={{ type: "spring", stiffness: 50, damping: 20 }}
-               className="max-w-7xl mx-auto"
-            >
-               <div className="flex flex-col md:flex-row items-baseline justify-between mb-16 md:mb-24 gap-8 md:gap-12">
-                  <div className="max-w-2xl">
-                     <motion.span
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.2 }}
-                        className="section-subtitle"
-                     >Our Iconic Concentrates</motion.span>
-                     <h2 className="section-title">The <span className="italic font-medium text-[#c5a059]">Reverse</span> Collection</h2>
-                     <p className="text-[#064e3b]/60 text-lg md:text-2xl font-medium leading-relaxed max-w-xl">Each formulation is a precisely engineered ritual, designed to reverse damage and restore biological vitality.</p>
-                  </div>
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                     <Link to="/shop" className="flex items-center gap-4 bg-white px-8 py-4 rounded-full border border-black/5 shadow-xl hover:shadow-2xl transition-all group text-[#064e3b]">
-                        <ShoppingBag size={20} className="text-[#c5a059]" />
-                        <span className="font-black text-[10px] md:text-xs uppercase tracking-[0.3em]">{products.length} Masterpieces</span>
-                     </Link>
-                  </motion.div>
-               </div>
-            </motion.div>
+         <ProductsSection products={products} />
 
-            {loading ? (
-               <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
-                  {[1, 2, 3, 4].map(n => (
-                     <div key={n} className="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm animate-pulse">
-                        <div className="aspect-[4/5] bg-gray-100 relative">
-                           <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
-                        </div>
-                        <div className="p-6 space-y-4">
-                           <div className="h-4 bg-gray-200 rounded-full w-3/4"></div>
-                           <div className="h-3 bg-gray-100 rounded-full w-1/2"></div>
-                           <div className="h-10 bg-gray-200 rounded-xl w-full"></div>
-                        </div>
-                     </div>
-                  ))}
-               </div>
-            ) : (
-               <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
-                  {products.map((product, idx) => (
-                     <motion.div
-                        key={product._id}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, amount: 0.1 }}
-                        transition={{
-                           type: "spring",
-                           stiffness: 100,
-                           damping: 20,
-                           delay: idx * 0.05
-                        }}
-                        className="translate-z-0"
-                     >
-                        <ProductCard product={product} />
-                     </motion.div>
-                  ))}
-               </div>
-            )}
-         </section>
-
-         <section className="py-20 md:py-32 bg-gradient-to-b from-[#fafafa] to-white overflow-hidden">
+         <section className="py-10 md:py-10 bg-gradient-to-b from-[#fafafa] to-white overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 md:px-6">
 
                {/* Header */}
@@ -262,25 +198,25 @@ const HomePage = () => {
                   </span>
 
                   <h2 className="text-3xl md:text-5xl lg:text-7xl font-black text-[#064e3b] mt-4 leading-[1.1] tracking-tight">
-                    Biological <span className="font-serif italic text-[#c5a059]">Architecture</span>
-                    <span className="block text-[14px] md:text-2xl font-medium text-[#064e3b]/40 mt-6 tracking-normal ">
-                      Real Customers Results: Hair transformation (reduced hair fall)
-                    </span>
+                     Biological <span className="font-serif italic text-[#c5a059]">Architecture</span>
+                     <span className="block text-[14px] md:text-2xl font-medium text-[#064e3b]/40 mt-6 tracking-normal ">
+                        Real Customers Results: Hair transformation (reduced hair fall)
+                     </span>
                   </h2>
-                </motion.div>
+               </motion.div>
 
-                {/* Before After Slider - Mobile Optimized */}
-                <motion.div
-                   initial={{ opacity: 0 }}
-                   whileInView={{ opacity: 1 }}
-                   viewport={{ once: true }}
-                   className="mb-10 md:mb-32 max-w-5xl mx-auto"
-                >
-                   <div
-                      ref={sliderRef}
-                      onMouseDown={handleMouseDown}
-                      onTouchStart={handleMouseDown}
-                      className="relative cursor-ew-resize select-none overflow-hidden rounded-3xl md:rounded-[60px] aspect-square md:aspect-video shadow-xl md:shadow-2xl border-2 md:border-8 border-white translate-z-0 touch-none"
+               {/* Before After Slider - Mobile Optimized */}
+               <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  className="mb-10 md:mb-32 max-w-5xl mx-auto"
+               >
+                  <div
+                     ref={sliderRef}
+                     onMouseDown={handleMouseDown}
+                     onTouchStart={handleMouseDown}
+                     className="relative cursor-ew-resize select-none overflow-hidden rounded-3xl md:rounded-[60px] aspect-square md:aspect-video shadow-xl md:shadow-2xl border-2 md:border-8 border-white translate-z-0 touch-none"
                   >
 
                      {/* After Image */}
@@ -378,7 +314,7 @@ const HomePage = () => {
 
          {/* FAQs Section */}
          {/* FAQ Section */}
-         <section className="py-16 md:py-20 px-4 bg-white">
+         <section className="py-10 md:py-10 px-4 bg-white">
             <div className="max-w-3xl mx-auto">
                <motion.div
                   initial={{ opacity: 0, y: 20 }}
