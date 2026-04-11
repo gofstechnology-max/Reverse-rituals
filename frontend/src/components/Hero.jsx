@@ -59,11 +59,21 @@ const Hero = () => {
         <div className="relative flex justify-center lg:order-2 order-1 w-full">
           <div className="relative w-[260px] sm:w-[380px] md:w-[480px] lg:w-[550px] aspect-square flex items-center justify-center">
 
-            <img
+            <motion.img
               src={slides[current].image}
               alt="Hair Growth Product"
-              className="w-full h-full object-contain drop-shadow-xl transform-gpu"
               loading="eager"
+              className="w-full h-full object-contain drop-shadow-xl transform-gpu will-change-transform"
+
+              animate={{
+                y: [0, -15, 0]
+              }}
+
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
             />
 
           </div>
