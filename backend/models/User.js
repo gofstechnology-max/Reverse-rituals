@@ -6,6 +6,14 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   isAdmin: { type: Boolean, required: true, default: false },
+  shippingAddress: {
+    fullName: { type: String },
+    address: { type: String },
+    city: { type: String },
+    state: { type: String },
+    zipCode: { type: String },
+    phone: { type: String },
+  },
 }, { timestamps: true });
 
 // Hash the password before saving

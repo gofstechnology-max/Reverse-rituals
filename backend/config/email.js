@@ -87,7 +87,7 @@ const sendOrderEmail = async (toEmail, orderDetails) => {
   const mailOptions = {
     from: process.env.MAIL_FROM || 'greensignaltamil@gmail.com',
     to: toEmail, // Send to customer
-    cc: process.env.ADMIN_NOTIFY_EMAIL || 'greensignaltamil@gmail.com', // CC to admin
+    cc: process.env.ADMIN_NOTIFY_EMAIL || 'greensignaltamil@gmail.com,ReverseRituals@gmail.com', // CC to admin(s)
     subject: `Your Reverse Rituals Order #${orderId} - ₹${total}`,
     html: htmlContent,
   };

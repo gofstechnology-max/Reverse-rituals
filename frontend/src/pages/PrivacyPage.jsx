@@ -42,7 +42,7 @@ const PrivacyPage = () => {
 
           <section>
             <h2 className="text-xl font-bold text-[#064e3b] mb-4">6. Your Rights</h2>
-            <p>You have the right to access, update, or delete your personal information. Contact us at rituals@reverse.com to exercise these rights.</p>
+            <p>You have the right to access, update, or delete your personal information. Contact us at reverserituals@gmail.com to exercise these rights.</p>
           </section>
 
           <section>
@@ -57,7 +57,7 @@ const PrivacyPage = () => {
 
           <section>
             <h2 className="text-xl font-bold text-[#064e3b] mb-4">9. Contact Information</h2>
-            <p>For questions about this privacy policy, please contact us at rituals@reverse.com</p>
+            <p>For questions about this privacy policy, please contact us at reverserituals@gmail.com</p>
           </section>
         </div>
       </div>

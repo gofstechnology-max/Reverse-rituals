@@ -3,18 +3,28 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
-
-  useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem('cartItems'));
-    if (storedCart) {
-      setCartItems(storedCart);
-    }
-  }, []);
+  const [cartItems, setCartItems] = useState(() => {
+    // Initialize from localStorage immediately
+    const storedCart = localStorage.getItem('cartItems');
+    return storedCart ? JSON.parse(storedCart) : [];
+  });
 
   useEffect(() => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
+
+  // Also listen for localStorage changes from other pages
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const storedCart = localStorage.getItem('cartItems');
+      if (storedCart) {
+        setCartItems(JSON.parse(storedCart));
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   const addToCart = (product, qty = 1) => {
     const existItem = cartItems.find((x) => x._id === product._id);

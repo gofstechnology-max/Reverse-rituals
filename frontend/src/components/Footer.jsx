@@ -29,6 +29,16 @@ const Footer = () => {
               </svg>
             </a>
             <a
+              href="https://www.youtube.com/@greensignaltamil-gst"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#c5a059] hover:text-[#064e3b] transition-all duration-300"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+              </svg>
+            </a>
+            <a
               href="https://wa.me/919384642040"
               target="_blank"
               rel="noopener noreferrer"
@@ -48,7 +58,6 @@ const Footer = () => {
             <li><Link to="/" className="hover:text-white transition-colors">Home</Link></li>
             <li><Link to="/shop" className="hover:text-white transition-colors">Shop</Link></li>
             <li><Link to="/about" className="hover:text-white transition-colors">Our Story</Link></li>
-            <li><Link to="/orders" className="hover:text-white transition-colors">My Orders</Link></li>
           </ul>
         </div>
 
@@ -58,7 +67,6 @@ const Footer = () => {
             <li><Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
             <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
             <li><Link to="/terms" className="hover:text-white transition-colors">Shipping Info</Link></li>
-            <li><Link to="/terms" className="hover:text-white transition-colors">Returns</Link></li>
           </ul>
         </div>
 

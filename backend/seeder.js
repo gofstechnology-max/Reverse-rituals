@@ -352,6 +352,165 @@ const products = [
       'Use 2-3 times per week initially',
       'Store water in refrigerator (5-6 days shelf life)'
     ]
+  },
+  {
+    _id: 'rosemary-comb-combo',
+    name: 'Rosemary & Neem Comb Combo',
+    price: 349,
+    originalPrice: 449,
+    description: 'Grow your hair with Rosemary Alchemy Water and maintain scalp health with the Neem Wood Comb. Perfect for hair growth and scalp care.',
+    image: 'https://i.ibb.co/XNRbjbM/IMG-4143-1.jpg',
+    category: 'Combo',
+    countInStock: 15,
+    rating: 4.8,
+    numReviews: 45,
+    features: [
+      'Hair Growth + Scalp Health',
+      'Saves ₹50 compared to buying separately',
+      'Natural ingredients',
+      'Easy to use',
+      'Visible results in 21 days'
+    ],
+    benefits: [
+      {
+        title: 'Hair Growth Stimulation',
+        description: 'Rosemary Alchemy Water stimulates hair follicles',
+        points: [
+          'Improves blood circulation to roots',
+          'Activates dormant follicles',
+          'Reduces hair fall'
+        ]
+      },
+      {
+        title: 'Scalp Health',
+        description: 'Neem Comb keeps scalp clean and healthy',
+        points: [
+          'Antibacterial properties fight dandruff',
+          'Distributes natural oils evenly',
+          'Reduces scalp irritation'
+        ]
+      },
+      {
+        title: 'Cost Effective',
+        description: 'Save money while getting both products',
+        points: [
+          '₹50 savings vs buying separately',
+          'Everything you need in one order'
+        ]
+      }
+    ],
+    usageTips: [
+      'Use Neem Comb daily to stimulate scalp',
+      'Apply Rosemary Water 2-3 times per week',
+      'Store water in refrigerator (5-6 days)',
+      'Use massager after applying water for best results'
+    ]
+  },
+  {
+    _id: 'rosemary-massager-combo',
+    name: 'Rosemary & Massager Combo',
+    price: 399,
+    originalPrice: 498,
+    description: 'Boost hair growth with Rosemary Alchemy Water and improve absorption with the Manual Scalp Massager. Perfect for faster results.',
+    image: 'https://i.ibb.co/XNRbjbM/IMG-4143-1.jpg',
+    category: 'Combo',
+    countInStock: 15,
+    rating: 4.8,
+    numReviews: 38,
+    features: [
+      'Hair Growth + Better Absorption',
+      'Saves ₹100 compared to buying separately',
+      'Natural ingredients',
+      'Deep scalp massage',
+      'Visible results in 21 days'
+    ],
+    benefits: [
+      {
+        title: 'Hair Growth',
+        description: 'Rosemary Alchemy Water stimulates follicles',
+        points: [
+          'Improves blood circulation',
+          'Activates dormant hair follicles',
+          'Strengthens roots'
+        ]
+      },
+      {
+        title: 'Better Absorption',
+        description: 'Massager helps products penetrate deeper',
+        points: [
+          'Water reaches scalp better',
+          'More effective results',
+          'Deep cleansing during wash'
+        ]
+      },
+      {
+        title: 'Cost Effective',
+        description: 'Save ₹100 while getting both products',
+        points: [
+          'Great value combo',
+          'Everything you need in one order'
+        ]
+      }
+    ],
+    usageTips: [
+      'Spray Rosemary Water on clean scalp',
+      'Use Massager for 5 minutes',
+      'Use 2-3 times per week',
+      'Store water in refrigerator'
+    ]
+  },
+  {
+    _id: 'comb-massager-combo',
+    name: 'Neem Comb & Massager Combo',
+    price: 299,
+    originalPrice: 398,
+    description: 'The perfect duo for scalp health and blood circulation. Neem Comb for scalp care + Massager for better circulation.',
+    image: 'https://i.ibb.co/XNRbjbM/IMG-4143-1.jpg',
+    category: 'Combo',
+    countInStock: 20,
+    rating: 4.7,
+    numReviews: 32,
+    features: [
+      'Scalp Health + Circulation',
+      'Saves ₹100 compared to buying separately',
+      'Natural & chemical-free',
+      'Easy to use',
+      'Daily use recommended'
+    ],
+    benefits: [
+      {
+        title: 'Scalp Health',
+        description: 'Neem Comb fights dandruff naturally',
+        points: [
+          'Antibacterial properties',
+          'Reduces scalp irritation',
+          'Distributes natural oils'
+        ]
+      },
+      {
+        title: 'Better Circulation',
+        description: 'Massager improves blood flow to roots',
+        points: [
+          'More nutrients reach follicles',
+          'Stimulates hair growth',
+          'Relieves stress'
+        ]
+      },
+      {
+        title: 'Cost Effective',
+        description: 'Save ₹100 while getting both products',
+        points: [
+          'Great value combo',
+          'Everything you need in one order'
+        ]
+      }
+    ],
+    usageTips: [
+      'Use Neem Comb daily',
+      'Use Massager 2-3 times per week',
+      'Clean both products regularly',
+      'Store in dry place'
+    ]
   }
 ];
 

@@ -3,6 +3,7 @@ import axios from 'axios';
 import Hero from '../components/Hero';
 import ProductCard from '../components/ProductCard';
 import ReviewSection from '../components/ReviewSection';
+import VoiceReviewsSection from '../components/VoiceReviewsSection';
 import AboutSection from '../components/AboutSection';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -114,6 +115,25 @@ const HomePage = () => {
       fetchProducts();
    }, []);
 
+   const productOrder = [
+      'alchemy-combo',
+      'alchemy-water',
+      'neem-comb',
+      'scalp-massager',
+      'rosemary-comb-combo',
+      'rosemary-massager-combo',
+      'comb-massager-combo'
+   ];
+
+   const sortedProducts = [...(products || [])].sort((a, b) => {
+      const indexA = productOrder.indexOf(a._id);
+      const indexB = productOrder.indexOf(b._id);
+      if (indexA === -1 && indexB === -1) return 0;
+      if (indexA === -1) return 1;
+      if (indexB === -1) return -1;
+      return indexA - indexB;
+   });
+
    const whyChoose = [
       { icon: <Shield size={32} />, title: "Clinical Efficacy", desc: "Scientifically proven results in 21 days." },
       { icon: <Heart size={32} />, title: "Pure Botanicals", desc: "Sulfate, Paraben, and Cruelty free." },
@@ -180,7 +200,7 @@ const HomePage = () => {
             </div> */}
 
 
-         <ProductsSection products={products} />
+         <ProductsSection products={sortedProducts} loading={loading} />
 
          <section className="py-10 md:py-10 bg-gradient-to-b from-[#fafafa] to-white overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 md:px-6">
@@ -194,13 +214,13 @@ const HomePage = () => {
                   className="text-center mb-16 md:mb-24"
                >
                   <span className="text-[#c5a059] text-xs md:text-sm font-black uppercase tracking-[0.4em] mb-4 block">
-                     Clinical Transformation
+                     My Hairline Journey
                   </span>
 
-                  <h2 className="text-3xl md:text-5xl lg:text-7xl font-black text-[#064e3b] mt-4 leading-[1.1] tracking-tight">
-                     Biological <span className="font-serif italic text-[#c5a059]">Architecture</span>
+                  <h2 className="text-3xl md:text-5xl lg:text-5xl font-black text-[#064e3b] mt-4 leading-[1.1] tracking-tight">
+                     Hair Transformation from <span className="font-serif italic text-[#c5a059]">Week 1 to Week 14</span>
                      <span className="block text-[14px] md:text-2xl font-medium text-[#064e3b]/40 mt-6 tracking-normal ">
-                        Real Customers Results: Hair transformation (reduced hair fall)
+                        Rapdi hairfall reduction in two weeks , notivable ahrgrwith wiht consisitent use
                      </span>
                   </h2>
                </motion.div>
@@ -269,27 +289,28 @@ const HomePage = () => {
                </motion.div>
 
                {/* Weekly Evolution Gallery - Static */}
-               <div className="max-w-5xl mx-auto px-2">
-                  <div className="flex overflow-x-auto gap-4 pb-8 scrollbar-hide justify-start sm:justify-center">
+               <div className="max-w-6xl mx-auto">
+                  <div className="flex overflow-x-auto gap-6 pb-8 px-2 scrollbar-hide justify-start">
                      {[
-                        { week: '01', title: 'Phase 01', img: '/WEEK1.PNG' },
-                        { week: '02', title: 'Phase 02', img: '/WEEK2.PNG' },
-                        { week: '04', title: 'Phase 03', img: '/WEEK4.PNG' },
-                        { week: '08', title: 'Phase 04', img: '/WEEK8.PNG' },
+                        { week: '1', title: 'Start', img: '/WEEK1.PNG' },
+                        { week: '2', title: 'Week 2', img: '/WEEK2.PNG' },
+                        { week: '4', title: 'Week 4', img: '/WEEK4.PNG' },
+                        { week: '6', title: 'Week 6', img: '/WEEK5.PNG' },
+                        { week: '8', title: 'Week 8', img: '/WEEK8.PNG' },
+                        { week: '12', title: 'Week 12', img: '/WEEK3.PNG' },
                         { week: '14', title: 'Result', img: '/WEEK14.JPG' },
                      ].map((step, i) => (
                         <div
                            key={i}
-                           className="relative min-w-[240px] md:min-w-[180px] group translate-z-0"
+                           className="relative min-w-[280px] md:min-w-[320px] shrink-0 group translate-z-0"
                         >
-                           <div className="relative rounded-2xl md:rounded-[32px] overflow-hidden shadow-lg border border-[#c5a059]/10 bg-white">
-                              <img src={step.img} className="w-full h-48 md:h-40 object-cover" alt="" />
-                              <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
-                              <div className="absolute top-3 left-3 bg-[#c5a059] text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-tight shadow-md">
+                           <div className="relative rounded-3xl overflow-hidden shadow-xl border-2 border-[#c5a059]/20 bg-white">
+                              <img src={step.img} className="w-full h-64 md:h-80 object-cover" alt="" />
+                              <div className="absolute top-4 left-4 bg-[#064e3b] text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide shadow-lg">
                                  Week {step.week}
                               </div>
-                              <div className="absolute bottom-3 left-3 text-white">
-                                 <p className="text-[10px] md:text-sm font-black uppercase tracking-tighter opacity-80">{step.title}</p>
+                              <div className="absolute bottom-4 left-4 right-4">
+                                 <p className="text-white text-lg font-bold uppercase tracking-wider drop-shadow-lg">{step.title}</p>
                               </div>
                            </div>
                         </div>
@@ -302,6 +323,7 @@ const HomePage = () => {
 
          <IngredientsSection />
          <ReviewSection />
+         <VoiceReviewsSection />
 
          {/* <HairProductSection /> */}
 

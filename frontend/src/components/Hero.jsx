@@ -14,14 +14,14 @@ const Hero = () => {
   const slides = [
     {
       subtitle: "Natural Hair Recovery System",
-      title: "Stop Hair Fall.\nRegrow .",
+      title: "Stop Hair Fall.\nRegrow Hair.",
       desc: "Scientifically blended Ayurvedic ingredients designed to reduce hair fall, activate dormant follicles, and restore scalp health.",
       image: "/ingredient.png"
     },
     {
-      subtitle: "Chemical-Free Hair Care",
-      title: "Stronger Roots.\nHealthier Hair.",
-      desc: "A complete ritual that detoxifies scalp, improves blood circulation, and promotes thicker and healthier hair growth.",
+      subtitle: "The Reverse Ritual",
+      title: "Stronger Roots.\nThicker Hair.",
+      desc: "A complete hair care system with Rosemary Alchemy Water, Neem Comb & Massager for visible results in 21 days.",
       image: "/ingredient.png"
     }
   ];
@@ -29,7 +29,7 @@ const Hero = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
-    }, 7000);
+    }, 3000);
 
     return () => clearInterval(timer);
   }, []);
@@ -53,11 +53,11 @@ const Hero = () => {
       {/* overlay */}
       <div className="absolute inset-0 bg-white/30"></div>
 
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 items-center relative z-10 w-full px-6 md:px-16 py-12 md:py-20">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 items-center relative z-10 w-full px-3 md:px-16 py-12 md:py-20">
 
         {/* Right Image */}
         <div className="relative flex justify-center lg:order-2 order-1 w-full">
-          <div className="relative w-[260px] sm:w-[380px] md:w-[480px] lg:w-[550px] aspect-square flex items-center justify-center">
+          <div className="relative w-[300px] sm:w-[380px] md:w-[480px] lg:w-[550px] aspect-square flex items-center justify-center">
 
             <motion.img
               src={slides[current].image}
@@ -112,13 +112,13 @@ const Hero = () => {
               {/* Trust Icons */}
               <div className="flex flex-wrap justify-center lg:justify-start gap-6 mb-10">
 
-                <div className="w-10 md:w-20">
+                {/* <div className="w-10 md:w-20">
                   <img
                     src="/rr-logo.png"
                     alt=""
                     className="w-full h-full object-cover"
                   />
-                </div>
+                </div> */}
 
 
 

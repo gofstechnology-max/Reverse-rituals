@@ -50,10 +50,10 @@ const AboutSection = () => {
         </motion.div>
 
         {/* Main Content - Stack on mobile, grid on desktop */}
-        <div className="space-y-8 md:space-y-0 md:grid md:grid-cols-12 md:gap-6 md:mb-12">
+        {/* <div className="space-y-8 md:space-y-0 md:grid md:grid-cols-12 md:gap-6 md:mb-12">
           
           {/* Mobile: First - Philosophy Card (Desktop: Right side) */}
-          <motion.div
+          {/* <motion.div
             variants={fadeUp}
             initial="hidden"
             whileInView="show"
@@ -112,7 +112,7 @@ const AboutSection = () => {
           </motion.div>
 
           {/* Mobile: Third - Story Cards (Desktop: Left side) */}
-          <motion.div
+          {/* <motion.div
             variants={fadeUp}
             initial="hidden"
             whileInView="show"
@@ -146,8 +146,8 @@ const AboutSection = () => {
                 After struggling with common hair concerns, we experimented with traditional herbs and saw real results — stronger roots, reduced hair fall, and healthier growth.
               </p>
             </div>
-          </motion.div>
-        </div>
+          </motion.div> */}
+        {/* </div>  */}
 
         {/* Brand Philosophy Section */}
         <motion.div

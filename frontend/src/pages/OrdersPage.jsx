@@ -1,17 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { Package, Truck, CheckCircle, Clock, MapPin, Phone, ArrowRight, ShoppingBag } from 'lucide-react';
+import { Package, Truck, CheckCircle, MapPin, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { Link, useNavigate } from 'react-router-dom';
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    if (!user.token) {
+      setLoading(false);
+      return;
+    }
+
     const fetchOrders = async () => {
       try {
         const config = {
@@ -29,10 +39,45 @@ const OrdersPage = () => {
       }
     };
 
-    if (user) {
-      fetchOrders();
+    fetchOrders();
+  }, [user, navigate]);
+
+const handlePayNow = (order) => {
+    if (!order.orderItems || order.orderItems.length === 0) {
+      alert('No items in this order');
+      return;
     }
-  }, [user]);
+    
+    // Get existing cart items from localStorage
+    const existingCart = JSON.parse(localStorage.getItem('cartItems') || '[]');
+    const newItems = [...existingCart];
+    
+    order.orderItems.forEach(item => {
+      const itemId = item.product;
+      const existingItem = newItems.find(x => x._id === itemId);
+      
+      if (existingItem) {
+        existingItem.qty += item.qty || 1;
+      } else {
+        newItems.push({
+          _id: itemId,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          qty: item.qty || 1
+        });
+      }
+    });
+    
+    // Save to localStorage
+    localStorage.setItem('cartItems', JSON.stringify(newItems));
+    
+    // Force state update by setting state variable in localStorage
+    window.dispatchEvent(new Event('storage'));
+    
+    // Navigate to cart using React Router
+    navigate('/cart', { replace: true });
+  };
 
   if (loading) return (
     <div className="min-h-screen bg-[#fdfbf7] pt-24 flex items-center justify-center">
@@ -43,7 +88,6 @@ const OrdersPage = () => {
   return (
     <div className="min-h-screen bg-[#fdfbf7] pt-24 pb-16 px-4">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-[#064e3b]">My Orders</h1>
@@ -77,7 +121,6 @@ const OrdersPage = () => {
                 transition={{ delay: index * 0.1 }}
                 className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
               >
-                {/* Order Header */}
                 <div className="bg-[#f8fdf9] px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center gap-4">
                   <div className="flex items-center gap-4">
                     <span className="text-xs font-semibold text-gray-400 uppercase">Order #{order._id.slice(-8).toUpperCase()}</span>
@@ -93,10 +136,8 @@ const OrdersPage = () => {
                   </div>
                 </div>
 
-                {/* Products */}
                 <div className="p-6">
                   <div className="flex flex-col sm:flex-row gap-6">
-                    {/* Product Images */}
                     <div className="flex gap-2 overflow-x-auto sm:flex-col sm:overflow-visible sm:w-24">
                       {order.orderItems.slice(0, 3).map((item, i) => (
                         <div key={i} className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-[#f5f5f5] overflow-hidden flex-shrink-0">
@@ -109,7 +150,6 @@ const OrdersPage = () => {
                       ))}
                     </div>
 
-                    {/* Order Details */}
                     <div className="grow space-y-4">
                       <div>
                         <h3 className="font-semibold text-[#064e3b]">
@@ -119,7 +159,6 @@ const OrdersPage = () => {
                       </div>
 
                       <div className="flex flex-wrap gap-6 text-sm">
-                        {/* Status Timeline */}
                         <div className="flex items-center gap-4">
                           <div className={`w-8 h-8 rounded-full flex items-center justify-center ${order.isPaid ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-400'}`}>
                             <CheckCircle size={16} />
@@ -145,12 +184,18 @@ const OrdersPage = () => {
                           <span className="font-medium text-[#064e3b]">Total: </span>
                           <span className="font-bold text-[#c5a059]">₹{order.totalPrice}</span>
                         </div>
-                        
+                        {!order.isPaid && (
+                          <button
+                            onClick={() => handlePayNow(order)}
+                            className="flex items-center gap-2 px-4 py-2 bg-[#c5a059] text-white rounded-full text-sm font-medium hover:bg-[#064e3b] transition-colors"
+                          >
+                            Pay Now
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
 
-                  {/* Shipping Address */}
                   {order.shippingAddress && (
                     <div className="mt-4 pt-4 border-t border-gray-100 flex items-start gap-3 text-sm text-gray-500">
                       <MapPin size={16} className="text-[#c5a059] mt-0.5" />

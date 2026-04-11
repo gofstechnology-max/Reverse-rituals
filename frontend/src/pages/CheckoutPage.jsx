@@ -18,13 +18,15 @@ const CheckoutPage = () => {
 
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
+  // Always use cart for checkout - simpler flow
+
   const [formData, setFormData] = useState({
-    fullName: user?.name || '',
-    address: '',
-    state: '',
-    city: '',
-    zipCode: '',
-    phone: user?.phone || '',
+    fullName: (user?.shippingAddress?.fullName) || (user?.name) || '',
+    address: user?.shippingAddress?.address || '',
+    state: user?.shippingAddress?.state || '',
+    city: user?.shippingAddress?.city || '',
+    zipCode: user?.shippingAddress?.zipCode || '',
+    phone: (user?.shippingAddress?.phone) || (user?.phone) || '',
   });
 
   const [isLocating, setIsLocating] = useState(false);
@@ -35,7 +37,47 @@ const CheckoutPage = () => {
   const [loadingCities, setLoadingCities] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
+  // If user has saved address, show option to use it
+  const hasSavedAddress = user?.shippingAddress?.address;
+  
+  const handleUseSavedAddress = () => {
+    if (user?.shippingAddress) {
+      setFormData({
+        fullName: user.shippingAddress.fullName || user.name || '',
+        address: user.shippingAddress.address || '',
+        state: user.shippingAddress.state || '',
+        city: user.shippingAddress.city || '',
+        zipCode: user.shippingAddress.zipCode || '',
+        phone: user.shippingAddress.phone || user.phone || '',
+      });
+    }
+  };
 
+  const handleSaveAddress = async () => {
+    if (!user || !user.token) {
+      toast.error('Please login to save address');
+      return;
+    }
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+      await axios.put(`${API_URL}/api/users/profile`, {
+        shippingAddress: {
+          fullName: formData.fullName,
+          address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          zipCode: formData.zipCode,
+          phone: formData.phone,
+        }
+      }, {
+        headers: { Authorization: `Bearer ${user.token}` }
+      });
+      toast.success('Address saved!');
+    } catch (error) {
+      console.error('Error saving address:', error);
+    }
+  };
+  const displayItems = cartItems;
   const finalTotal = cartTotal;
 
   useEffect(() => {
@@ -199,7 +241,10 @@ const CheckoutPage = () => {
   }, [authLoading, user, navigate]);
 
   useEffect(() => {
-    if (cartItems.length === 0 && !isCheckingAuth) navigate('/cart');
+    // If cart is empty, redirect to cart
+    if (cartItems.length === 0 && !isCheckingAuth) {
+      navigate('/cart');
+    }
   }, [cartItems, navigate, isCheckingAuth]);
 
   const loadRazorpay = () => {
@@ -229,6 +274,11 @@ const CheckoutPage = () => {
 
     try {
       const orderConfig = { headers: { 'Content-Type': 'application/json', Authorization: user ? `Bearer ${user.token}` : undefined } };
+      
+      let order, razorpayOrder;
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+
+      // Always create new order from cart
       const orderData = {
         orderItems: cartItems.map(item => ({
           product: item._id,
@@ -245,19 +295,9 @@ const CheckoutPage = () => {
         },
         paymentMethod: 'Razorpay'
       };
-
-      let order, razorpayOrder;
-      try {
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
-        const { data } = await axios.post(`${API_URL}/api/orders`, orderData, orderConfig);
-        order = data.order;
-        razorpayOrder = data.razorpayOrder;
-      } catch (err) {
-        console.error('Order error:', err.response?.data);
-        toast.error(err.response?.data?.message || 'Order failed');
-        setIsProcessing(false);
-        return;
-      }
+      const { data } = await axios.post(`${API_URL}/api/orders`, orderData, orderConfig);
+      order = data.order;
+      razorpayOrder = data.razorpayOrder;
 
       const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_SZN5DY7IbG1LzA';
 
@@ -276,6 +316,7 @@ const CheckoutPage = () => {
             if (verifyRes.data.message === "Payment verified successfully") {
               toast.success('Payment Successful!');
               clearCart();
+              localStorage.removeItem('repay_order');
               localStorage.setItem('latestOrder', JSON.stringify({
                 ...order,
                 isPaid: true,
@@ -368,11 +409,23 @@ const CheckoutPage = () => {
                     <h3 className="text-lg font-black text-[#064e3b] flex items-center gap-2">
                       <MapPin size={20} className="text-[#c5a059]" /> Shipping Address
                     </h3>
-                    <button type="button" onClick={detectLocation} disabled={isLocating}
-                      className="px-4 py-2 bg-[#064e3b]/5 text-[#064e3b] rounded-xl font-bold text-sm hover:bg-[#064e3b] hover:text-white transition-all flex items-center gap-2">
-                      {isLocating ? <Loader2 size={16} className="animate-spin" /> : <LocateFixed size={16} />}
-                      {isLocating ? 'Detecting...' : 'Detect Location'}
-                    </button>
+                    <div className="flex gap-2">
+                      {hasSavedAddress && (
+                        <button type="button" onClick={handleUseSavedAddress}
+                          className="px-4 py-2 bg-[#c5a059]/10 text-[#c5a059] rounded-xl font-bold text-sm hover:bg-[#c5a059] hover:text-white transition-all">
+                          Use Saved
+                        </button>
+                      )}
+                      <button type="button" onClick={handleSaveAddress}
+                        className="px-4 py-2 bg-[#064e3b]/5 text-[#064e3b] rounded-xl font-bold text-sm hover:bg-[#064e3b] hover:text-white transition-all">
+                        Save
+                      </button>
+                      <button type="button" onClick={detectLocation} disabled={isLocating}
+                        className="px-4 py-2 bg-[#064e3b]/5 text-[#064e3b] rounded-xl font-bold text-sm hover:bg-[#064e3b] hover:text-white transition-all flex items-center gap-2">
+                        {isLocating ? <Loader2 size={16} className="animate-spin" /> : <LocateFixed size={16} />}
+                        {isLocating ? '...' : 'Detect'}
+                      </button>
+                    </div>
                   </div>
 
                   <div className="space-y-4">
@@ -443,8 +496,8 @@ const CheckoutPage = () => {
                 </h3>
 
                 <div className="space-y-3 mb-6 max-h-60 overflow-y-auto">
-                  {cartItems.map((item) => (
-                    <div key={item._id} className="flex items-center gap-3 p-2 bg-[#fdfbf7] rounded-xl">
+                  {displayItems.map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-3 p-2 bg-[#fdfbf7] rounded-xl">
                       {item.image && <img src={item.image} alt={item.name} className="w-12 h-12 rounded-lg object-cover" />}
                       <div className="flex-1 min-w-0">
                         <p className="font-bold text-[#064e3b] text-sm truncate">{item.name}</p>
@@ -458,7 +511,7 @@ const CheckoutPage = () => {
                 <div className="space-y-3 pt-4 border-t border-[#064e3b]/10">
                   <div className="flex justify-between text-[#064e3b]/60">
                     <span>Subtotal</span>
-                    <span className="font-bold">₹{cartTotal}</span>
+                    <span className="font-bold">₹{finalTotal}</span>
                   </div>
                   <div className="flex justify-between text-[#064e3b]/60">
                     <span className="flex items-center gap-2"><Truck size={14} /> Shipping</span>
@@ -467,16 +520,16 @@ const CheckoutPage = () => {
                     </span>
                   </div>
 
-                  {cartTotal < 99 && (
-                    <p className="text-[10px] text-[#c5a059] font-black uppercase tracking-widest">
-                      Add ₹{99 - cartTotal} more for FREE shipping
-                    </p>
-                  )}
+{finalTotal < 99 && (
+                      <p className="text-[10px] text-[#c5a059] font-black uppercase tracking-widest">
+                        Add ₹{99 - finalTotal} more for FREE shipping
+                      </p>
+                    )}
 
-                  <div className="flex justify-between pt-3 border-t border-[#064e3b]/10">
-                    <span className="font-bold text-[#064e3b]">Total</span>
-                    <span className="text-xl font-black text-[#c5a059]">₹{finalTotal}</span>
-                  </div>
+                    <div className="flex justify-between pt-3 border-t border-[#064e3b]/10">
+                      <span className="font-bold text-[#064e3b]">Total</span>
+                      <span className="text-xl font-black text-[#c5a059]">₹{finalTotal}</span>
+                    </div>
                 </div>
 
                 <div className="mt-6 p-4 bg-[#c5a059]/5 rounded-xl flex items-start gap-3">
@@ -484,6 +537,16 @@ const CheckoutPage = () => {
                   <div>
                     <p className="font-bold text-[#064e3b] text-sm">Secure Payment</p>
                     <p className="text-[#064e3b]/40 text-xs">Your payment is secured by Razorpay</p>
+                  </div>
+                </div>
+
+                {/* Payment Method Logos */}
+                <div className="mt-4 pt-4 border-t border-[#064e3b]/10">
+                  <p className="text-center text-[#064e3b]/40 text-xs mb-3">Accepting all UPI apps</p>
+                  <div className="flex items-center justify-center gap-3">
+                    <img src="/GPAY.jpeg" alt="Google Pay" className="h-6 w-auto" />
+                    <img src="/PAYTYM.jpeg" alt="Paytm" className="h-6 w-auto" />
+                    <img src="/PHONEPE.png" alt="PhonePe" className="h-6 w-auto" />
                   </div>
                 </div>
               </div>

@@ -1,135 +1,102 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ShoppingBag } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+import "swiper/css";
+
 import ProductCard from "../components/ProductCard";
 
 const ProductsSection = ({ products, loading }) => {
 
-    const sliderRef = useRef(null);
-
-    useEffect(() => {
-        // Disable auto-scroll on mobile to prevent stuttering/jank
-        if (typeof window !== 'undefined' && window.innerWidth < 768) return;
-        if (!sliderRef.current || !products?.length) return;
-
-        let index = 0;
-        const interval = setInterval(() => {
-            index = (index + 1) % products.length;
-            sliderRef.current.scrollTo({
-                left: sliderRef.current.clientWidth * index,
-                behavior: "smooth"
-            });
-        }, 4000); // Increased delay for better UX
-
-        return () => clearInterval(interval);
-    }, [products]);
-
     return (
-        <section id="products" className="py-10 md:py-10 px-6 overflow-hidden">
+        <section id="products" className="py-10  md:px-6 bg-[#fdfbf7] overflow-hidden">
 
             {/* Header */}
             <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ type: "spring", stiffness: 50, damping: 20 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
                 className="max-w-7xl mx-auto"
             >
-                <div className="flex flex-col md:flex-row items-baseline justify-between mb-10 gap-8 md:gap-12">
+                <div className="flex flex-col md:flex-row items-center justify-between mb-10 gap-6">
 
-                    <div className="max-w-2xl">
-                        <motion.span
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.2 }}
-                            className="section-subtitle"
-                        >
+                    <div className="max-w-2xl text-center md:text-left">
+                        <span className="text-[#064e3b] font-bold uppercase tracking-[0.2em] text-[10px] mb-3 block">
                             Our Iconic Concentrates
-                        </motion.span>
+                        </span>
 
-                        <h2 className="section-title">
-                            The <span className="italic font-medium text-[#c5a059]">Reverse</span> Collection
+                        <h2 className="text-3xl md:text-5xl font-bold text-[#c5a059] mb-4">
+                            The <span className="italic text-[#064e3b]">Reverse</span> Collection
                         </h2>
 
-                        <p className="text-[#064e3b]/60 text-lg md:text-2xl font-medium leading-relaxed max-w-xl">
-                            Each formulation is a precisely engineered ritual, designed to reverse damage and restore biological vitality.
+                        <p className="text-[#064e3b]/60 text-base md:text-lg">
+                            Each formulation is a precisely engineered ritual designed to restore vitality.
                         </p>
                     </div>
 
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                        <Link
-                            to="/shop"
-                            className="flex items-center gap-4 bg-white px-8 py-4 rounded-full border border-black/5 shadow-xl hover:shadow-2xl transition-all group text-[#064e3b]"
-                        >
-                            <ShoppingBag size={20} className="text-[#c5a059]" />
-                            <span className="font-black text-[10px] md:text-xs uppercase tracking-[0.3em]">
-                                {products.length} Masterpieces
-                            </span>
-                        </Link>
-                    </motion.div>
+                    <div
+                        className="flex items-center gap-3 bg-white px-6 py-3 rounded-full border shadow-md hover:shadow-xl transition text-[#064e3b]"
+                    >
+                        <ShoppingBag size={18} className="text-[#c5a059]" />
+                        <span className="text-xs font-bold uppercase tracking-wider">
+                            Our Masterpieces
+                        </span>
+                    </div>
 
                 </div>
             </motion.div>
 
             {/* Loading */}
             {loading ? (
-                <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
+                <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
                     {[1, 2, 3, 4].map((n) => (
-                        <div
-                            key={n}
-                            className="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm animate-pulse"
-                        >
-                            <div className="aspect-[4/5] bg-gray-100"></div>
-                            <div className="p-6 space-y-4">
-                                <div className="h-4 bg-gray-200 rounded-full w-3/4"></div>
-                                <div className="h-3 bg-gray-100 rounded-full w-1/2"></div>
-                                <div className="h-10 bg-gray-200 rounded-xl w-full"></div>
-                            </div>
-                        </div>
+                        <div key={n} className="bg-white rounded-2xl h-[300px] animate-pulse" />
                     ))}
                 </div>
             ) : (
                 <>
-                    {/* Mobile Slider */}
-                    <div className="md:hidden max-w-sm mx-auto overflow-hidden">
+                    {/* 🔥 Mobile + Tablet Swiper (NO AUTO SCROLL) */}
+                    <div className="md:hidden max-w-4xl mx-auto">
 
-                        <div
-                            ref={sliderRef}
-                            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth gap-4"
-                            style={{
-                                scrollbarWidth: "none",
-                                WebkitOverflowScrolling: "touch"
-                            }}
+                        <Swiper
+                            grabCursor={true}
+                            centeredSlides={true}
+                            slidesPerView={"auto"}
+                            spaceBetween={16}
+                            loop={true}
+                            loopedSlides={products.length}
+                            className="!overflow-visible px-2"
                         >
                             {products.map((product) => (
-                                <div
+                                <SwiperSlide
                                     key={product._id}
-                                    className="snap-center shrink-0 w-full"
+                                    className="!w-[80%] sm:!w-[70%]"
                                 >
-                                    <ProductCard product={product} />
-                                </div>
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        whileInView={{ opacity: 1, scale: 1 }}
+                                        transition={{ duration: 0.4 }}
+                                    >
+                                        <ProductCard product={product} />
+                                    </motion.div>
+                                </SwiperSlide>
                             ))}
-                        </div>
+                        </Swiper>
 
                     </div>
 
-                    {/* Desktop Grid */}
-                    <div className="hidden md:grid max-w-7xl mx-auto grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+                    {/* 💻 Desktop Grid */}
+                    <div className="hidden md:grid max-w-7xl mx-auto grid-cols-2 lg:grid-cols-4 gap-8">
 
                         {products.map((product, idx) => (
                             <motion.div
                                 key={product._id}
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{
-                                    type: "spring",
-                                    stiffness: 100,
-                                    damping: 20,
-                                    delay: idx * 0.05
-                                }}
+                                transition={{ delay: idx * 0.05 }}
                             >
                                 <ProductCard product={product} />
                             </motion.div>
@@ -138,6 +105,7 @@ const ProductsSection = ({ products, loading }) => {
                     </div>
                 </>
             )}
+
         </section>
     );
 };

@@ -1,5 +1,6 @@
 const Order = require('../models/Order');
 const Product = require('../models/Product');
+const User = require('../models/User');
 const razorpay = require('../config/razorpay');
 const crypto = require('crypto');
 
@@ -33,8 +34,6 @@ const addOrderItems = async (req, res) => {
     
     const products = await Product.find({ _id: { $in: productIds } });
     
-    console.log('Found products:', products.length, 'looking for:', productIds.length);
-
     if (products.length !== orderItems.length) {
       res.status(400).json({ message: 'One or more products not found' });
       return;
@@ -81,6 +80,15 @@ const addOrderItems = async (req, res) => {
 
     const razorpayOrder = await razorpay.orders.create(options);
 
+    // Save address to user if logged in
+    if (req.user) {
+      const user = await User.findById(req.user._id);
+      if (user) {
+        user.shippingAddress = shippingAddress;
+        await user.save();
+      }
+    }
+
     const order = new Order({
       orderItems: orderItemsWithPrices,
       user: req.user ? req.user._id : null,
@@ -101,20 +109,48 @@ const addOrderItems = async (req, res) => {
     });
   } catch (error) {
     console.error('ORDER ERROR:', error.name, error.message);
-    
-    if (error.name === 'ValidationError') {
-      const messages = Object.values(error.errors).map(e => e.message).join(', ');
-      return res.status(400).json({ message: messages });
-    }
-    
-    if (error.kind === 'ObjectId') {
-      return res.status(400).json({ message: 'Invalid product ID' });
-    }
-    
     res.status(500).json({ 
       message: 'Order creation failed', 
       error: error.message 
     });
+  }
+};
+
+// @desc    Update existing order for re-payment
+// @route   POST /api/orders/:id/pay
+// @access  Private
+const createPayLinkForOrder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (order) {
+      if (order.isPaid) {
+        return res.status(400).json({ message: 'Order is already paid' });
+      }
+
+      const options = {
+        amount: Math.round(order.totalPrice * 100),
+        currency: "INR",
+        receipt: `receipt_${order._id}_${Date.now()}`,
+      };
+
+      const razorpayOrder = await razorpay.orders.create(options);
+      
+      order.paymentResult = {
+        razorpay_order_id: razorpayOrder.id,
+      };
+      
+      await order.save();
+
+      res.json({
+        order,
+        razorpayOrder
+      });
+    } else {
+      res.status(404).json({ message: 'Order not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to create payment link', error: error.message });
   }
 };
 
@@ -151,7 +187,7 @@ const verifyPayment = async (req, res) => {
 
       const updatedOrder = await order.save();
 
-      // Send email notification (non-blocking - won't affect order if fails)
+      // Send email notification
       const orderDetails = {
         orderId: updatedOrder._id.toString().slice(-8).toUpperCase(),
         customerName: updatedOrder.shippingAddress.fullName,
@@ -166,7 +202,6 @@ const verifyPayment = async (req, res) => {
         phone: updatedOrder.shippingAddress.phone,
       };
 
-      // Fire and forget - email sending won't block the response
       sendOrderEmail(updatedOrder.shippingAddress.email, orderDetails).catch(err => {
         console.log('Email notification skipped:', err.message);
       });
@@ -193,11 +228,79 @@ const getOrderById = async (req, res) => {
       res.status(404).json({ message: 'Order not found' });
     }
   } catch (error) {
-    if (error.kind === 'ObjectId') {
-      res.status(404).json({ message: 'Order not found' });
-    } else {
-      res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// @desc    Create payment for existing unpaid order
+// @route   POST /api/orders/:id/pay
+// @access  Private
+const createPaymentForOrder = async (req, res) => {
+  try {
+    console.log('Looking for order:', req.params.id);
+    let order;
+    try {
+      order = await Order.findById(req.params.id);
+    } catch (e) {
+      console.log('Invalid order ID format');
+      res.status(400).json({ message: 'Invalid order ID' });
+      return;
     }
+    console.log('Order found:', order ? 'yes' : 'no', order ? 'totalPrice: ' + order.totalPrice + ', user: ' + order.user : '');
+    
+    if (!order) {
+      res.status(404).json({ message: 'Order not found' });
+      return;
+    }
+
+    // Check if user owns this order (allow if no user on order or user matches)
+    const orderUserId = order.user ? order.user.toString() : null;
+    const reqUserId = req.user ? req.user._id.toString() : null;
+    
+    console.log('Order user ID:', orderUserId, 'Request user ID:', reqUserId);
+    
+    // Allow if order has no user, or if user matches
+    if (orderUserId && reqUserId && orderUserId !== reqUserId) {
+      res.status(403).json({ message: 'Not authorized' });
+      return;
+    }
+
+    if (order.isPaid) {
+      res.status(400).json({ message: 'Order already paid' });
+      return;
+    }
+
+    if (!order.totalPrice || order.totalPrice <= 0) {
+      res.status(400).json({ message: 'Invalid order amount' });
+      return;
+    }
+
+    const amountInPaise = Math.round(order.totalPrice * 100);
+    console.log('Creating Razorpay order with amount:', amountInPaise, 'paise');
+
+    const options = {
+      amount: amountInPaise,
+      currency: "INR",
+      receipt: `receipt_${order._id}_${Date.now()}`,
+    };
+
+    const razorpayOrder = await razorpay.orders.create(options);
+    console.log('Razorpay order created successfully:', razorpayOrder.id);
+    
+    order.paymentResult = {
+      razorpay_order_id: razorpayOrder.id,
+    };
+    
+    await order.save();
+
+    res.json({
+      order,
+      razorpayOrder
+    });
+  } catch (error) {
+    console.error('Payment creation error - full details:', error);
+    console.error('Stack:', error.stack);
+    res.status(500).json({ message: 'Failed to create payment', error: error.message });
   }
 };
 
@@ -256,4 +359,5 @@ module.exports = {
   getOrders,
   updateOrderToDelivered,
   deleteOrder,
+  createPaymentForOrder,
 };

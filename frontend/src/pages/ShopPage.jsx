@@ -25,10 +25,27 @@ const ShopPage = () => {
     fetchProducts();
   }, []);
 
+  const productOrder = [
+    'alchemy-combo',
+    'alchemy-water',
+    'neem-comb',
+    'scalp-massager',
+    'rosemary-comb-combo',
+    'rosemary-massager-combo',
+    'comb-massager-combo'
+  ];
+
   const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.description?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  ).sort((a, b) => {
+    const indexA = productOrder.indexOf(a._id);
+    const indexB = productOrder.indexOf(b._id);
+    if (indexA === -1 && indexB === -1) return 0;
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  });
 
   return (
     <div className="min-h-screen bg-[#fdfbf7] pt-32 pb-20 px-6">

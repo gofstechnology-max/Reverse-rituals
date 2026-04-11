@@ -41,8 +41,21 @@ const TermsPage = () => {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-[#064e3b] mb-4">6. Returns and Refunds</h2>
-            <p>We offer a 7-day return policy for unused products in original packaging. Please contact us to initiate a return.</p>
+            <h2 className="text-xl font-bold text-[#064e3b] mb-4">6. Returns, Refunds, and Exchange Policy</h2>
+            <div className="space-y-4">
+              <p><strong>No Returns - Final Sale:</strong> All sales are final. We do not accept returns or exchanges for any reason unless the product received is damaged, defective, or incorrect.</p>
+              
+              <p><strong>Video Proof Required for Damaged/Incorrect Products:</strong> If you receive a damaged, defective, or incorrect product, you must provide a video recording of the product opening process as evidence. The video must clearly show:</p>
+              <ul className="list-disc list-inside space-y-2 ml-4">
+                <li>The unopened package before opening</li>
+                <li>The seal being broken</li>
+                <li>The product inside showing the damage or issue</li>
+              </ul>
+              
+              <p><strong>Refund Process:</strong> Once we verify the video proof and confirm the issue, we will process a refund to your original payment method within 5-7 business days. If you prefer a replacement product instead of a refund, we can arrange that as well.</p>
+              
+              <p><strong>How to Report:</strong> Contact us on WhatsApp at +91 93846 42040 with your order details and video proof. We typically respond within 24 hours.</p>
+            </div>
           </section>
 
           <section>
@@ -57,7 +70,7 @@ const TermsPage = () => {
 
           <section>
             <h2 className="text-xl font-bold text-[#064e3b] mb-4">9. Contact Information</h2>
-            <p>For questions about these terms, please contact us at rituals@reverse.com</p>
+            <p>For questions about these terms, please contact us at reverserituals@gmail.com</p>
           </section>
         </div>
       </div>

@@ -50,7 +50,7 @@ const ProductPage = () => {
 
   const tabs = [
     { id: 'benefits', label: 'Benefits' },
-    { id: 'ingredients', label: 'Ingredients' },
+    ...(product.ingredients && product.ingredients.length > 0 ? [{ id: 'ingredients', label: 'Ingredients' }] : []),
     { id: 'how-to-use', label: 'How to Use' },
   ];
 
@@ -100,7 +100,7 @@ const ProductPage = () => {
             </h1>
 
             {/* Rating */}
-            <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
+            {/* <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
               <div className="flex items-center gap-1">
                 {[1,2,3,4,5].map((star) => (
                   <Star 
@@ -113,7 +113,7 @@ const ProductPage = () => {
               <span className="text-[#064e3b]/50 text-sm">
                 {product.rating || 4}.0 ({product.numReviews || 0} reviews)
               </span>
-            </div>
+            </div> */}
 
             <p className="text-[#064e3b]/70 text-base md:text-lg leading-relaxed mb-6">
               {product.description}
@@ -162,7 +162,7 @@ const ProductPage = () => {
                 { icon: <Truck size={18} />, text: 'Free Shipping' },
                 { icon: <Shield size={18} />, text: 'Quality Guaranteed' },
                 { icon: <Leaf size={18} />, text: '100% Natural' },
-                { icon: <RotateCcw size={18} />, text: 'Easy Returns' },
+          
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-2 text-[#064e3b]/60 text-xs md:text-sm">
                   <span className="text-[#c5a059]">{item.icon}</span>

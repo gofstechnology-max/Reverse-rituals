@@ -144,7 +144,17 @@ const CartPage = () => {
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </button>
 
-              <p className="text-center text-[#064e3b]/30 text-xs mt-3">Secure checkout with Razorpay</p>
+              {/* Payment Method Logos */}
+              <div className="mt-4 pt-4 border-t border-[#064e3b]/10">
+                <p className="text-center text-[#064e3b]/40 text-xs mb-3">Accepting all UPI apps</p>
+                <div className="flex items-center justify-center gap-4">
+                  <img src="/GPAY.jpeg" alt="Google Pay" className="h-8 w-auto" />
+                  <img src="/PAYTYM.jpeg" alt="Paytm" className="h-8 w-auto" />
+                  <img src="/PHONEPE.png" alt="PhonePe" className="h-8 w-auto" />
+                </div>
+              </div>
+
+              <p className="text-center text-[#064e3b]/30 text-xs mt-2">Secure checkout with Razorpay</p>
             </div>
           </div>
         </div>

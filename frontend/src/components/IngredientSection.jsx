@@ -1,12 +1,13 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { X, FlaskConical, ShieldCheck, Sparkles } from "lucide-react";
+import { X, FlaskConical, ShieldCheck, Sparkles, Play } from "lucide-react";
 import { Link } from "react-router-dom";
+
 
 const ingredients = [
     {
         name: "Rosemary",
-        emoji: "🌿",
+        emoji: "/rosemary.png",
         angle: 0,
         tagline: "The Growth Catalyst",
         details: `Rosemary Alchemy Water is your main active ingredient for growth.
@@ -22,7 +23,7 @@ Benefits:
     },
     {
         name: "Bhringraj",
-        emoji: "🌱",
+        emoji: "/bhringiraj.png",
         angle: 72,
         tagline: "King of Hair",
         details: `Also known as "King of Hair" in Ayurveda, it works deeply on regrowth.
@@ -38,7 +39,7 @@ Benefits:
     },
     {
         name: "Fenugreek",
-        emoji: "🌾",
+        emoji: "/fenugreek.png",
         angle: 144,
         tagline: "The Strengthener",
         details: `Acts as a natural conditioner + strengthening agent.
@@ -54,7 +55,7 @@ Benefits:
     },
     {
         name: "Black Seeds",
-        emoji: "🌿",
+        emoji: "/blackseed.png",
         angle: 216,
         tagline: "Scalp Healer",
         details: `Provides scalp healing and follicle stimulation.
@@ -70,7 +71,7 @@ Benefits:
     },
     {
         name: "Clove",
-        emoji: "🌸",
+        emoji: "/clove.png",
         angle: 288,
         tagline: "Circulation Booster",
         details: `Works as a circulation booster + scalp cleanser.
@@ -162,7 +163,7 @@ const ProductShowcase = () => {
                                             <div className="bg-white/10 md:bg-white/5 border border-white/10 rounded-full px-3 md:px-8 py-1.5 md:py-4 text-[9px] md:text-sm whitespace-nowrap flex items-center gap-2 md:gap-4 shadow-2xl cursor-pointer hover:border-[#c5a059]/40 transition">
 
                                                 <span className="text-base md:text-3xl">
-                                                    {ing.emoji}
+                                                    <img src={ing.emoji} alt="" className="w-5 md:w-10" />
                                                 </span>
 
                                                 <span className="font-black uppercase tracking-widest">
@@ -191,10 +192,9 @@ const ProductShowcase = () => {
             {/* Modal */}
             <AnimatePresence>
                 {selected && (
-                    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
-
+                    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-3 md:p-4">
                         <motion.div
-                            className="absolute inset-0 bg-[#063b2c]/98" // Solid opacity for better mobile perf
+                            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
                             onClick={() => setSelected(null)}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -202,59 +202,82 @@ const ProductShowcase = () => {
                         />
 
                         <motion.div
-                            className="relative w-full max-w-2xl max-h-[90vh] bg-[#0f4b3b] border border-white/10 rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl will-change-transform"
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="relative w-full max-w-sm md:max-w-3xl max-h-[85vh] md:max-h-[90vh] bg-[#082f2a] border border-white/10 rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl flex flex-col"
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            transition={{ type: "spring", duration: 0.5 }}
                             onClick={(e) => e.stopPropagation()}
                         >
-
+                            {/* Close Button */}
                             <button
                                 onClick={() => setSelected(null)}
-                                className="absolute top-6 right-6 p-2 bg-white/5 rounded-full border border-white/10"
+                                className="absolute top-3 right-3 z-10 p-2 bg-white/10 rounded-full hover:bg-white/20 transition"
                             >
-                                <X size={22} />
+                                <X size={18} className="text-white" />
                             </button>
 
-                            <div className="p-8 md:p-12 border-b border-white/5 flex gap-6">
-
-                                <div className="text-5xl md:text-7xl">
-                                    {selected.emoji}
+                            {/* Header - Image + Title - Scrollable if needed */}
+                            <div className="flex-shrink-0 flex flex-col md:flex-row gap-3 md:gap-6 p-4 md:p-6 pb-4">
+                                {/* Image */}
+                                <div className="flex-shrink-0 flex items-center justify-center">
+                                    <div className="w-20 h-20 md:w-32 md:h-32 bg-white/5 rounded-xl md:rounded-2xl flex items-center justify-center">
+                                        <img 
+                                            src={selected.emoji} 
+                                            alt={selected.name}
+                                            className="w-14 h-14 md:w-24 md:h-24 object-contain"
+                                        />
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <h4 className="text-3xl md:text-5xl font-black">
+                                {/* Title Info */}
+                                <div className="flex-1 text-center md:text-left">
+                                    <h4 className="text-xl md:text-3xl font-bold text-white">
                                         {selected.name}
                                     </h4>
-
-                                    <p className="text-[#c5a059] mt-2 uppercase tracking-widest text-xs">
+                                    <p className="text-[#c5a059] mt-1 text-xs font-medium uppercase tracking-wider">
                                         {selected.tagline}
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="overflow-y-auto p-8 md:p-12 space-y-6">
+                            {/* Divider */}
+                            <div className="flex-shrink-0 h-px bg-white/10 mx-4" />
 
-                                <p className="text-white/90 text-lg leading-relaxed whitespace-pre-line">
-                                    {selected.details}
+                            {/* Scrollable Content */}
+                            <div className="flex-1 overflow-y-auto px-4 md:px-6 py-4 space-y-4">
+                                <p className="text-white/80 text-sm leading-relaxed">
+                                    {selected.details.split('\n\n')[0]}
                                 </p>
 
-                                <div className="grid md:grid-cols-2 gap-4">
-
-                                    <div className="bg-white/5 p-5 rounded-2xl">
-                                        <ShieldCheck className="text-[#c5a059]" />
-                                        <p className="text-sm mt-2">
-                                            Clinical-grade extracts solar-infused for 21 days
-                                        </p>
+                                {selected.details.includes('Benefits:') && (
+                                    <div>
+                                        <h6 className="text-[#c5a059] font-semibold text-xs uppercase tracking-wide mb-2">
+                                            Key Benefits
+                                        </h6>
+                                        <ul className="space-y-1.5">
+                                            {selected.details.split('\n').filter(line => line.startsWith('•')).map((benefit, idx) => (
+                                                <li key={idx} className="text-white/70 text-sm leading-relaxed flex items-start gap-2">
+                                                    <span className="text-[#c5a059] mt-0.5">•</span>
+                                                    <span>{benefit.replace('• ', '')}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </div>
+                                )}
+                            </div>
 
-                                    <div className="bg-white/5 p-5 rounded-2xl">
-                                        <Sparkles className="text-[#c5a059]" />
-                                        <p className="text-sm mt-2">
-                                            100% Organic concentrated botanicals
-                                        </p>
+                            {/* Quality Badges */}
+                            <div className="flex-shrink-0 px-4 pb-4 pt-2">
+                                <div className="grid grid-cols-2 gap-2">
+                                    <div className="bg-white/5 rounded-lg p-2.5 flex items-center gap-2">
+                                        <ShieldCheck className="text-[#c5a059] w-4 h-4 flex-shrink-0" />
+                                        <p className="text-white/70 text-xs">Clinical-grade</p>
                                     </div>
-
+                                    <div className="bg-white/5 rounded-lg p-2.5 flex items-center gap-2">
+                                        <Sparkles className="text-[#c5a059] w-4 h-4 flex-shrink-0" />
+                                        <p className="text-white/70 text-xs">100% Organic</p>
+                                    </div>
                                 </div>
                             </div>
                         </motion.div>
@@ -263,17 +286,169 @@ const ProductShowcase = () => {
             </AnimatePresence>
 
             {/* Button */}
-            <div className="flex justify-center md:pt-10 relative z-10">
-                <Link
-                    to="/product/alchemy-water"
-                    className="bg-[#c5a059] text-[#064e3b] px-10 py-5 rounded-full font-black uppercase tracking-widest text-xs hover:scale-105 hover:bg-white transition"
-                >
-                    Explore Masterpiece
-                    <FlaskConical className="inline ml-3" size={18} />
-                </Link>
+
+
+            {/* Ingredient Cards Section */}
+            <div className="mt-0 md:mt-12">
+                <div className="text-center mb-6 md:mb-8">
+                    <h3 className="text-2xl md:text-4xl font-bold text-white">
+                        Meet the <span className="text-[#c5a059]">Ingredients</span>
+                    </h3>
+                </div>
+
+                {/* Horizontal scroll on mobile, grid on desktop */}
+                <div className="md:hidden overflow-x-auto scrollbar-hide -mx-4 px-4">
+                    <div className="flex gap-2.5 w-max">
+                        {ingredients.map((ing, i) => (
+                            <motion.div
+                                key={ing.name}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1 }}
+                                onClick={() => setSelected(ing)}
+                                className="w-[85px] flex-shrink-0 bg-white/5 border border-white/10 rounded-lg p-2.5 cursor-pointer hover:bg-white/10 hover:border-[#c5a059]/40 transition group"
+                            >
+                                <div className="aspect-square relative mb-1.5">
+                                    <img
+                                        src={ing.emoji}
+                                        alt={ing.name}
+                                        className="w-full h-full object-contain group-hover:scale-110 transition duration-300"
+                                    />
+                                </div>
+                                <h4 className="text-white text-center font-bold text-[10px] uppercase tracking-wide">{ing.name}</h4>
+                                <p className="text-[#c5a059] text-center text-[8px] mt-0.5">{ing.tagline}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Desktop Grid */}
+                <div className="hidden md:grid grid-cols-5 gap-6 max-w-6xl mx-auto px-4">
+                    {ingredients.map((ing, i) => (
+                        <motion.div
+                            key={ing.name}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: i * 0.1 }}
+                            onClick={() => setSelected(ing)}
+                            className="bg-white/5 border border-white/10 rounded-2xl p-6 cursor-pointer hover:bg-white/10 hover:border-[#c5a059]/40 transition group"
+                        >
+                            <div className="aspect-square relative mb-3">
+                                <img
+                                    src={ing.emoji}
+                                    alt={ing.name}
+                                    className="w-full h-full object-contain group-hover:scale-110 transition duration-300"
+                                />
+                            </div>
+                            <h4 className="text-white text-center font-bold text-base uppercase tracking-wide">{ing.name}</h4>
+                            <p className="text-[#c5a059] text-center text-xs mt-1">{ing.tagline}</p>
+                        </motion.div>
+                    ))}
+                </div>
             </div>
 
+            <VideoShowcase />
         </section>
+    );
+};
+
+const VideoShowcase = () => {
+    const [showVideo, setShowVideo] = useState(false);
+    const [selectedVideo, setSelectedVideo] = useState(null);
+
+    const videos = [
+        {
+            id: 1,
+            title: "How to Apply",
+            thumbnail: "/video.mp4",
+            duration: "1:30"
+        }
+    ];
+
+    return (
+        <>
+            <div className="max-w-4xl mx-auto px-4 py-10 md:py-14">
+                <div className="text-center mb-6 md:mb-8">
+                    <span className="text-[#c5a059] text-xs font-black uppercase tracking-[0.3em] mb-2 md:mb-3 block">
+                        Tutorial
+                    </span>
+                    <h3 className="text-xl md:text-3xl font-bold text-white">
+                        How to <span className="text-[#c5a059]">Use</span>
+                    </h3>
+                </div>
+
+                <div className="flex justify-center">
+                    {videos.map((video) => (
+                        <motion.div
+                            key={video.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            onClick={() => {
+                                setSelectedVideo(video);
+                                setShowVideo(true);
+                            }}
+                            className="w-full max-w-sm md:max-w-lg group cursor-pointer rounded-xl md:rounded-2xl overflow-hidden bg-white/5 border border-white/10 hover:border-[#c5a059]/40 transition"
+                        >
+                            <div className="aspect-video relative">
+                                <video
+                                    src={video.thumbnail}
+                                    className="w-full h-full object-cover"
+                                    poster=""
+                                    muted
+                                    preload="metadata"
+                                />
+                                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition flex items-center justify-center">
+                                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition">
+                                        <Play size={20} md:size={24} className="text-white ml-0.5" fill="white" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="p-3 md:p-4">
+                                <h4 className="text-white font-semibold text-sm md:text-base">{video.title}</h4>
+                                <p className="text-white/50 text-xs mt-0.5">Watch tutorial</p>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Video Modal */}
+            <AnimatePresence>
+                {showVideo && selectedVideo && (
+                    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
+                        <motion.div
+                            className="absolute inset-0 bg-black/90"
+                            onClick={() => setShowVideo(false)}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                        />
+                        <motion.div
+                            className="relative w-full max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden"
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                        >
+                            <button
+                                onClick={() => setShowVideo(false)}
+                                className="absolute top-4 right-4 z-10 p-2 bg-white/20 rounded-full hover:bg-white/30 transition"
+                            >
+                                <X size={24} className="text-white" />
+                            </button>
+                            <video
+                                src={selectedVideo.thumbnail}
+                                className="w-full h-full"
+                                controls
+                                autoPlay
+                            />
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+        </>
     );
 };
 
