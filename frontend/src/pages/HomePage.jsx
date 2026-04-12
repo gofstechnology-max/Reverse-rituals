@@ -8,7 +8,7 @@ import AboutSection from '../components/AboutSection';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
-import { ShoppingBag, Star, Zap, Leaf, Shield, Heart, Award, CheckCircle2, Play, BookOpen, FlaskConical, Globe, HelpCircle, ChevronDown, ArrowRight } from 'lucide-react';
+import { ShoppingBag, Star, Zap, Leaf, Shield, Heart, Award, CheckCircle2, Play, BookOpen, FlaskConical, Globe, HelpCircle, ChevronDown, ArrowRight, MessageCircle } from 'lucide-react';
 import HairProductSection from '../components/HairProductSection';
 import IngredientsSection from '../components/IngredientSection';
 import ProductsSection from './ProductsSection';
@@ -51,17 +51,17 @@ const HomePage = () => {
       setSliderPos(sliderPosRef.current);
    };
 
-useEffect(() => {
-       const handleScroll = () => {
-          setHasScrolled(window.scrollY > 100);
-       };
-       window.addEventListener('scroll', handleScroll, { passive: true });
-       return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+   useEffect(() => {
+      const handleScroll = () => {
+         setHasScrolled(window.scrollY > 100);
+      };
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      return () => window.removeEventListener('scroll', handleScroll);
+   }, []);
 
-    useEffect(() => {
-       let rafId;
-       const onMove = (e) => {
+   useEffect(() => {
+      let rafId;
+      const onMove = (e) => {
          if (!isDragging || !sliderRef.current) return;
 
          const rect = sliderRef.current.getBoundingClientRect();
@@ -163,13 +163,13 @@ useEffect(() => {
       { feature: "Sustainability", others: "Standard Logistics", ours: "Closed-Loop Ethical Sourcing" },
    ];
 
-   const faqs = [
-      { q: "How soon will I see results?", a: "Most customers notice reduced hair fall within 21 days. For best results, we recommend using the product consistently for 2-3 months." },
-      { q: "Is it safe for colored or treated hair?", a: "Yes! Our formula is gentle and pH-balanced. It's safe for colored hair and helps maintain hair vibrancy while nourishing from within." },
-      { q: "Is this product vegan and cruelty-free?", a: "Absolutely. We never test on animals and use 100% plant-based natural ingredients. All products are ethically sourced." },
-      { q: "How often should I use it?", a: "For best results, apply 2-3 times per week. Massage into clean, damp scalp and leave for 30 minutes before washing." },
-      { q: "What makes this different from other hair oils?", a: "Our unique Ayurvedic blend combines traditional herbs with modern formulation, designed to penetrate deep into the scalp and strengthen roots." },
-   ];
+const faqs = [
+       { q: "How soon will I see results?", a: "Most customers notice reduced hair fall within 1 week and reduced dandruff in just 3 uses. For best results, we recommend using the product consistently for 2-3 months." },
+       { q: "Is it safe for colored or treated hair?", a: "This rosemary water is completely natural and Ayurvedic, but we still recommend that you do a patch test first. If you have chemically treated or dyed hair, those chemicals can react with natural ingredients. So, please do a patch test before full use, or consult a trusted dermatologist for advice." },
+       { q: "Is this product vegan and cruelty-free?", a: "Absolutely. We never test on animals and use 100% plant-based natural ingredients. All products are ethically sourced." },
+       { q: "How often should I use it?", a: "For best results, you should use it consistently. In the initial stage, for the first two weeks, apply it two to three times a week. After applying, massage it in for about five minutes. Ensure your scalp is clean and not oily. Once applied, leave it for about 30 minutes before washing it off." },
+       { q: "What makes this different from other?", a: "Our unique Ayurvedic blend combines traditional herbs with modern formulation, designed to penetrate deep into the scalp and strengthen roots." },
+    ];
 
    return (
       <div className="overflow-hidden">
@@ -215,13 +215,13 @@ useEffect(() => {
             <div className="max-w-7xl mx-auto px-4 md:px-6">
 
                {/* Header */}
-<motion.div
-                   initial={{ opacity: 0, y: 40 }}
-                   whileInView={{ opacity: 1, y: 0 }}
-                   viewport={{ once: true, margin: "-100px" }}
-                   transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                   className="text-center mb-16 md:mb-24"
-                >
+               <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                  className="text-center mb-16 md:mb-24"
+               >
                   <span className="text-[#c5a059] text-xs md:text-sm font-black uppercase tracking-[0.4em] mb-4 block">
                      My Hairline Journey
                   </span>
@@ -229,19 +229,19 @@ useEffect(() => {
                   <h2 className="text-3xl md:text-5xl lg:text-5xl font-black text-[#064e3b] mt-4 leading-[1.1] tracking-tight">
                      Hair Transformation from <span className="font-serif italic text-[#c5a059]">Week 1 to Week 14</span>
                      <span className="block text-[14px] md:text-2xl font-medium text-[#064e3b]/40 mt-6 tracking-normal ">
-                        Rapdi hairfall reduction in two weeks , notivable ahrgrwith wiht consisitent use
+                        Rapid hair fall reduction in 2 weeks, noticeable hair growth with consistent use.
                      </span>
                   </h2>
                </motion.div>
 
                {/* Before After Slider - Mobile Optimized */}
-<motion.div
-                   initial={{ opacity: 0, scale: 0.95 }}
-                   whileInView={{ opacity: 1, scale: 1 }}
-                   viewport={{ once: true, margin: "-50px" }}
-                   transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                   className="mb-10 md:mb-32 max-w-5xl mx-auto will-change-transform"
-                >
+               <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  className="mb-10 md:mb-32 max-w-5xl mx-auto will-change-transform"
+               >
                   <div
                      ref={sliderRef}
                      onMouseDown={handleMouseDown}
@@ -249,15 +249,15 @@ useEffect(() => {
                      className="relative cursor-ew-resize select-none overflow-hidden rounded-3xl md:rounded-[60px] aspect-square md:aspect-video shadow-xl md:shadow-2xl border-2 md:border-8 border-white translate-z-0 touch-none will-change-transform"
                   >
 
-                     {/* After Image */}
+                     {/* Right Image - After (Week 14) */}
                      <img
                         src="/WEEK14.JPG"
                         className="absolute inset-0 w-full h-full object-cover"
-                        alt="After"
+                        alt="Week 14"
                         loading="lazy"
                      />
 
-                     {/* Before Image - Fixed to Week 1 */}
+                     {/* Left Image - Before (Week 1) */}
                      <div
                         ref={beforeImageRef}
                         className="absolute inset-0 overflow-hidden will-change-[clip-path]"
@@ -266,7 +266,7 @@ useEffect(() => {
                         <img
                            src="/WEEK1.PNG"
                            className="absolute inset-0 w-full h-full object-cover"
-                           alt="Before"
+                           alt="Week 1"
                            loading="lazy"
                         />
                      </div>
@@ -320,7 +320,7 @@ useEffect(() => {
                                  Week {step.week}
                               </div>
                               <div className="absolute bottom-4 left-4 right-4">
-                                 <p className="text-white text-lg font-bold uppercase tracking-wider drop-shadow-lg">{step.title}</p>
+
                               </div>
                            </div>
                         </div>
@@ -348,29 +348,29 @@ useEffect(() => {
          {/* FAQ Section */}
          <section className="py-10 md:py-10 px-4 bg-white">
             <div className="max-w-3xl mx-auto">
-<motion.div
-                   initial={{ opacity: 0, y: 30 }}
-                   whileInView={{ opacity: 1, y: 0 }}
-                   viewport={{ once: true, margin: "-50px" }}
-                   transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                   className="text-center mb-10"
-                >
-                  <h2 className="text-2xl md:text-3xl font-medium text-[#064e3b]">
-                     Frequently <span className="font-serif italic text-[#c5a059]">Asked</span>
-                  </h2>
-                  <p className="text-gray-500 mt-2 text-sm">Got questions? We've got answers.</p>
+               <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  className="text-center mb-10"
+               >
+<h2 className="text-2xl md:text-3xl font-medium text-[#064e3b]">
+                      Frequently Asked <span className="font-serif italic text-[#c5a059]">Questions</span>
+                   </h2>
+                   <p className="text-[#064e3b]/60 mt-2 text-sm">Got Questions? We've got answers.</p>
                </motion.div>
 
                <div className="space-y-3">
                   {faqs.map((faq, i) => (
-<motion.div
-                         key={i}
-                         initial={{ opacity: 0, y: 20 }}
-                         whileInView={{ opacity: 1, y: 0 }}
-                         viewport={{ once: true, margin: "-20px" }}
-                         transition={{ duration: 0.5, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
-                         className="bg-[#f8fdf9] rounded-xl overflow-hidden border border-[#c5a059]/10"
-                      >
+                     <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-20px" }}
+                        transition={{ duration: 0.5, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                        className="bg-[#f8fdf9] rounded-xl overflow-hidden border border-[#c5a059]/10"
+                     >
                         <button
                            onClick={() => setActiveFaq(activeFaq === i ? null : i)}
                            className="w-full px-5 py-4 flex items-center justify-between text-left group"
@@ -386,7 +386,7 @@ useEffect(() => {
                                  exit={{ height: 0, opacity: 0 }}
                                  className="px-5 pb-4"
                               >
-                                 <p className="text-gray-600 text-sm leading-relaxed pt-2 border-t border-[#c5a059]/10">{faq.a}</p>
+                                 <p className="text-[#064e3b]/70 text-sm leading-relaxed pt-2 border-t border-[#c5a059]/10">{faq.a}</p>
                               </motion.div>
                            )}
                         </AnimatePresence>
@@ -394,18 +394,24 @@ useEffect(() => {
                   ))}
                </div>
 
-               {/* Contact CTA */}
-               <motion.div
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  className="text-center mt-10"
-               >
-                  <p className="text-gray-500 text-sm">Still have questions?</p>
-                  <Link to="/contact" className="text-[#c5a059] font-medium text-sm hover:underline mt-1 inline-block">
-                     Contact us →
-                  </Link>
-               </motion.div>
+{/* Contact CTA */}
+                <motion.div
+                   initial={{ opacity: 0 }}
+                   whileInView={{ opacity: 1 }}
+                   viewport={{ once: true }}
+                   className="text-center mt-10"
+                >
+                   <p className="text-[#064e3b]/60 text-sm">Still have questions?</p>
+                   <a 
+                     href="https://wa.me/917358422064" 
+                     target="_blank"
+                     rel="noopener noreferrer"
+                     className="inline-flex items-center gap-2 mt-2 px-5 py-2.5 bg-[#064e3b] text-white rounded-full font-medium text-sm hover:bg-[#053d2f] transition"
+                   >
+                      <MessageCircle size={16} />
+                      Contact now
+                   </a>
+                </motion.div>
             </div>
          </section>
 

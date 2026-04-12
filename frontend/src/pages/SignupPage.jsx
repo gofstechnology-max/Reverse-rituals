@@ -55,11 +55,11 @@ const SignupPage = () => {
         {/* Left Branding Section */}
         <div className="hidden md:flex flex-col justify-center bg-[#e8f5e9] p-12">
 
-          <h1 className="text-4xl font-black text-green-800 mb-4">
+          <h1 className="text-4xl font-black text-[#064e3b] mb-4">
             Reverse Rituals 🌿
           </h1>
 
-          <p className="text-green-700 text-lg">
+          <p className="text-[#064e3b]/80 text-lg">
             Join our herbal haircare journey and experience
             natural ingredients for stronger and healthier hair.
           </p>
@@ -96,7 +96,7 @@ const SignupPage = () => {
                 Full Name
               </label>
 
-              <div className="flex items-center border rounded-xl mt-2 px-4 py-3 focus-within:border-green-500">
+              <div className="flex items-center border rounded-xl mt-2 px-4 py-3 focus-within:border-[#c5a059]">
                 <User className="text-gray-400" size={18} />
                 <input
                   type="text"
@@ -115,7 +115,7 @@ const SignupPage = () => {
                 Email Address
               </label>
 
-              <div className="flex items-center border rounded-xl mt-2 px-4 py-3 focus-within:border-green-500">
+              <div className="flex items-center border rounded-xl mt-2 px-4 py-3 focus-within:border-[#c5a059]">
                 <Mail className="text-gray-400" size={18} />
                 <input
                   type="email"
@@ -134,7 +134,7 @@ const SignupPage = () => {
                 Password
               </label>
 
-              <div className="flex items-center border rounded-xl mt-2 px-4 py-3 focus-within:border-green-500">
+              <div className="flex items-center border rounded-xl mt-2 px-4 py-3 focus-within:border-[#c5a059]">
                 <Lock className="text-gray-400" size={18} />
                 <input
                   type="password"
@@ -151,7 +151,7 @@ const SignupPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full bg-[#064e3b] hover:bg-[#053d2f] text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <>Creating Account...</>
@@ -169,7 +169,7 @@ const SignupPage = () => {
 
             <Link
               to="/login"
-              className="text-green-600 font-semibold hover:underline"
+              className="text-[#c5a059] font-semibold hover:underline"
             >
               Sign in here
             </Link>

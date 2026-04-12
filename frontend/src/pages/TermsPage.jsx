@@ -52,7 +52,7 @@ const TermsPage = () => {
                 <li>The product inside showing the damage or issue</li>
               </ul>
               
-              <p><strong>Refund Process:</strong> Once we verify the video proof and confirm the issue, we will process a refund to your original payment method within 5-7 business days. If you prefer a replacement product instead of a refund, we can arrange that as well.</p>
+              <p><strong>Refund Process:</strong> Once we verify the video proof and confirm the issue, we will process a refund to your original payment method within 48 hours. If you prefer a replacement product instead of a refund, we can arrange that as well.</p>
               
               <p><strong>How to Report:</strong> Contact us on WhatsApp at +91 93846 42040 with your order details and video proof. We typically respond within 24 hours.</p>
             </div>

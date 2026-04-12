@@ -37,10 +37,7 @@ const ReviewSection = () => {
           centeredSlides={true}
           loop={true}
           grabCursor={true}
-          autoplay={{
-            delay: 2500,
-            disableOnInteraction: false,
-          }}
+
           slidesPerView={1.5}
           spaceBetween={15}
           breakpoints={{

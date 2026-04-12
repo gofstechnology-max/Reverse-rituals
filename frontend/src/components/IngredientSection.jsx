@@ -101,7 +101,20 @@ const ProductShowcase = () => {
     }, []);
 
     useEffect(() => {
-        document.body.style.overflow = selected ? "hidden" : "auto";
+        if (selected) {
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+        } else {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+        };
     }, [selected]);
 
     const isMobile = screenWidth < 768;
@@ -222,8 +235,8 @@ const ProductShowcase = () => {
                                 {/* Image */}
                                 <div className="flex-shrink-0 flex items-center justify-center">
                                     <div className="w-20 h-20 md:w-32 md:h-32 bg-white/5 rounded-xl md:rounded-2xl flex items-center justify-center">
-                                        <img 
-                                            src={selected.emoji} 
+                                        <img
+                                            src={selected.emoji}
                                             alt={selected.name}
                                             className="w-14 h-14 md:w-24 md:h-24 object-contain"
                                         />
@@ -307,7 +320,7 @@ const ProductShowcase = () => {
                                 viewport={{ once: true }}
                                 transition={{ delay: i * 0.1 }}
                                 onClick={() => setSelected(ing)}
-                                className="w-[85px] flex-shrink-0 bg-white/5 border border-white/10 rounded-lg p-2.5 cursor-pointer hover:bg-white/10 hover:border-[#c5a059]/40 transition group"
+                                className="w-[85px] flex-shrink-0 bg-white border border-white/10 rounded-lg p-2.5 cursor-pointer  transition group"
                             >
                                 <div className="aspect-square relative mb-1.5">
                                     <img
@@ -316,7 +329,7 @@ const ProductShowcase = () => {
                                         className="w-full h-full object-contain group-hover:scale-110 transition duration-300"
                                     />
                                 </div>
-                                <h4 className="text-white text-center font-bold text-[10px] uppercase tracking-wide">{ing.name}</h4>
+                                <h4 className="text-[#064e3b] text-center font-bold text-[10px] uppercase tracking-wide">{ing.name}</h4>
                                 <p className="text-[#c5a059] text-center text-[8px] mt-0.5">{ing.tagline}</p>
                             </motion.div>
                         ))}
@@ -333,7 +346,7 @@ const ProductShowcase = () => {
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.1 }}
                             onClick={() => setSelected(ing)}
-                            className="bg-white/5 border border-white/10 rounded-2xl p-6 cursor-pointer hover:bg-white/10 hover:border-[#c5a059]/40 transition group"
+                            className="bg-white border border-white/10 rounded-2xl p-6 cursor-pointer transition group"
                         >
                             <div className="aspect-square relative mb-3">
                                 <img
@@ -342,7 +355,7 @@ const ProductShowcase = () => {
                                     className="w-full h-full object-contain group-hover:scale-110 transition duration-300"
                                 />
                             </div>
-                            <h4 className="text-white text-center font-bold text-base uppercase tracking-wide">{ing.name}</h4>
+                            <h4 className="text-[#064e3b] text-center font-bold text-base uppercase tracking-wide">{ing.name}</h4>
                             <p className="text-[#c5a059] text-center text-xs mt-1">{ing.tagline}</p>
                         </motion.div>
                     ))}
@@ -357,6 +370,23 @@ const ProductShowcase = () => {
 const VideoShowcase = () => {
     const [showVideo, setShowVideo] = useState(false);
     const [selectedVideo, setSelectedVideo] = useState(null);
+
+    useEffect(() => {
+        if (showVideo) {
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+        } else {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+        };
+    }, [showVideo]);
 
     const videos = [
         {

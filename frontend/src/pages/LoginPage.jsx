@@ -39,13 +39,13 @@ const LoginPage = () => {
       <div className="grid md:grid-cols-2 w-full max-w-6xl bg-white rounded-3xl shadow-xl overflow-hidden">
 
         {/* Left Haircare Branding Section */}
-        <div className="hidden md:flex flex-col justify-center bg-[#e8f5e9] p-12">
+        <div className="hidden md:flex flex-col justify-center bg-[#f0fdf4] p-12">
 
-          <h1 className="text-4xl font-black text-green-800 mb-4">
+          <h1 className="text-4xl font-black text-[#064e3b] mb-4">
             Reverse Rituals 🌿
           </h1>
 
-          <p className="text-green-700 text-lg leading-relaxed">
+          <p className="text-[#064e3b]/80 text-lg leading-relaxed">
             Natural haircare for strong, healthy and beautiful hair.
             Experience herbal ingredients and premium care with every drop.
           </p>
@@ -72,7 +72,7 @@ const LoginPage = () => {
               Welcome Back
             </h2>
 
-            <p className="text-gray-500">
+<p className="text-[#064e3b]/60">
               Login to continue your haircare journey
             </p>
           </div>
@@ -82,16 +82,16 @@ const LoginPage = () => {
 
             {/* Email */}
             <div>
-              <label className="text-gray-600 text-sm">
+              <label className="text-[#064e3b]/70 text-sm">
                 Email Address
               </label>
 
-              <div className="flex items-center border rounded-xl mt-2 px-4 py-3 focus-within:border-green-500">
-                <Mail className="text-gray-400" size={18} />
+              <div className="flex items-center border rounded-xl mt-2 px-4 py-3 focus-within:border-[#c5a059]">
+                <Mail className="text-[#064e3b]/50" size={18} />
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="w-full ml-3 outline-none"
+                  className="w-full ml-3 outline-none text-[#064e3b]"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -101,12 +101,12 @@ const LoginPage = () => {
 
             {/* Password */}
             <div>
-              <label className="text-gray-600 text-sm">
+              <label className="text-[#064e3b]/70 text-sm">
                 Password
               </label>
 
-              <div className="flex items-center border rounded-xl mt-2 px-4 py-3 focus-within:border-green-500">
-                <Lock className="text-gray-400" size={18} />
+              <div className="flex items-center border rounded-xl mt-2 px-4 py-3 focus-within:border-[#c5a059]">
+                <Lock className="text-[#064e3b]/50" size={18} />
                 <input
                   type="password"
                   placeholder="Enter your password"
@@ -122,7 +122,7 @@ const LoginPage = () => {
             <div className="text-right">
               <Link
                 to="/forgot-password"
-                className="text-sm text-green-600 hover:underline"
+                className="text-sm text-[#c5a059] hover:underline"
               >
                 Forgot Password?
               </Link>
@@ -133,7 +133,7 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full bg-[#064e3b] hover:bg-[#053d2f] text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <>Logging in...</>
@@ -145,13 +145,13 @@ const LoginPage = () => {
 
           {/* Signup */}
           <div className="mt-8 text-center">
-            <p className="text-gray-500">
+            <p className="text-[#064e3b]/60">
               Don't have an account?
             </p>
 
             <Link
               to="/signup"
-              className="text-green-600 font-semibold hover:underline"
+              className="text-[#c5a059] font-semibold hover:underline"
             >
               Create Free Account
             </Link>

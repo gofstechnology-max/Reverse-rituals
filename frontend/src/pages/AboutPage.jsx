@@ -7,7 +7,7 @@ const AboutPage = () => {
   return (
     <div className="bg-[#fdfbf7]  pt-10 pb-20">
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-6 py-20">
+      <section className="max-w-7xl mx-auto px-6 py-5">
         <div className="text-center mb-16">
           <p className="text-[#c5a059] font-medium uppercase tracking-widest text-sm mb-4">Our Story</p>
           <h1 className="text-4xl md:text-5xl font-serif text-[#064e3b]">
