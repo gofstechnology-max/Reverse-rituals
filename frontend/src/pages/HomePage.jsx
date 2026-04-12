@@ -249,22 +249,22 @@ const faqs = [
                      className="relative cursor-ew-resize select-none overflow-hidden rounded-3xl md:rounded-[60px] aspect-square md:aspect-video shadow-xl md:shadow-2xl border-2 md:border-8 border-white translate-z-0 touch-none will-change-transform"
                   >
 
-                     {/* Right Image - After (Week 14) */}
-                     <img
-                        src="/WEEK14.JPG"
-                        className="absolute inset-0 w-full h-full object-cover"
-                        alt="Week 14"
-                        loading="lazy"
-                     />
+{/* Right Image - After (Week 14) */}
+                      <img
+                         src="/Week/Week-14.JPG"
+                         className="absolute inset-0 w-full h-full object-cover"
+                         alt="Week 14"
+                         loading="lazy"
+                      />
 
-                     {/* Left Image - Before (Week 1) */}
-                     <div
-                        ref={beforeImageRef}
-                        className="absolute inset-0 overflow-hidden will-change-[clip-path]"
-                        style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
-                     >
-                        <img
-                           src="/WEEK1.PNG"
+                      {/* Left Image - Before (Week 1) */}
+                      <div
+                         ref={beforeImageRef}
+                         className="absolute inset-0 overflow-hidden will-change-[clip-path]"
+                         style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
+                      >
+                         <img
+                            src="/Week/Week-1.PNG"
                            className="absolute inset-0 w-full h-full object-cover"
                            alt="Week 1"
                            loading="lazy"
@@ -300,16 +300,16 @@ const faqs = [
 
                {/* Weekly Evolution Gallery - Static */}
                <div className="max-w-6xl mx-auto">
-                  <div className="flex overflow-x-auto gap-6 pb-8 px-2 scrollbar-hide justify-start">
-                     {[
-                        { week: '1', title: 'Start', img: '/WEEK1.PNG' },
-                        { week: '2', title: 'Week 2', img: '/WEEK2.PNG' },
-                        { week: '4', title: 'Week 4', img: '/WEEK4.PNG' },
-                        { week: '6', title: 'Week 6', img: '/WEEK5.PNG' },
-                        { week: '8', title: 'Week 8', img: '/WEEK8.PNG' },
-                        { week: '12', title: 'Week 12', img: '/WEEK3.PNG' },
-                        { week: '14', title: 'Result', img: '/WEEK14.JPG' },
-                     ].map((step, i) => (
+<div className="flex overflow-x-auto gap-6 pb-8 px-2 scrollbar-hide justify-start">
+{[
+                           { week: '1', title: 'Week 1', img: '/Week/Week-1.PNG' },
+                           { week: '2', title: 'Week 2', img: '/Week/Week-2.PNG' },
+                           { week: '4', title: 'Week 4', img: '/Week/Week-4.PNG' },
+                           { week: '6', title: 'Week 6', img: '/Week/Week-6.PNG' },
+                           { week: '8', title: 'Week 8', img: '/Week/Week-8.PNG' },
+                           { week: '12', title: 'Week 12', img: '/Week/Week-12.PNG' },
+                           { week: '14', title: 'Week 14', img: '/Week/Week-14.JPG' },
+                        ].map((step, i) => (
                         <div
                            key={i}
                            className="relative min-w-[280px] md:min-w-[320px] shrink-0 group translate-z-0"

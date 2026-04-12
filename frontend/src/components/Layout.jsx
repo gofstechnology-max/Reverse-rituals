@@ -42,7 +42,7 @@ const Layout = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        className="custom-toast-container"
       />
     </div>
   );

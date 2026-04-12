@@ -101,19 +101,17 @@ const ProductShowcase = () => {
     }, []);
 
     useEffect(() => {
+        // Store original overflow value
+        const originalOverflow = document.body.style.overflow;
+        
         if (selected) {
             document.body.style.overflow = 'hidden';
-            document.body.style.position = 'fixed';
-            document.body.style.width = '100%';
         } else {
-            document.body.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.width = '';
+            document.body.style.overflow = originalOverflow || '';
         }
+        
         return () => {
-            document.body.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.width = '';
+            document.body.style.overflow = originalOverflow || '';
         };
     }, [selected]);
 
@@ -372,19 +370,16 @@ const VideoShowcase = () => {
     const [selectedVideo, setSelectedVideo] = useState(null);
 
     useEffect(() => {
+        const originalOverflow = document.body.style.overflow;
+        
         if (showVideo) {
             document.body.style.overflow = 'hidden';
-            document.body.style.position = 'fixed';
-            document.body.style.width = '100%';
         } else {
-            document.body.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.width = '';
+            document.body.style.overflow = originalOverflow || '';
         }
+        
         return () => {
-            document.body.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.width = '';
+            document.body.style.overflow = originalOverflow || '';
         };
     }, [showVideo]);
 

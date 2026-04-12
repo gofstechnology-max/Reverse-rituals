@@ -40,7 +40,7 @@ const ProductPage = () => {
       <div className="w-12 h-12 border-4 border-[#c5a059] border-t-transparent rounded-full animate-spin"></div>
     </div>
   );
-  
+
   if (!product) return (
     <div className="min-h-screen bg-[#fdfbf7] pt-32 text-center">
       <p className="text-[#064e3b]/50">Product not found</p>
@@ -55,26 +55,26 @@ const ProductPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#fdfbf7] pt-20 md:pt-28 pb-16 md:pb-20">
-      <div className="max-w-6xl mx-auto px-4 md:px-6">
-        
+    <div className="min-h-screen bg-[#fdfbf7] pt-10 md:pt-28 pb-16 md:pb-20">
+      <div className="max-w-6xl mx-auto px-5 md:px-6">
+
         {/* Breadcrumb */}
-        <div className="mb-6 md:mb-8">
+        {/* <div className="mb-6 md:mb-8">
           <Link to="/shop" className="inline-flex items-center gap-2 text-[#064e3b]/50 hover:text-[#c5a059] transition-colors text-sm">
             <ArrowLeft size={16} />
             Back to Shop
           </Link>
-        </div>
+        </div> */}
 
         {/* Main Product Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-12 md:mb-20">
-          
+
           {/* Image */}
           <div className="relative order-1">
             <div className="aspect-[4/5] md:aspect-square rounded-xl md:rounded-2xl overflow-hidden bg-white shadow-lg">
-              <img 
-                src={product.image} 
-                alt={product.name} 
+              <img
+                src={product.image}
+                alt={product.name}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -121,33 +121,37 @@ const ProductPage = () => {
 
             {/* Price */}
             <div className="mb-6">
-              <div className="flex items-baseline gap-2 md:gap-4">
+              <div className="flex items-baseline gap-2 md:gap-4 flex-wrap">
                 <span className="text-3xl md:text-4xl font-serif text-[#064e3b]">₹{product.price}</span>
-               
+                {product.originalPrice && Number(product.originalPrice) > Number(product.price) && (
+                  <>
+                    <span className="text-lg md:text-xl text-gray-400 line-through">₹{product.originalPrice}</span>
+                    <span className="text-sm bg-[#c5a059] text-white px-2 py-0.5 rounded-full">
+                      {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
+                    </span>
+                  </>
+                )}
               </div>
-              {/* {product.originalPrice && (
-                <p className="text-green-600 text-sm mt-1">Save ₹{product.originalPrice - product.price}</p>
-              )} */}
             </div>
 
             {/* Quantity & Add to Cart */}
             <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mb-8">
               <div className="flex items-center border border-[#064e3b]/20 rounded-full overflow-hidden w-fit">
-                <button 
+                <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   className="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center hover:bg-[#064e3b]/5 transition-colors"
                 >
                   <Minus size={16} md:size={18} className="text-[#064e3b]" />
                 </button>
                 <span className="w-10 md:w-14 text-center font-medium text-[#064e3b]">{quantity}</span>
-                <button 
+                <button
                   onClick={() => setQuantity(quantity + 1)}
                   className="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center hover:bg-[#064e3b]/5 transition-colors"
                 >
                   <Plus size={16} md:size={18} className="text-[#064e3b]" />
                 </button>
               </div>
-              <button 
+              <button
                 onClick={handleAddToCart}
                 className="flex-1 flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 bg-[#064e3b] text-white rounded-full font-medium hover:bg-[#c5a059] transition-colors"
               >
@@ -162,7 +166,7 @@ const ProductPage = () => {
                 { icon: <Truck size={18} />, text: 'Free Shipping' },
                 { icon: <Shield size={18} />, text: 'Quality Guaranteed' },
                 { icon: <Leaf size={18} />, text: '100% Natural' },
-          
+
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-2 text-[#064e3b]/60 text-xs md:text-sm">
                   <span className="text-[#c5a059]">{item.icon}</span>
@@ -181,11 +185,10 @@ const ProductPage = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-3 md:py-4 px-4 md:px-6 border-b-2 transition-colors whitespace-nowrap rounded-lg ${
-                  activeTab === tab.id 
-                    ? 'border-[#c5a059] bg-[#c5a059]/10 text-[#064e3b] font-medium' 
+                className={`py-3 md:py-4 px-4 md:px-6 border-b-2 transition-colors whitespace-nowrap rounded-lg ${activeTab === tab.id
+                    ? 'border-[#c5a059] bg-[#c5a059]/10 text-[#064e3b] font-medium'
                     : 'border-transparent text-[#064e3b]/40 hover:text-[#064e3b] hover:bg-[#064e3b]/5'
-                }`}
+                  }`}
               >
                 {tab.label}
               </button>
@@ -195,7 +198,7 @@ const ProductPage = () => {
           {/* Tab Content */}
           <div className="pb-12">
             <AnimatePresence mode="wait">
-              
+
               {/* Benefits Tab */}
               {activeTab === 'benefits' && (
                 <motion.div
@@ -300,7 +303,7 @@ const ProductPage = () => {
                       <li>• Do a patch test before regular use</li>
                     </ul>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {product.usageTips ? product.usageTips.map((tip, i) => (
                       <div key={i} className="flex items-start gap-3 p-3 md:p-4 bg-white rounded-xl border border-[#064e3b]/10">

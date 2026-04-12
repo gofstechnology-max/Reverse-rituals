@@ -72,10 +72,10 @@ const Hero = () => {
                 alt="Hair Growth Product"
                 loading="eager"
                 className="w-full h-full object-contain drop-shadow-xl"
-                initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                exit={{ opacity: 0, scale: 1.1, rotate: 5 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 1 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 1 }}
+            
               />
             </AnimatePresence>
           </div>

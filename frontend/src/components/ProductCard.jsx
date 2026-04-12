@@ -52,10 +52,15 @@ const ProductCard = ({ product }) => {
         
         <p className="text-gray-500 text-sm mb-3 line-clamp-2">{product.description}</p>
         
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-4 flex-wrap">
           <span className="text-xl font-black text-[#064e3b]">₹{product.price}</span>
-          {product.originalPrice > product.price && (
-            <span className="text-sm text-gray-400 line-through">₹{product.originalPrice}</span>
+          {product.originalPrice && Number(product.originalPrice) > Number(product.price) && (
+            <>
+              <span className="text-sm text-gray-400 line-through">₹{product.originalPrice}</span>
+              <span className="text-xs bg-[#c5a059] text-white px-1.5 py-0.5 rounded-full">
+                {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
+              </span>
+            </>
           )}
         </div>
 
