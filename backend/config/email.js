@@ -5,8 +5,10 @@ let transporter = null;
 const getTransporter = () => {
   if (transporter) return transporter;
   
-  if (!process.env.MAIL_USER || !process.env.MAIL_PASS || process.env.MAIL_PASS === 'your_app_password_here') {
+  if (!process.env.MAIL_USER || !process.env.MAIL_PASS || process.env.MAIL_PASS === 'your_app_password_here' || process.env.MAIL_PASS === '') {
     console.log('Email not configured - skipping email notifications');
+    console.log('MAIL_USER:', process.env.MAIL_USER ? 'set' : 'missing');
+    console.log('MAIL_PASS:', process.env.MAIL_PASS ? 'set' : 'missing');
     return null;
   }
   
