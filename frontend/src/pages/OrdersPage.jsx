@@ -138,9 +138,9 @@ const handlePayNow = (order) => {
 
                 <div className="p-6">
                   <div className="flex flex-col sm:flex-row gap-6">
-                    <div className="flex gap-2 overflow-x-auto sm:flex-col sm:overflow-visible sm:w-24">
+                    <Link to={`/product/${order.orderItems[0]?.product}`} className="flex gap-2 overflow-x-auto sm:flex-col sm:overflow-visible sm:w-24">
                       {order.orderItems.slice(0, 3).map((item, i) => (
-                        <div key={i} className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-[#f5f5f5] overflow-hidden flex-shrink-0">
+                        <div key={i} className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-[#f5f5f5] overflow-hidden flex-shrink-0 hover:opacity-80 transition">
                           {item.image ? (
                             <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                           ) : (
@@ -148,7 +148,7 @@ const handlePayNow = (order) => {
                           )}
                         </div>
                       ))}
-                    </div>
+                    </Link>
 
                     <div className="grow space-y-4">
                       <div>

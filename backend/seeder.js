@@ -409,7 +409,7 @@ const products = [
   {
     _id: 'rosemary-massager-combo',
     name: 'Rosemary & Massager Combo',
-    price: 399,
+    price: 349,
     originalPrice: 498,
     description: 'Boost hair growth with Rosemary Alchemy Water and improve absorption with the Manual Scalp Massager. Perfect for faster results.',
     image: 'https://i.ibb.co/Z6DHHXdh/rosemary-adn-sclap.jpg',
@@ -511,7 +511,59 @@ const products = [
       'Clean both products regularly',
       'Store in dry place'
     ]
-  }
+  }, {
+    _id: 'rosemary-massager-combo-sample',
+    name: 'Sample',
+    price: 1,
+    originalPrice: 498,
+    description: 'Boost hair growth with Rosemary Alchemy Water and improve absorption with the Manual Scalp Massager. Perfect for faster results.',
+    image: 'https://i.ibb.co/Z6DHHXdh/rosemary-adn-sclap.jpg',
+    category: 'Combo',
+    countInStock: 15,
+    rating: 4.8,
+    numReviews: 38,
+    features: [
+      'Hair Growth + Better Absorption',
+      'Saves ₹100 compared to buying separately',
+      'Natural ingredients',
+      'Deep scalp massage',
+      'Visible results in 21 days'
+    ],
+    benefits: [
+      {
+        title: 'Hair Growth',
+        description: 'Rosemary Alchemy Water stimulates follicles',
+        points: [
+          'Improves blood circulation',
+          'Activates dormant hair follicles',
+          'Strengthens roots'
+        ]
+      },
+      {
+        title: 'Better Absorption',
+        description: 'Massager helps products penetrate deeper',
+        points: [
+          'Water reaches scalp better',
+          'More effective results',
+          'Deep cleansing during wash'
+        ]
+      },
+      {
+        title: 'Cost Effective',
+        description: 'Save ₹100 while getting both products',
+        points: [
+          'Great value combo',
+          'Everything you need in one order'
+        ]
+      }
+    ],
+    usageTips: [
+      'Spray Rosemary Water on clean scalp',
+      'Use Massager for 5 minutes',
+      'Use 2-3 times per week',
+      'Store water in refrigerator'
+    ]
+  },
 ];
 
 const importData = async () => {

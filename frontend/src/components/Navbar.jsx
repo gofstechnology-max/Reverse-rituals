@@ -154,12 +154,21 @@ const Navbar = () => {
                   Login
                 </Link>
               ) : (
-                <Link
-                  to={user.isAdmin ? "/admin" : "/orders"}
-                  className="p-2 rounded-full hover:bg-[#064e3b]/5 transition"
-                >
-                  <User size={20} className="text-[#064e3b]" />
-                </Link>
+                <div className="flex items-center gap-2">
+                  <Link
+                    to={user.isAdmin ? "/admin" : "/orders"}
+                    className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-[#064e3b]/5 transition"
+                  >
+                    <User size={18} className="text-[#064e3b]" />
+                    <span className="text-xs font-medium text-[#064e3b] hidden sm:inline">{user.name?.split(' ')[0]}</span>
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="px-3 py-2 text-red-500 text-sm font-medium hover:bg-red-50 rounded-full transition"
+                  >
+                    Logout
+                  </button>
+                </div>
               )}
 
             </div>
@@ -187,12 +196,21 @@ const Navbar = () => {
                 Login
               </Link>
             ) : (
-              <Link
-                to={user.isAdmin ? "/admin" : "/orders"}
-                className="p-2 rounded-full hover:bg-[#064e3b]/5 transition"
-              >
-                <User size={20} className="text-[#064e3b]" />
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link
+                  to={user.isAdmin ? "/admin" : "/orders"}
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-full hover:bg-[#064e3b]/5 transition"
+                >
+                  <User size={18} className="text-[#064e3b]" />
+                  <span className="text-xs font-medium text-[#064e3b]">{user.name?.split(' ')[0]}</span>
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="px-2 py-1.5 text-red-500 text-xs font-medium hover:bg-red-50 rounded-full transition"
+                >
+                  Logout
+                </button>
+              </div>
             )}
 
           </div>

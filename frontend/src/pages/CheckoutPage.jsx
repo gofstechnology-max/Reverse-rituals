@@ -37,7 +37,21 @@ const CheckoutPage = () => {
   const [loadingCities, setLoadingCities] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
-  // If user has saved address, show option to use it
+  // Auto-fill from saved address when user is available
+  useEffect(() => {
+    if (user?.shippingAddress?.address) {
+      setFormData({
+        fullName: user.shippingAddress.fullName || user.name || '',
+        address: user.shippingAddress.address || '',
+        state: user.shippingAddress.state || '',
+        city: user.shippingAddress.city || '',
+        zipCode: user.shippingAddress.zipCode || '',
+        phone: user.shippingAddress.phone || user.phone || '',
+      });
+    }
+  }, [user]);
+
+// If user has saved address, show option to use it
   const hasSavedAddress = user?.shippingAddress?.address;
   
   const handleUseSavedAddress = () => {
@@ -50,12 +64,19 @@ const CheckoutPage = () => {
         zipCode: user.shippingAddress.zipCode || '',
         phone: user.shippingAddress.phone || user.phone || '',
       });
+      toast.success('Address loaded from saved');
+    } else {
+      toast.error('No saved address found');
     }
   };
 
   const handleSaveAddress = async () => {
     if (!user || !user.token) {
       toast.error('Please login to save address');
+      return;
+    }
+    if (!formData.fullName || !formData.address || !formData.city || !formData.state || !formData.zipCode || !formData.phone) {
+      toast.error('Please fill all address fields');
       return;
     }
     try {
@@ -75,9 +96,11 @@ const CheckoutPage = () => {
       toast.success('Address saved!');
     } catch (error) {
       console.error('Error saving address:', error);
+      toast.error('Failed to save address');
     }
   };
-  const displayItems = cartItems;
+
+const displayItems = cartItems;
   const finalTotal = cartTotal;
 
   useEffect(() => {
@@ -409,23 +432,11 @@ const CheckoutPage = () => {
                     <h3 className="text-lg font-black text-[#064e3b] flex items-center gap-2">
                       <MapPin size={20} className="text-[#c5a059]" /> Shipping Address
                     </h3>
-                    <div className="flex gap-2">
-                      {hasSavedAddress && (
-                        <button type="button" onClick={handleUseSavedAddress}
-                          className="px-4 py-2 bg-[#c5a059]/10 text-[#c5a059] rounded-xl font-bold text-sm hover:bg-[#c5a059] hover:text-white transition-all">
-                          Use Saved
-                        </button>
-                      )}
-                      <button type="button" onClick={handleSaveAddress}
-                        className="px-4 py-2 bg-[#064e3b]/5 text-[#064e3b] rounded-xl font-bold text-sm hover:bg-[#064e3b] hover:text-white transition-all">
-                        Save
-                      </button>
-                      <button type="button" onClick={detectLocation} disabled={isLocating}
-                        className="px-4 py-2 bg-[#064e3b]/5 text-[#064e3b] rounded-xl font-bold text-sm hover:bg-[#064e3b] hover:text-white transition-all flex items-center gap-2">
-                        {isLocating ? <Loader2 size={16} className="animate-spin" /> : <LocateFixed size={16} />}
-                        {isLocating ? '...' : 'Detect'}
-                      </button>
-                    </div>
+                    <button type="button" onClick={detectLocation} disabled={isLocating}
+                      className="px-4 py-2 bg-[#064e3b]/5 text-[#064e3b] rounded-xl font-bold text-sm hover:bg-[#064e3b] hover:text-white transition-all flex items-center gap-2">
+                      {isLocating ? <Loader2 size={16} className="animate-spin" /> : <LocateFixed size={16} />}
+                      {isLocating ? '...' : 'Detect'}
+                    </button>
                   </div>
 
                   <div className="space-y-4">
@@ -454,11 +465,8 @@ const CheckoutPage = () => {
                       </div>
                       <div className="col-span-2 md:col-span-1">
                         <label className="text-sm font-bold text-[#064e3b]/60 ml-1 mb-2 block">City</label>
-                        <select required name="city" value={formData.city} onChange={handleChange} disabled={!formData.state}
-                          className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059] disabled:opacity-50">
-                          <option value="">Select</option>
-                          {cities.map(c => <option key={c} value={c}>{c}</option>)}
-                        </select>
+                        <input type="text" required name="city" value={formData.city} onChange={handleChange}
+                          className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059]" placeholder="Enter city" />
                       </div>
                     </div>
                   </div>
@@ -471,6 +479,20 @@ const CheckoutPage = () => {
                   <label htmlFor="terms" className="text-sm text-[#064e3b]/60">
                     I agree to the <span className="text-[#064e3b] font-bold underline">Terms & Conditions</span> and <span className="text-[#064e3b] font-bold underline">Privacy Policy</span>
                   </label>
+                </div>
+
+                {/* Save Address Buttons */}
+                <div className="flex flex-wrap gap-3">
+                  {hasSavedAddress && (
+                    <button type="button" onClick={handleUseSavedAddress}
+                      className="px-5 py-2.5 bg-[#c5a059]/10 text-[#c5a059] rounded-xl font-bold text-sm hover:bg-[#c5a059] hover:text-white transition-all">
+                      Use Saved Address
+                    </button>
+                  )}
+                  <button type="button" onClick={handleSaveAddress}
+                    className="px-5 py-2.5 bg-[#064e3b] text-white rounded-xl font-bold text-sm hover:bg-[#053d2f] transition-all">
+                    Save Address
+                  </button>
                 </div>
 
                 {/* Pay Button */}
