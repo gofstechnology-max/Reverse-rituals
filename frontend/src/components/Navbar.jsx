@@ -114,7 +114,12 @@ const Navbar = () => {
             <div className="flex items-center gap-10 text-[13px] uppercase tracking-[0.2em] font-semibold text-[#064e3b]">
               {navLinks.map((link) => (
                 <Link key={link.name} to={link.path} className="relative group hover:text-[#064e3b]">
-                  {link.name}
+                  <motion.span
+                    whileHover={{ scale: 1.05 }}
+                    className="inline-block"
+                  >
+                    {link.name}
+                  </motion.span>
                   <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-[#c5a059] transition-all group-hover:w-full"></span>
                 </Link>
               ))}

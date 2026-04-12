@@ -10,6 +10,27 @@
   --text-muted: #4b5563;
   --bg-main: #ffffff;
   --bg-offset: #f8f9fa;
+  --toast-success: #064e3b;
+  --toast-error: #dc2626;
+}
+
+:root .Toastify__toast-container {
+  --toastify-toast-background: #ffffff;
+  border-radius: 12px;
+}
+
+:root .Toastify__progress-bar--success {
+  background: #064e3b !important;
+}
+
+:root .Toastify__progress-bar--error {
+  background: #dc2626 !important;
+}
+
+:root .Toastify__progress-bar {
+  background: rgba(6, 78, 59, 0.3);
+  height: 3px;
+}
 
   font-family: 'Outfit', sans-serif !important;
   line-height: 1.6;

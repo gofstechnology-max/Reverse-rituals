@@ -5,21 +5,8 @@ const Preloader = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 2200); // Give enough time for basic fonts and layout
-
-        // Also finish loading when window is fully loaded
-        const handleLoad = () => {
-            setLoading(false);
-        };
-
-        window.addEventListener('load', handleLoad);
-
-        return () => {
-            clearTimeout(timer);
-            window.removeEventListener('load', handleLoad);
-        };
+        const timer = setTimeout(() => setLoading(false), 2200);
+        return () => clearTimeout(timer);
     }, []);
 
     return (
@@ -28,11 +15,10 @@ const Preloader = () => {
                 <motion.div
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.4, ease: "easeInOut" }}
-                    className="fixed inset-0 z-1000 flex flex-col items-center justify-center bg-white will-change-opacity"
+                    transition={{ duration: 0.4 }}
+                    className="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center"
                 >
                     <div className="relative">
-                        {/* Outer Glow */}
                         <motion.div
                             animate={{
                                 opacity: [0.1, 0.3, 0.1],
@@ -46,7 +32,6 @@ const Preloader = () => {
                             className="absolute inset-0 bg-[#064e3b]/10 blur-3xl rounded-full"
                         />
 
-                        {/* Logo Container */}
                         <motion.div
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
@@ -60,7 +45,6 @@ const Preloader = () => {
                                 fetchPriority="high"
                             />
 
-                            {/* Text Loading */}
                             <div className="flex flex-col items-center gap-4">
                                 <motion.span
                                     initial={{ opacity: 0, y: 10 }}
@@ -71,7 +55,6 @@ const Preloader = () => {
                                     Reverse Rituals
                                 </motion.span>
 
-                                {/* Loading Bar */}
                                 <div className="w-48 h-1 bg-[#064e3b]/10 rounded-full overflow-hidden">
                                     <motion.div
                                         initial={{ x: "-100%" }}

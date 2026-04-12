@@ -17,6 +17,7 @@ import ProductsSection from './ProductsSection';
 const HomePage = () => {
    const [products, setProducts] = useState([]);
    const [loading, setLoading] = useState(true);
+   const [hasScrolled, setHasScrolled] = useState(false);
    const [activeFaq, setActiveFaq] = useState(null);
    const [sliderPos, setSliderPos] = useState(50);
    const sliderPosRef = useRef(50);
@@ -50,9 +51,17 @@ const HomePage = () => {
       setSliderPos(sliderPosRef.current);
    };
 
-   useEffect(() => {
-      let rafId;
-      const onMove = (e) => {
+useEffect(() => {
+       const handleScroll = () => {
+          setHasScrolled(window.scrollY > 100);
+       };
+       window.addEventListener('scroll', handleScroll, { passive: true });
+       return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    useEffect(() => {
+       let rafId;
+       const onMove = (e) => {
          if (!isDragging || !sliderRef.current) return;
 
          const rect = sliderRef.current.getBoundingClientRect();
@@ -206,13 +215,13 @@ const HomePage = () => {
             <div className="max-w-7xl mx-auto px-4 md:px-6">
 
                {/* Header */}
-               <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ type: "spring", stiffness: 50, damping: 20 }}
-                  className="text-center mb-16 md:mb-24"
-               >
+<motion.div
+                   initial={{ opacity: 0, y: 40 }}
+                   whileInView={{ opacity: 1, y: 0 }}
+                   viewport={{ once: true, margin: "-100px" }}
+                   transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                   className="text-center mb-16 md:mb-24"
+                >
                   <span className="text-[#c5a059] text-xs md:text-sm font-black uppercase tracking-[0.4em] mb-4 block">
                      My Hairline Journey
                   </span>
@@ -226,12 +235,13 @@ const HomePage = () => {
                </motion.div>
 
                {/* Before After Slider - Mobile Optimized */}
-               <motion.div
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true, amount: 0.1 }} // Optimize viewport check
-                  className="mb-10 md:mb-32 max-w-5xl mx-auto will-change-transform"
-               >
+<motion.div
+                   initial={{ opacity: 0, scale: 0.95 }}
+                   whileInView={{ opacity: 1, scale: 1 }}
+                   viewport={{ once: true, margin: "-50px" }}
+                   transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                   className="mb-10 md:mb-32 max-w-5xl mx-auto will-change-transform"
+                >
                   <div
                      ref={sliderRef}
                      onMouseDown={handleMouseDown}
@@ -338,12 +348,13 @@ const HomePage = () => {
          {/* FAQ Section */}
          <section className="py-10 md:py-10 px-4 bg-white">
             <div className="max-w-3xl mx-auto">
-               <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="text-center mb-10"
-               >
+<motion.div
+                   initial={{ opacity: 0, y: 30 }}
+                   whileInView={{ opacity: 1, y: 0 }}
+                   viewport={{ once: true, margin: "-50px" }}
+                   transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                   className="text-center mb-10"
+                >
                   <h2 className="text-2xl md:text-3xl font-medium text-[#064e3b]">
                      Frequently <span className="font-serif italic text-[#c5a059]">Asked</span>
                   </h2>
@@ -352,14 +363,14 @@ const HomePage = () => {
 
                <div className="space-y-3">
                   {faqs.map((faq, i) => (
-                     <motion.div
-                        key={i}
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.1 }}
-                        className="bg-[#f8fdf9] rounded-xl overflow-hidden border border-[#c5a059]/10"
-                     >
+<motion.div
+                         key={i}
+                         initial={{ opacity: 0, y: 20 }}
+                         whileInView={{ opacity: 1, y: 0 }}
+                         viewport={{ once: true, margin: "-20px" }}
+                         transition={{ duration: 0.5, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                         className="bg-[#f8fdf9] rounded-xl overflow-hidden border border-[#c5a059]/10"
+                      >
                         <button
                            onClick={() => setActiveFaq(activeFaq === i ? null : i)}
                            className="w-full px-5 py-4 flex items-center justify-between text-left group"

@@ -43,6 +43,12 @@ const Layout = () => {
         draggable
         pauseOnHover
         theme="light"
+        style={{
+          --toastify-color-progress-success: '#064e3b',
+          '--toastify-color-progress-error: '#ef4444',
+          '--toastify-color-progress-background': '#f0fdf4',
+        }}
+        successClassName="!bg-green-800"
       />
     </div>
   );

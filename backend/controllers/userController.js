@@ -15,20 +15,25 @@ const generateToken = (id) => {
 // Send email helper (using Gmail SMTP)
 const sendEmail = async (to, subject, html) => {
   try {
+    if (!process.env.MAIL_USER || !process.env.MAIL_PASS) {
+      console.log('Email config missing - MAIL_USER or MAIL_PASS not set');
+      return false;
+    }
     const nodemailer = require('nodemailer');
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
       },
     });
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+      from: process.env.MAIL_USER,
       to,
       subject,
       html,
     });
+    console.log('Email sent successfully to:', to);
     return true;
   } catch (error) {
     console.log('Email send failed:', error.message);
