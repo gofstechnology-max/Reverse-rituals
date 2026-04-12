@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
   Sparkles,
@@ -12,11 +12,6 @@ const Hero = () => {
   const [current, setCurrent] = useState(0);
   const containerRef = useRef(null);
   
-  const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 300], [0, 50]);
-  const y2 = useTransform(scrollY, [0, 300], [0, -30]);
-  const opacity = useTransform(scrollY, [0, 200], [1, 0]);
-
   const slides = [
     {
       subtitle: "Natural Hair Recovery System",
@@ -58,26 +53,26 @@ const Hero = () => {
     >
       <div className="absolute inset-0 bg-white/30"></div>
 
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 items-center relative z-10 w-full px-3 md:px-16 py-12 md:py-20">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 items-center relative z-10 w-full px-3 md:px-16 py-10 md:py-20">
 
-        <motion.div 
+<motion.div 
           className="relative flex justify-center lg:order-2 order-1 w-full"
-          style={{ y: y2 }}
         >
           <div className="relative w-[300px] sm:w-[380px] md:w-[480px] lg:w-[550px] aspect-square flex items-center justify-center">
-            <AnimatePresence mode="wait">
-              <motion.img
-                key={current}
+            <motion.img
                 src={slides[current].image}
                 alt="Hair Growth Product"
                 loading="eager"
                 className="w-full h-full object-contain drop-shadow-xl"
-                initial={{ opacity: 1 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 1 }}
-            
-              />
-            </AnimatePresence>
+                animate={{
+                    y: [0, -15, 0]
+                }}
+                transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+            />
           </div>
         </motion.div>
 
@@ -97,7 +92,7 @@ const Hero = () => {
                 className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-[#c5a059]/10 text-[#c5a059] border border-[#c5a059]/20 mb-6"
               >
                 <Sparkles size={14} />
-                <span className="text-xs tracking-[0.3em] uppercase font-bold">
+                <span className="md:text-xs tracking-[0.1em] uppercase font-bold text-[10px]">
                   {slides[current].subtitle}
                 </span>
               </motion.div>
