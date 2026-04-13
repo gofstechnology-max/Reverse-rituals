@@ -66,6 +66,15 @@ const CheckoutPage = () => {
   // State for saved address from DB
   const [savedAddressFromDB, setSavedAddressFromDB] = useState(null);
   
+  // State/City/Loading states
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [loadingStates, setLoadingStates] = useState(false);
+  const [loadingCities, setLoadingCities] = useState(false);
+  const [isLocating, setIsLocating] = useState(false);
+  const [isFetchingPincode, setIsFetchingPincode] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  
   // If user has saved address in DB, show button
   const hasSavedAddress = savedAddressFromDB?.address;
   
