@@ -25,13 +25,13 @@ const CheckoutPage = () => {
         setIsCheckingAuth(false);
         return;
       }
-      
+
       try {
         const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
         const { data } = await axios.get(`${API_URL}/api/users/profile`, {
           headers: { Authorization: `Bearer ${user.token}` }
         });
-        
+
         // Store saved address for "Use Saved Address" button
         if (data.shippingAddress?.address) {
           setSavedAddressFromDB(data.shippingAddress);
@@ -61,11 +61,12 @@ const CheckoutPage = () => {
     city: '',
     zipCode: '',
     phone: '',
+    email: '',
   });
 
   // State for saved address from DB
   const [savedAddressFromDB, setSavedAddressFromDB] = useState(null);
-  
+
   // State/City/Loading states
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
@@ -74,10 +75,10 @@ const CheckoutPage = () => {
   const [isLocating, setIsLocating] = useState(false);
   const [isFetchingPincode, setIsFetchingPincode] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
-  
+
   // If user has saved address in DB, show button
   const hasSavedAddress = savedAddressFromDB?.address;
-  
+
   const handleUseSavedAddress = () => {
     if (savedAddressFromDB) {
       setFormData({
@@ -307,19 +308,19 @@ const CheckoutPage = () => {
   const handlePayment = async (e) => {
     e.preventDefault();
     if (!agreedToTerms) { toast.error("Please agree to the terms"); return; }
-    
+
     setIsProcessing(true);
 
     const res = await loadRazorpay();
-    if (!res) { 
-      toast.error('Razorpay failed to load'); 
+    if (!res) {
+      toast.error('Razorpay failed to load');
       setIsProcessing(false);
-      return; 
+      return;
     }
 
     try {
       const orderConfig = { headers: { 'Content-Type': 'application/json', Authorization: user ? `Bearer ${user.token}` : undefined } };
-      
+
       let order, razorpayOrder;
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
@@ -355,10 +356,13 @@ const CheckoutPage = () => {
         description: 'Payment for your hair transformation',
         order_id: razorpayOrder.id,
         handler: async (response) => {
+
           setIsProcessing(true);
           try {
             const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+
             const verifyRes = await axios.post(`${API_URL}/api/orders/verify`, { ...response, orderId: order._id });
+
             if (verifyRes.data.message === "Payment verified successfully") {
               toast.success('Payment Successful!');
               clearCart();
@@ -372,8 +376,8 @@ const CheckoutPage = () => {
               }));
               navigate('/orders');
             }
-          } catch (err) { 
-            toast.error('Payment verification failed'); 
+          } catch (err) {
+            toast.error('Payment verification failed');
             setIsProcessing(false);
           }
         },
@@ -392,8 +396,8 @@ const CheckoutPage = () => {
         setIsProcessing(false);
       });
       rzp.open();
-    } catch (error) { 
-      toast.error(error.response?.data?.message || 'Checkout failed'); 
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Checkout failed');
       setIsProcessing(false);
     }
   };
@@ -445,6 +449,11 @@ const CheckoutPage = () => {
                       <label className="text-sm font-bold text-[#064e3b]/60 ml-1 mb-2 block">Phone Number</label>
                       <input type="tel" required name="phone" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value.replace(/\D/g, '').slice(0, 10) })}
                         className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059]" placeholder="10-digit number" />
+                    </div>
+                    <div>
+                      <label className="text-sm font-bold text-[#064e3b]/60 ml-1 mb-2 block">Email</label>
+                      <input type="email" required name="email" value={formData.email} onChange={handleChange}
+                        className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059]" placeholder="your@email.com" />
                     </div>
                   </div>
                 </div>
@@ -519,8 +528,8 @@ const CheckoutPage = () => {
                 </div>
 
                 {/* Pay Button */}
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={isProcessing}
                   className="w-full py-5 bg-[#064e3b] text-white rounded-2xl font-bold hover:bg-[#c5a059] transition-all flex items-center justify-center gap-3 text-lg disabled:opacity-70 disabled:cursor-not-allowed"
                 >
@@ -565,16 +574,16 @@ const CheckoutPage = () => {
                     </span>
                   </div>
 
-{finalTotal < 99 && (
-                      <p className="text-[10px] text-[#c5a059] font-black uppercase tracking-widest">
-                        Add ₹{99 - finalTotal} more for FREE shipping
-                      </p>
-                    )}
+                  {finalTotal < 99 && (
+                    <p className="text-[10px] text-[#c5a059] font-black uppercase tracking-widest">
+                      Add ₹{99 - finalTotal} more for FREE shipping
+                    </p>
+                  )}
 
-                    <div className="flex justify-between pt-3 border-t border-[#064e3b]/10">
-                      <span className="font-bold text-[#064e3b]">Total</span>
-                      <span className="text-xl font-black text-[#c5a059]">₹{finalTotal}</span>
-                    </div>
+                  <div className="flex justify-between pt-3 border-t border-[#064e3b]/10">
+                    <span className="font-bold text-[#064e3b]">Total</span>
+                    <span className="text-xl font-black text-[#c5a059]">₹{finalTotal}</span>
+                  </div>
                 </div>
 
                 <div className="mt-6 p-4 bg-[#c5a059]/5 rounded-xl flex items-start gap-3">

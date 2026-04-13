@@ -5,36 +5,33 @@ let transporter = null;
 const getTransporter = () => {
   if (transporter) return transporter;
   
-  console.log('=== EMAIL CONFIG DEBUG ===');
-  console.log('MAIL_USER:', process.env.MAIL_USER);
-  console.log('MAIL_PASS set:', !!process.env.MAIL_PASS);
-  console.log('MAIL_PASS value:', process.env.MAIL_PASS ? 'yes' : 'no');
-  
-  if (!process.env.MAIL_USER || !process.env.MAIL_PASS || process.env.MAIL_PASS === 'your_app_password_here' || process.env.MAIL_PASS === '') {
-    console.log('Email not configured - skipping email notifications');
+  if (!process.env.MAIL_USER || !process.env.MAIL_PASS) {
+    console.log('Email not configured - missing credentials');
     return null;
   }
   
   transporter = nodemailer.createTransport({
-    host: process.env.MAIL_HOST || 'smtp.gmail.com',
-    port: process.env.MAIL_PORT || 587,
-    secure: false,
+    service: 'gmail',
     auth: {
       user: process.env.MAIL_USER,
       pass: process.env.MAIL_PASS,
     },
   });
   
-  console.log('Transporter created successfully');
+  console.log('Email transporter created for:', process.env.MAIL_USER);
   return transporter;
 };
 
 const sendOrderEmail = async (toEmail, orderDetails) => {
+  console.log('sendOrderEmail called with:', { toEmail, orderId: orderDetails.orderId });
+  
   const transport = getTransporter();
   if (!transport) {
     console.log('No transport - email not sent');
     return;
   }
+  
+  console.log('Transport ready, preparing email...');
   
   const { orderId, customerName, address, items, total, paymentMethod, phone } = orderDetails;
 
@@ -93,30 +90,20 @@ const sendOrderEmail = async (toEmail, orderDetails) => {
     </div>
   `;
 
-  const adminEmail = process.env.ADMIN_NOTIFY_EMAIL || 'reverserituals@gmail.com';
+  const adminEmail = process.env.ADMIN_NOTIFY_EMAIL || 'mdibrahim.developer@gmail.com';
   
   const mailOptions = {
-    from: process.env.MAIL_FROM || 'Reverse Rituals <reverserituals@gmail.com>',
+    from: process.env.MAIL_USER || 'mdibrahim.developer@gmail.com',
     to: adminEmail,
     subject: `New Order Received - Reverse Rituals #${orderId} - ₹${total}`,
     html: htmlContent,
   };
 
-  try {
-    console.log('Sending email to:', adminEmail);
-    console.log('Mail options:', JSON.stringify(mailOptions, null, 2));
-    const info = await transport.sendMail(mailOptions);
-    console.log('Email sent successfully! Message ID:', info.messageId);
-  } catch (error) {
-    console.error('CRITICAL EMAIL ERROR:', error.message);
-    console.error('Error code:', error.code);
-    if (error.code === 'EAUTH') {
-      console.error('Authentication failed. Check if Gmail App Password is still valid.');
-    }
-    if (error.code === 'ECONNREFUSED') {
-      console.error('Connection refused - check SMTP host and port');
-    }
-  }
+  console.log('Sending email to:', adminEmail);
+  
+  const info = await transport.sendMail(mailOptions);
+  console.log('Email sent successfully! Message ID:', info.messageId);
+  return info;
 };
 
 module.exports = { sendOrderEmail };

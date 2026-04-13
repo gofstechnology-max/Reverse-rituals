@@ -4,10 +4,13 @@ const User = require('../models/User');
 const razorpay = require('../config/razorpay');
 const crypto = require('crypto');
 
+console.log('=== ORDER CONTROLLER LOADED ===');
+
 let sendOrderEmail = () => {};
 try {
   const emailModule = require('../config/email');
   sendOrderEmail = emailModule.sendOrderEmail;
+  console.log('Email module loaded successfully');
 } catch (e) {
   console.log('Email module not available');
 }
@@ -158,7 +161,20 @@ const createPayLinkForOrder = async (req, res) => {
 // @route   POST /api/orders/verify
 // @access  Public
 const verifyPayment = async (req, res) => {
+  console.log('=== VERIFY PAYMENT CALLED ===');
+  console.log('Body:', req.body);
+  console.log('Keys:', Object.keys(req.body));
+  
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId } = req.body;
+
+  if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !orderId) {
+    console.log('Missing required fields!');
+    console.log('razorpay_order_id:', razorpay_order_id);
+    console.log('razorpay_payment_id:', razorpay_payment_id);
+    console.log('razorpay_signature:', razorpay_signature);
+    console.log('orderId:', orderId);
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
 
   const body = razorpay_order_id + "|" + razorpay_payment_id;
 
@@ -168,9 +184,12 @@ const verifyPayment = async (req, res) => {
     .digest("hex");
 
   const isAuthentic = expectedSignature === razorpay_signature;
+  
+  console.log('Signature valid:', isAuthentic);
 
   if (isAuthentic) {
     const order = await Order.findById(orderId);
+    console.log('Order found:', !!order);
 
     if (order) {
       order.isPaid = true;
@@ -208,12 +227,14 @@ const verifyPayment = async (req, res) => {
       };
 
       console.log('Order details:', orderDetails);
+      console.log('Calling sendOrderEmail...');
 
-      sendOrderEmail(updatedOrder.shippingAddress.email, orderDetails).then(() => {
+      try {
+        await sendOrderEmail(updatedOrder.shippingAddress.email, orderDetails);
         console.log('Email sent successfully!');
-      }).catch(err => {
-        console.log('Email notification skipped:', err.message);
-      });
+      } catch (emailErr) {
+        console.log('Email error:', emailErr.message);
+      }
 
       res.json({ message: "Payment verified successfully", order: updatedOrder });
     } else {
