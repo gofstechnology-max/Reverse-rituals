@@ -187,6 +187,11 @@ const verifyPayment = async (req, res) => {
 
       const updatedOrder = await order.save();
 
+      console.log('=== EMAIL DEBUG ===');
+      console.log('Order saved, attempting to send email...');
+      console.log('Order email:', updatedOrder.shippingAddress.email);
+      console.log('Admin email:', process.env.ADMIN_NOTIFY_EMAIL);
+      
       // Send email notification
       const orderDetails = {
         orderId: updatedOrder._id.toString().slice(-8).toUpperCase(),
@@ -202,7 +207,11 @@ const verifyPayment = async (req, res) => {
         phone: updatedOrder.shippingAddress.phone,
       };
 
-      sendOrderEmail(updatedOrder.shippingAddress.email, orderDetails).catch(err => {
+      console.log('Order details:', orderDetails);
+
+      sendOrderEmail(updatedOrder.shippingAddress.email, orderDetails).then(() => {
+        console.log('Email sent successfully!');
+      }).catch(err => {
         console.log('Email notification skipped:', err.message);
       });
 

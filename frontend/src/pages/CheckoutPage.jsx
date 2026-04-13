@@ -336,7 +336,8 @@ const CheckoutPage = () => {
           state: formData.state || '',
           zipCode: formData.zipCode || '',
           country: 'India',
-          phone: formData.phone || ''
+          phone: formData.phone || '',
+          email: user?.email || ''  // Add email
         },
         paymentMethod: 'Razorpay'
       };

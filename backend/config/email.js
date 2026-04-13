@@ -5,10 +5,13 @@ let transporter = null;
 const getTransporter = () => {
   if (transporter) return transporter;
   
+  console.log('=== EMAIL CONFIG DEBUG ===');
+  console.log('MAIL_USER:', process.env.MAIL_USER);
+  console.log('MAIL_PASS set:', !!process.env.MAIL_PASS);
+  console.log('MAIL_PASS value:', process.env.MAIL_PASS ? 'yes' : 'no');
+  
   if (!process.env.MAIL_USER || !process.env.MAIL_PASS || process.env.MAIL_PASS === 'your_app_password_here' || process.env.MAIL_PASS === '') {
     console.log('Email not configured - skipping email notifications');
-    console.log('MAIL_USER:', process.env.MAIL_USER ? 'set' : 'missing');
-    console.log('MAIL_PASS:', process.env.MAIL_PASS ? 'set' : 'missing');
     return null;
   }
   
@@ -22,12 +25,16 @@ const getTransporter = () => {
     },
   });
   
+  console.log('Transporter created successfully');
   return transporter;
 };
 
 const sendOrderEmail = async (toEmail, orderDetails) => {
   const transport = getTransporter();
-  if (!transport) return;
+  if (!transport) {
+    console.log('No transport - email not sent');
+    return;
+  }
   
   const { orderId, customerName, address, items, total, paymentMethod, phone } = orderDetails;
 
@@ -86,22 +93,28 @@ const sendOrderEmail = async (toEmail, orderDetails) => {
     </div>
   `;
 
-const mailOptions = {
-    from: process.env.MAIL_FROM || 'greensignaltamil@gmail.com',
-    to: process.env.ADMIN_NOTIFY_EMAIL || 'reverserituals@gmail.com', // Send to admin only
-    cc: '', // No CC - admin email is the recipient
+  const adminEmail = process.env.ADMIN_NOTIFY_EMAIL || 'reverserituals@gmail.com';
+  
+  const mailOptions = {
+    from: process.env.MAIL_FROM || 'Reverse Rituals <reverserituals@gmail.com>',
+    to: adminEmail,
     subject: `New Order Received - Reverse Rituals #${orderId} - ₹${total}`,
     html: htmlContent,
   };
 
   try {
-    console.log(`Attempting to send order email to: ${toEmail}`);
-    await transport.sendMail(mailOptions);
-    console.log('Order notification email sent successfully to customer and admin');
+    console.log('Sending email to:', adminEmail);
+    console.log('Mail options:', JSON.stringify(mailOptions, null, 2));
+    const info = await transport.sendMail(mailOptions);
+    console.log('Email sent successfully! Message ID:', info.messageId);
   } catch (error) {
     console.error('CRITICAL EMAIL ERROR:', error.message);
+    console.error('Error code:', error.code);
     if (error.code === 'EAUTH') {
       console.error('Authentication failed. Check if Gmail App Password is still valid.');
+    }
+    if (error.code === 'ECONNREFUSED') {
+      console.error('Connection refused - check SMTP host and port');
     }
   }
 };

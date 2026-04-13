@@ -111,7 +111,7 @@ const ShopPage = () => {
             {filteredProducts.map((product) => (
               <div key={product._id} className="flex flex-col md:flex-row bg-white rounded-3xl overflow-hidden border border-[#064e3b]/5">
                 <div className="md:w-1/3 aspect-square md:aspect-auto">
-                  <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                  <img src={product.image} alt={product.name} className="w-full h-full object-cover" loading="lazy" />
                 </div>
                 <div className="flex-1 p-8 flex flex-col justify-center">
                   <h3 className="text-2xl font-serif font-medium text-[#064e3b] mb-2">{product.name}</h3>
