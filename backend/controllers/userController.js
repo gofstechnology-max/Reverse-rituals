@@ -37,6 +37,20 @@ const sendEmail = async (to, subject, html) => {
   }
 };
 
+// Send password reset email (using new template)
+const sendPasswordResetEmail = async (to, name, otp) => {
+  try {
+    if (!emailModule || !emailModule.sendPasswordResetEmail) {
+      console.log('Email module not available');
+      return false;
+    }
+    return await emailModule.sendPasswordResetEmail(to, name, otp);
+  } catch (error) {
+    console.log('Password reset email failed:', error.message);
+    return false;
+  }
+};
+
 // @desc    Send OTP for password reset
 // @route   POST /api/users/forgot-password
 // @access  Public
@@ -59,18 +73,8 @@ const forgotPassword = async (req, res) => {
     expires: Date.now() + 10 * 60 * 1000
   });
   
-  // Send OTP via email
-  const emailSent = await sendEmail(
-    email,
-    'Password Reset OTP - Reverse Rituals',
-    `<div style="font-family: Arial, sans-serif; max-width: 500px; padding: 20px;">
-      <h2 style="color: #064e3b;">Reverse Rituals - Password Reset</h2>
-      <p>Your OTP for password reset is:</p>
-      <h1 style="color: #c5a059; font-size: 36px; letter-spacing: 5px;">${otp}</h1>
-      <p style="color: #666; font-size: 14px;">This OTP is valid for 10 minutes.</p>
-      <p style="color: #666; font-size: 14px;">If you didn't request this, please ignore this email.</p>
-    </div>`
-  );
+  // Send OTP via email using new template
+  const emailSent = await sendPasswordResetEmail(email, user.name, otp);
   
   if (emailSent) {
     res.json({ message: 'OTP sent to your email' });
