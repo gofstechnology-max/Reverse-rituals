@@ -161,18 +161,9 @@ const createPayLinkForOrder = async (req, res) => {
 // @route   POST /api/orders/verify
 // @access  Public
 const verifyPayment = async (req, res) => {
-  console.log('=== VERIFY PAYMENT CALLED ===');
-  console.log('Body:', req.body);
-  console.log('Keys:', Object.keys(req.body));
-  
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId } = req.body;
 
   if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !orderId) {
-    console.log('Missing required fields!');
-    console.log('razorpay_order_id:', razorpay_order_id);
-    console.log('razorpay_payment_id:', razorpay_payment_id);
-    console.log('razorpay_signature:', razorpay_signature);
-    console.log('orderId:', orderId);
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
@@ -184,12 +175,9 @@ const verifyPayment = async (req, res) => {
     .digest("hex");
 
   const isAuthentic = expectedSignature === razorpay_signature;
-  
-  console.log('Signature valid:', isAuthentic);
 
   if (isAuthentic) {
     const order = await Order.findById(orderId);
-    console.log('Order found:', !!order);
 
     if (order) {
       order.isPaid = true;
@@ -206,12 +194,6 @@ const verifyPayment = async (req, res) => {
 
       const updatedOrder = await order.save();
 
-      console.log('=== EMAIL DEBUG ===');
-      console.log('Order saved, attempting to send email...');
-      console.log('Order email:', updatedOrder.shippingAddress.email);
-      console.log('Admin email:', process.env.ADMIN_NOTIFY_EMAIL);
-      
-      // Send email notification
       const orderDetails = {
         orderId: updatedOrder._id.toString().slice(-8).toUpperCase(),
         customerName: updatedOrder.shippingAddress.fullName,
@@ -226,12 +208,21 @@ const verifyPayment = async (req, res) => {
         phone: updatedOrder.shippingAddress.phone,
       };
 
-      console.log('Order details:', orderDetails);
-      console.log('Calling sendOrderEmail...');
-
       try {
-        await sendOrderEmail(updatedOrder.shippingAddress.email, orderDetails);
-        console.log('Email sent successfully!');
+        await sendOrderEmail(orderDetails);
+        console.log('Order email sent to admin');
+      } catch (emailErr) {
+        console.log('Email error:', emailErr.message);
+      }
+
+      res.json({ message: "Payment verified successfully", order: updatedOrder });
+    } else {
+      res.status(404).json({ message: 'Order not found' });
+    }
+  } else {
+    res.status(400).json({ message: "Invalid signature" });
+  }
+};
       } catch (emailErr) {
         console.log('Email error:', emailErr.message);
       }
