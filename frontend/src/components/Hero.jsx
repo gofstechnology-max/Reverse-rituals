@@ -54,17 +54,15 @@ const Hero = () => {
       {/* Fixed height container - content centered */}
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-0 lg:gap-8 items-center relative z-10 w-full h-full px-4 md:px-8">
 
-        {/* Image - only dmobile */}
+        {/* Image - only dmobile  no aniamte */}
         <div className=" lg:flex items-center justify-center mx-auto lg:hidden">
           <div className=" w-[300px] xl:w-[420px] ">
-            <motion.img
+            <img
               key={`img-${current}`}
               src={slides[current].image}
               alt="Hair Growth Product"
               loading="eager"
               className="w-full object-contain drop-shadow-xl"
-
-
             />
           </div>
         </div>
