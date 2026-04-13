@@ -365,6 +365,7 @@ const CheckoutPage = () => {
 
             if (verifyRes.data.message === "Payment verified successfully") {
               toast.success('Payment Successful!');
+              navigate('/orders');
               clearCart();
               localStorage.removeItem('repay_order');
               localStorage.setItem('latestOrder', JSON.stringify({
@@ -374,7 +375,7 @@ const CheckoutPage = () => {
                 totalPrice: order.totalPrice,
                 orderItems: order.orderItems
               }));
-              navigate('/orders');
+
             }
           } catch (err) {
             toast.error('Payment verification failed');

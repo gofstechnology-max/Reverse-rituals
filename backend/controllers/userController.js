@@ -12,28 +12,24 @@ const generateToken = (id) => {
   });
 };
 
-// Send email helper (using Gmail SMTP)
+// Load Brevo email module
+let emailModule = null;
+try {
+  emailModule = require('../config/email');
+  console.log('Email module loaded in userController');
+} catch (e) {
+  console.log('Email module not available');
+}
+
+// Send email helper (using Brevo SMTP)
 const sendEmail = async (to, subject, html) => {
   try {
-    if (!process.env.MAIL_USER || !process.env.MAIL_PASS) {
-      console.log('Email config missing - MAIL_USER or MAIL_PASS not set');
+    if (!emailModule || !emailModule.sendEmail) {
+      console.log('Email module not available');
       return false;
     }
-    const nodemailer = require('nodemailer');
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
-      },
-    });
-    await transporter.sendMail({
-      from: process.env.MAIL_USER,
-      to,
-      subject,
-      html,
-    });
-    console.log('Email sent successfully to:', to);
+    emailModule.sendEmail(to, subject, html);
+    console.log('Email sent to:', to);
     return true;
   } catch (error) {
     console.log('Email send failed:', error.message);
