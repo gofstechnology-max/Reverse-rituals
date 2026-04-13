@@ -42,7 +42,7 @@ const Hero = () => {
 
   return (
     <section
-      className="relative w-full h-[650px] md:h-[600px] lg:h-[550px] overflow-hidden bg-[#fdfbf7]"
+      className="relative w-full h-[850px] md:h-[600px] lg:h-[550px] overflow-hidden bg-[#fdfbf7]"
       style={{
         backgroundImage: "url('/leaves-bg.png')",
         backgroundSize: "cover",
@@ -52,17 +52,17 @@ const Hero = () => {
       <div className="absolute inset-0 bg-white/30"></div>
 
       {/* Fixed height container - content centered */}
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-4 lg:gap-8 items-center relative z-10 w-full h-full px-4 md:px-8">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-0 lg:gap-8 items-center relative z-10 w-full h-full px-4 md:px-8">
 
         {/* Image - only desktop */}
-        <div className=" lg:flex items-center justify-center h-full">
-          <div className="w-[350px] xl:w-[420px]">
+        <div className=" lg:flex items-center justify-center ">
+          <div className="w-[300px] xl:w-[420px] ">
             <motion.img
               key={`img-${current}`}
               src={slides[current].image}
               alt="Hair Growth Product"
               loading="eager"
-              className="w-full h-auto object-contain drop-shadow-xl"
+              className="w-full object-contain drop-shadow-xl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -115,7 +115,7 @@ const Hero = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="flex gap-6 mb-8"
+                  className="flex gap-6 mb-8 mx-auto justify-center"
                 >
                   <div className="flex items-center gap-2">
                     <ShieldCheck size={16} className="text-[#c5a059]" />
@@ -131,7 +131,7 @@ const Hero = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
-                  className="flex gap-4"
+                  className="flex gap-4 justify-center md:flex-row flex-col items-center"
                 >
                   <motion.button
                     whileHover={{ scale: 1.05 }}
