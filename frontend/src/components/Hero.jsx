@@ -44,23 +44,21 @@ const Hero = () => {
   return (
     <section
       ref={containerRef}
-      className="relative flex items-center overflow-hidden bg-[#fdfbf7]"
+      className="relative flex items-center overflow-hidden bg-[#fdfbf7] min-h-[700px] md:min-h-[600px]"
       style={{
         backgroundImage: "url('/leaves-bg.png')",
         backgroundSize: "cover",
-        backgroundPosition: "center",
-        minHeight: "100dvh",
-        minHeight: "100vh"
+        backgroundPosition: "center"
       }}
     >
       <div className="absolute inset-0 bg-white/30"></div>
 
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 items-center relative z-10 w-full px-3 md:px-16 py-8 md:py-12">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-6 items-center relative z-10 w-full px-3 md:px-12 py-6">
 
         <motion.div
           className="relative flex justify-center lg:order-2 order-1 w-full"
         >
-          <div className="relative w-[300px] sm:w-[380px] md:w-[480px] lg:w-[550px] aspect-square flex items-center justify-center">
+          <div className="relative w-[250px] sm:w-[320px] md:w-[400px] lg:w-[480px] aspect-square flex items-center justify-center">
             <motion.img
               src={slides[current].image}
               alt="Hair Growth Product"
