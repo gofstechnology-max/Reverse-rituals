@@ -44,7 +44,7 @@ const Hero = () => {
   return (
     <section
       ref={containerRef}
-      className="relative flex items-center overflow-hidden bg-[#fdfbf7]"
+      className="relative flex items-center overflow-hidden bg-[#fdfbf7] min-h-screen"
       style={{
         backgroundImage: "url('/leaves-bg.png')",
         backgroundSize: "cover",
