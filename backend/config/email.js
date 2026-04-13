@@ -1,46 +1,24 @@
 const nodemailer = require('nodemailer');
 
 console.log('=== EMAIL MODULE LOADED ===');
-console.log('MAIL_USER:', process.env.MAIL_USER);
-console.log('ADMIN_EMAIL:', process.env.ADMIN_NOTIFY_EMAIL);
 
-let transporter = null;
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS
+  },
+  timeout: 10000 // 10 second timeout
+});
 
-const initTransporter = () => {
-  if (!process.env.MAIL_USER || !process.env.MAIL_PASS) {
-    console.log('❌ Email not configured - missing credentials');
-    return null;
-  }
-  
-  transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASS
-    }
-  });
-  
-  console.log('✅ Email transporter ready');
-  return transporter;
-};
+console.log('✅ Email transporter ready for:', process.env.MAIL_USER);
 
-const sendOrderEmail = async (orderDetails) => {
-  console.log('\n=== SENDING ORDER EMAIL ===');
-  
-  if (!transporter) {
-    transporter = initTransporter();
-  }
-  
-  if (!transporter) {
-    console.log('❌ No transporter - email not sent');
-    return false;
-  }
-
-  const { orderId, customerName, address, items, total, paymentMethod, phone } = orderDetails;
+const sendOrderEmail = (orderDetails) => {
   const adminEmail = process.env.ADMIN_NOTIFY_EMAIL || 'reverserituals@gmail.com';
-
-  console.log('To:', adminEmail);
-  console.log('Order ID:', orderId);
+  
+  console.log('📧 Email to:', adminEmail);
+  
+  const { orderId, customerName, address, items, total, paymentMethod, phone } = orderDetails;
 
   const itemsList = items.map(item => 
     `<tr><td>${item.name}</td><td>${item.qty}</td><td>₹${item.price}</td></tr>`
@@ -61,19 +39,24 @@ const sendOrderEmail = async (orderDetails) => {
     </table>
   `;
 
-  try {
-    await transporter.sendMail({
+  // Use setTimeout to make it truly non-blocking
+  setTimeout(() => {
+    transporter.sendMail({
       from: process.env.MAIL_USER,
       to: adminEmail,
       subject: `New Order - #${orderId} - ₹${total}`,
       html: html
+    }, (err, info) => {
+      if (err) {
+        console.log('❌ Email error:', err.message);
+      } else {
+        console.log('✅ Email sent! ID:', info.messageId);
+      }
     });
-    console.log('✅ Email sent successfully to', adminEmail);
-    return true;
-  } catch (error) {
-    console.log('❌ Email failed:', error.message);
-    return false;
-  }
+  }, 100); // Small delay to let response go first
+
+  console.log('📧 Email queued');
+  return true;
 };
 
-module.exports = { sendOrderEmail, initTransporter };
+module.exports = { sendOrderEmail };
