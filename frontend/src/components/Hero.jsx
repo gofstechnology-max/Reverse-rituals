@@ -44,16 +44,18 @@ const Hero = () => {
   return (
     <section
       ref={containerRef}
-      className="relative flex items-center overflow-hidden bg-[#fdfbf7] min-h-[100dvh]"
+      className="relative flex items-center overflow-hidden bg-[#fdfbf7]"
       style={{
         backgroundImage: "url('/leaves-bg.png')",
         backgroundSize: "cover",
-        backgroundPosition: "center"
+        backgroundPosition: "center",
+        minHeight: "100dvh",
+        minHeight: "100vh"
       }}
     >
       <div className="absolute inset-0 bg-white/30"></div>
 
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 items-center relative z-10 w-full px-3 md:px-16 py-10 md:py-20">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 items-center relative z-10 w-full px-3 md:px-16 py-8 md:py-12">
 
         <motion.div
           className="relative flex justify-center lg:order-2 order-1 w-full"
