@@ -1,28 +1,30 @@
+require('dotenv').config();
 const nodemailer = require('nodemailer');
 
 console.log('=== EMAIL MODULE LOADED ===');
 
-let transporter = null;
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS
+  }
+});
 
-const getTransporter = () => {
-  if (transporter) return transporter;
-  
-  transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASS
-    },
-    timeout: 30000
-  });
-  
-  console.log('✅ Email transporter ready');
-  return transporter;
-};
+console.log('✅ Email transporter ready');
+
+// Pre-verify connection
+transporter.verify((error) => {
+  if (error) {
+    console.log('❌ Transporter verify error:', error.message);
+  } else {
+    console.log('✅ Transporter verified and ready');
+  }
+});
 
 const sendOrderEmail = (orderDetails) => {
   const adminEmail = process.env.ADMIN_NOTIFY_EMAIL || 'reverserituals@gmail.com';
-  console.log('📧 Email to:', adminEmail);
+  console.log('📧 Sending email to:', adminEmail);
   
   const { orderId, customerName, address, items, total, paymentMethod, phone } = orderDetails;
 
@@ -31,7 +33,7 @@ const sendOrderEmail = (orderDetails) => {
   ).join('');
 
   const html = `
-    <h2>New Order Received! 🎉</h2>
+    <h2>New Order Received!</h2>
     <p><strong>Order #:</strong> ${orderId}</p>
     <p><strong>Customer:</strong> ${customerName}</p>
     <p><strong>Phone:</strong> ${phone}</p>
@@ -45,20 +47,15 @@ const sendOrderEmail = (orderDetails) => {
     </table>
   `;
 
-  getTransporter().sendMail({
+  transporter.sendMail({
     from: process.env.MAIL_USER,
     to: adminEmail,
     subject: `New Order - #${orderId} - ₹${total}`,
     html: html
   }, (err, info) => {
-    if (err) {
-      console.log('❌ Email error:', err.message);
-    } else {
-      console.log('✅ Email sent! ID:', info.messageId);
-    }
+    if (err) console.log('❌ Email error:', err.message);
+    else console.log('✅ Email sent! ID:', info.messageId);
   });
-  
-  return true;
 };
 
 module.exports = { sendOrderEmail };
