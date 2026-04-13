@@ -1,7 +1,5 @@
 require('dotenv').config();
 const SibApiV3Sdk = require('sib-api-v3-sdk');
-const fs = require('fs');
-const path = require('path');
 
 console.log('=== EMAIL MODULE LOADED (BREVO API) ===');
 
@@ -11,26 +9,6 @@ apiKey.apiKey = process.env.BREVO_API_KEY;
 
 const transactionalApi = new SibApiV3Sdk.TransactionalEmailsApi();
 console.log('✅ Brevo API ready');
-
-function loadTemplate(templateName, data) {
-  const templatePath = path.join(__dirname, '..', `${templateName}.html`);
-  console.log('Loading template from:', templatePath);
-  
-  if (!fs.existsSync(templatePath)) {
-    console.error('❌ Template not found:', templatePath);
-    throw new Error(`Template not found: ${templatePath}`);
-  }
-  
-  let html = fs.readFileSync(templatePath, 'utf8');
-  console.log('Template loaded, length:', html.length);
-
-  for (const [key, value] of Object.entries(data)) {
-    const regex = new RegExp(`{{${key}}}`, 'g');
-    html = html.replace(regex, value);
-  }
-
-  return html;
-}
 
 const sendOrderEmail = async (orderDetails) => {
   try {
@@ -43,19 +21,20 @@ const sendOrderEmail = async (orderDetails) => {
     deliveryDate.setDate(deliveryDate.getDate() + 5);
     const deliveryDateStr = deliveryDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
+    // Build order items HTML inline
     const orderItemsHtml = items.map(item => `
       <tr>
-        <td style="padding:16px;border-bottom:1px solid #eee;">
+        <td style="padding:12px;border-bottom:1px solid #eee;">
           <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
-              <td width="60" valign="top">
-                <img src="${item.image || 'https://via.placeholder.com/60x60?text=Product'}" alt="${item.name}" width="60" height="60" style="display:block;border-radius:6px;object-fit:cover;">
+              <td width="50" valign="top">
+                <img src="${item.image || 'https://via.placeholder.com/50x50?text=Product'}" alt="${item.name}" width="50" height="50" style="display:block;border-radius:4px;">
               </td>
-              <td valign="top" style="padding-left:16px;">
-                <p style="margin:0;font-size:15px;font-weight:500;color:#111827;">${item.name}</p>
-                <p style="margin:4px 0 0;color:#6b7280;font-size:14px;">Qty: ${item.qty}</p>
+              <td valign="top" style="padding-left:10px;font-size:14px;color:#333;">
+                ${item.name}<br>
+                <span style="color:#666;font-size:12px;">Qty: ${item.qty}</span>
               </td>
-              <td align="right" valign="top" style="color:#111827;font-size:15px;font-weight:500;">
+              <td align="right" valign="top" style="font-size:14px;color:#333;font-weight:500;">
                 ₹${item.price}
               </td>
             </tr>
@@ -64,46 +43,124 @@ const sendOrderEmail = async (orderDetails) => {
       </tr>
     `).join('');
 
-    const html = loadTemplate('order-confirmation', {
-      logo_url: process.env.BRAND_LOGO || 'https://via.placeholder.com/140x40?text=LOGO',
-      brand_name: process.env.BRAND_NAME || 'Reverse Rituals',
-      order_number: orderId,
-      customer_name: customerName,
-      subtotal: total,
-      shipping: 'Free',
-      tax: 0,
-      total: total,
-      delivery_date: deliveryDateStr,
-      shipping_name: customerName,
-      shipping_address: address,
-      shipping_city: '',
-      shipping_state: '',
-      shipping_zip: '',
-      track_order_url: process.env.TRACK_ORDER_URL || '#',
-      support_url: process.env.SUPPORT_URL || 'mailto:support@reverserituals.com',
-      year: new Date().getFullYear(),
-      order_items_html: orderItemsHtml
-    });
+    // Full HTML template inline
+    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0;padding:0;font-family:Arial,sans-serif;background-color:#f5f5f5;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;padding:20px;">
+    <tr>
+      <td align="center">
+        <table width="550" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:8px;overflow:hidden;">
+          <!-- Header -->
+          <tr>
+            <td style="padding:20px 25px;background-color:#064e3b;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="color:#ffffff;font-size:20px;font-weight:bold;">Reverse Rituals</td>
+                  <td align="right" style="color:#c5a059;font-size:14px;">Order #${orderId}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Message -->
+          <tr>
+            <td style="padding:25px 25px 15px;">
+              <h2 style="margin:0 0 10px;font-size:18px;color:#333;">Order Confirmed!</h2>
+              <p style="margin:0;color:#666;font-size:14px;line-height:1.5;">
+                Hi ${customerName}, thank you for your order! We're preparing it with care.
+              </p>
+            </td>
+          </tr>
+          <!-- Order Items -->
+          <tr>
+            <td style="padding:0 25px;">
+              <p style="margin:0 0 10px;font-size:14px;font-weight:bold;color:#333;">Order Details</p>
+              <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #eee;border-radius:4px;">
+                ${orderItemsHtml}
+              </table>
+            </td>
+          </tr>
+          <!-- Total -->
+          <tr>
+            <td style="padding:15px 25px;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="font-size:14px;color:#666;">Subtotal</td>
+                  <td align="right" style="font-size:14px;color:#333;">₹${total}</td>
+                </tr>
+                <tr>
+                  <td style="font-size:14px;color:#666;">Shipping</td>
+                  <td align="right" style="font-size:14px;color:#666;">Free</td>
+                </tr>
+                <tr>
+                  <td style="border-top:2px solid #064e3b;padding-top:10px;font-size:16px;font-weight:bold;color:#333;">Total</td>
+                  <td align="right" style="border-top:2px solid #064e3b;padding-top:10px;font-size:16px;font-weight:bold;color:#064e3b;">₹${total}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Delivery -->
+          <tr>
+            <td style="padding:0 25px 15px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0fdf4;border-radius:4px;border:1px solid #bbf7d0;">
+                <tr>
+                  <td style="padding:15px;">
+                    <p style="margin:0;font-size:14px;font-weight:bold;color:#166534;">Estimated Delivery</p>
+                    <p style="margin:5px 0 0;font-size:16px;color:#15803d;">${deliveryDateStr}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Address -->
+          <tr>
+            <td style="padding:0 25px 20px;">
+              <p style="margin:0 0 8px;font-size:14px;font-weight:bold;color:#333;">Shipping Address</p>
+              <p style="margin:0;color:#666;font-size:14px;line-height:1.5;">
+                ${customerName}<br>
+                ${address}
+              </p>
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td style="padding:20px 25px;background-color:#f5f5f5;text-align:center;">
+              <p style="margin:0 0 8px;font-size:12px;color:#666;">
+                Need help? Contact us at support@reverserituals.com
+              </p>
+              <p style="margin:0;font-size:11px;color:#999;">
+                © ${new Date().getFullYear()} Reverse Rituals. All rights reserved.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
 
     const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
     sendSmtpEmail.subject = `Order Confirmed - #${orderId}`;
     sendSmtpEmail.htmlContent = html;
     sendSmtpEmail.sender = { name: 'Reverse Rituals', email: process.env.MAIL_USER };
     
-    // Send to customer if email provided, otherwise just admin
     if (email) {
       sendSmtpEmail.to = [
         { email: adminEmail, name: 'Admin' },
         { email: email, name: customerName }
       ];
-      console.log('📧 Sending to both admin AND customer:', email);
     } else {
       sendSmtpEmail.to = [{ email: adminEmail, name: 'Admin' }];
-      console.log('📧 No customer email, sending to admin only');
     }
 
     const result = await transactionalApi.sendTransacEmail(sendSmtpEmail);
-    console.log('✅ Order email sent!', result);
+    console.log('✅ Order email sent!', result.messageId);
     return true;
   } catch (error) {
     console.log('❌ Order email error:', error.message);
@@ -115,14 +172,66 @@ const sendPasswordResetEmail = async (toEmail, name, otp) => {
   try {
     console.log('📧 Sending password reset to:', toEmail);
     
-    const html = loadTemplate('forgot-password', {
-      logo_url: process.env.BRAND_LOGO || 'https://via.placeholder.com/120x40?text=LOGO',
-      brand_name: process.env.BRAND_NAME || 'Reverse Rituals',
-      customer_name: name,
-      otp: otp,
-      support_url: process.env.SUPPORT_URL || 'mailto:support@reverserituals.com',
-      year: new Date().getFullYear()
-    });
+    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+</head>
+<body style="margin:0;padding:0;font-family:Arial,sans-serif;background-color:#f5f5f5;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;padding:40px;">
+    <tr>
+      <td align="center">
+        <table width="450" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:8px;">
+          <tr>
+            <td style="padding:30px 25px 20px;text-align:center;background-color:#064e3b;">
+              <h1 style="margin:0;color:#ffffff;font-size:22px;">Reverse Rituals</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:30px 25px 20px;text-align:center;">
+              <div style="width:60px;height:60px;background-color:#fef3c7;border-radius:50%;margin:0 auto 20px;">
+                <span style="font-size:30px;line-height:60px;">🔐</span>
+              </div>
+              <h2 style="margin:0 0 15px;font-size:20px;color:#333;">Reset Your Password</h2>
+              <p style="margin:0;color:#666;font-size:14px;line-height:1.5;">
+                Hi ${name}, we received a request to reset your password.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 25px 20px;text-align:center;">
+              <div style="display:inline-block;background-color:#f5f5f5;padding:15px 30px;border-radius:8px;">
+                <span style="font-size:28px;font-weight:bold;letter-spacing:8px;color:#333;">${otp}</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 25px 20px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#fef3c7;border-radius:4px;">
+                <tr>
+                  <td style="padding:15px;text-align:center;">
+                    <p style="margin:0;font-size:13px;color:#92400e;">
+                      <strong>This code expires in 10 minutes.</strong>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 25px 30px;text-align:center;">
+              <p style="margin:0;color:#999;font-size:12px;">
+                If you didn't request this, please ignore this email.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
 
     const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
     sendSmtpEmail.subject = 'Reset Your Password - OTP';
@@ -131,7 +240,7 @@ const sendPasswordResetEmail = async (toEmail, name, otp) => {
     sendSmtpEmail.to = [{ email: toEmail, name: name }];
 
     const result = await transactionalApi.sendTransacEmail(sendSmtpEmail);
-    console.log('✅ Password reset email sent!', result);
+    console.log('✅ Password reset email sent!', result.messageId);
     return true;
   } catch (error) {
     console.log('❌ Password reset email error:', error.message);
@@ -148,7 +257,7 @@ const sendEmail = async (toEmail, subject, htmlContent) => {
     sendSmtpEmail.to = [{ email: toEmail, name: 'Customer' }];
 
     const result = await transactionalApi.sendTransacEmail(sendSmtpEmail);
-    console.log('✅ Email sent to:', toEmail, result);
+    console.log('✅ Email sent to:', toEmail);
     return true;
   } catch (error) {
     console.log('❌ Email error:', error.message);
