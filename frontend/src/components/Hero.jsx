@@ -54,18 +54,17 @@ const Hero = () => {
       {/* Fixed height container - content centered */}
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-0 lg:gap-8 items-center relative z-10 w-full h-full px-4 md:px-8">
 
-        {/* Image - only desktop */}
-        <div className=" lg:flex items-center justify-center mx-auto">
-          <div className="w-[300px] xl:w-[420px] ">
+        {/* Image - only dmobile */}
+        <div className=" lg:flex items-center justify-center mx-auto lg:hidden">
+          <div className=" w-[300px] xl:w-[420px] ">
             <motion.img
               key={`img-${current}`}
               src={slides[current].image}
               alt="Hair Growth Product"
               loading="eager"
               className="w-full object-contain drop-shadow-xl"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+
+
             />
           </div>
         </div>
@@ -115,7 +114,7 @@ const Hero = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="flex gap-6 mb-8 mx-auto justify-center"
+                  className="flex gap-6 mb-8 justify-center md:justify-start  "
                 >
                   <div className="flex items-center gap-2">
                     <ShieldCheck size={16} className="text-[#c5a059]" />
@@ -131,7 +130,7 @@ const Hero = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
-                  className="flex gap-4 justify-center md:flex-row flex-col items-center"
+                  className="flex gap-4 justify-center md:flex-row flex-col items-center md:justify-start"
                 >
                   <motion.button
                     whileHover={{ scale: 1.05 }}
@@ -155,6 +154,20 @@ const Hero = () => {
                 </motion.div>
               </motion.div>
             </AnimatePresence>
+          </div>
+        </div>
+        {/* Image - only desktop */}
+        <div className=" lg:flex items-center justify-center mx-auto sm:hidden">
+          <div className="w-[300px] xl:w-[420px] ">
+            <motion.img
+              key={`img-${current}`}
+              src={slides[current].image}
+              alt="Hair Growth Product"
+              loading="eager"
+              className="w-full object-contain drop-shadow-xl"
+
+
+            />
           </div>
         </div>
       </div>
