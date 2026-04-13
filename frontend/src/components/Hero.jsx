@@ -35,7 +35,7 @@ const Hero = () => {
 
   return (
     <section
-      className="relative w-full h-[750px] md:h-[600px] lg:h-[600px] overflow-hidden bg-[#fdfbf7]"
+      className="relative w-full h-[780px] md:h-[600px] lg:h-[600px] overflow-hidden bg-[#fdfbf7]"
       style={{
         backgroundImage: "url('/leaves-bg.png')",
         backgroundSize: "cover",
@@ -71,7 +71,7 @@ const Hero = () => {
               >
                 <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-[#c5a059]/10 text-[#c5a059] border border-[#c5a059]/20 mb-4">
                   <Sparkles size={14} />
-                  <span className="md:text-xs tracking-[0.1em] uppercase font-bold text-[9px]">
+                  <span className="md:text-xs tracking-[0.1em] uppercase font-bold text-[11px]">
                     {slides[current].subtitle}
                   </span>
                 </div>
@@ -95,7 +95,7 @@ const Hero = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-4 flex-col md:flex-row">
+                <div className="flex gap-4 flex-col md:flex-row items-center md:items-start">
                   <button
                     onClick={scrollToProducts}
                     className="px-8 py-4 rounded-full bg-[#064e3b] text-white font-bold flex items-center gap-3 hover:bg-[#064e3b]/90 cursor-pointer"
