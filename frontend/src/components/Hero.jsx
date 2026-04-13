@@ -157,7 +157,7 @@ const Hero = () => {
           </div>
         </div>
         {/* Image - only desktop */}
-        <div className=" lg:flex items-center justify-center mx-auto sm:hidden">
+        <div className=" lg:flex items-center justify-center mx-auto hidden">
           <div className="w-[300px] xl:w-[420px] ">
             <motion.img
               key={`img-${current}`}
