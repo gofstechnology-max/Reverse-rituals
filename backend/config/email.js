@@ -2,20 +2,26 @@ const nodemailer = require('nodemailer');
 
 console.log('=== EMAIL MODULE LOADED ===');
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS
-  },
-  timeout: 10000 // 10 second timeout
-});
+let transporter = null;
 
-console.log('✅ Email transporter ready for:', process.env.MAIL_USER);
+const getTransporter = () => {
+  if (transporter) return transporter;
+  
+  transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS
+    },
+    timeout: 30000
+  });
+  
+  console.log('✅ Email transporter ready');
+  return transporter;
+};
 
 const sendOrderEmail = (orderDetails) => {
   const adminEmail = process.env.ADMIN_NOTIFY_EMAIL || 'reverserituals@gmail.com';
-  
   console.log('📧 Email to:', adminEmail);
   
   const { orderId, customerName, address, items, total, paymentMethod, phone } = orderDetails;
@@ -39,23 +45,19 @@ const sendOrderEmail = (orderDetails) => {
     </table>
   `;
 
-  // Use setTimeout to make it truly non-blocking
-  setTimeout(() => {
-    transporter.sendMail({
-      from: process.env.MAIL_USER,
-      to: adminEmail,
-      subject: `New Order - #${orderId} - ₹${total}`,
-      html: html
-    }, (err, info) => {
-      if (err) {
-        console.log('❌ Email error:', err.message);
-      } else {
-        console.log('✅ Email sent! ID:', info.messageId);
-      }
-    });
-  }, 100); // Small delay to let response go first
-
-  console.log('📧 Email queued');
+  getTransporter().sendMail({
+    from: process.env.MAIL_USER,
+    to: adminEmail,
+    subject: `New Order - #${orderId} - ₹${total}`,
+    html: html
+  }, (err, info) => {
+    if (err) {
+      console.log('❌ Email error:', err.message);
+    } else {
+      console.log('✅ Email sent! ID:', info.messageId);
+    }
+  });
+  
   return true;
 };
 
