@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 
 const Hero = () => {
   const [current, setCurrent] = useState(0);
-  const containerRef = useRef(null);
 
   const slides = [
     {
@@ -43,122 +42,120 @@ const Hero = () => {
 
   return (
     <section
-      ref={containerRef}
-      className="relative flex items-center overflow-hidden bg-[#fdfbf7] min-h-[700px] md:min-h-[600px]"
+      className="relative w-full h-[650px] md:h-[600px] lg:h-[550px] overflow-hidden bg-[#fdfbf7]"
       style={{
         backgroundImage: "url('/leaves-bg.png')",
         backgroundSize: "cover",
-        backgroundPosition: "center"
+        backgroundPosition: ""
       }}
     >
       <div className="absolute inset-0 bg-white/30"></div>
 
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-6 items-center relative z-10 w-full px-3 md:px-12 py-6">
+      {/* Fixed height container - content centered */}
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-4 lg:gap-8 items-center relative z-10 w-full h-full px-4 md:px-8">
 
-        <motion.div
-          className="relative flex justify-center lg:order-2 order-1 w-full"
-        >
-          <div className="relative w-[250px] sm:w-[320px] md:w-[400px] lg:w-[480px] aspect-square flex items-center justify-center">
+        {/* Image - only desktop */}
+        <div className=" lg:flex items-center justify-center h-full">
+          <div className="w-[350px] xl:w-[420px]">
             <motion.img
+              key={`img-${current}`}
               src={slides[current].image}
               alt="Hair Growth Product"
               loading="eager"
-              className="w-full h-full object-contain drop-shadow-xl"
-              animate={{
-                y: [0, -15, 0]
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
+              className="w-full h-auto object-contain drop-shadow-xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
             />
           </div>
-        </motion.div>
+        </div>
 
-        <div className="text-center lg:text-left lg:order-1 order-2">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.4 }}
-            >
+        {/* Text Content - centered in container */}
+        <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left h-full">
+          <div className="flex flex-col items-center lg:items-start max-w-lg">
+            <AnimatePresence mode="wait">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-[#c5a059]/10 text-[#c5a059] border border-[#c5a059]/20 mb-6"
+                key={current}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
               >
-                <Sparkles size={14} />
-                <span className="md:text-xs tracking-[0.1em] uppercase font-bold text-[10px]">
-                  {slides[current].subtitle}
-                </span>
-              </motion.div>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-black text-[#064e3b] leading-[1.1] mb-6 whitespace-pre-line"
-              >
-                {slides[current].title}
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="text-[#064e3b]/80 text-sm md:text-base lg:text-xl max-w-lg mx-auto lg:mx-0 mb-8 font-medium"
-              >
-                {slides[current].desc}
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="flex flex-wrap justify-center lg:justify-start gap-6 mb-10"
-              >
-                <div className="flex items-center gap-2">
-                  <ShieldCheck size={18} className="text-[#c5a059]" />
-                  <span className="text-sm font-medium">Chemical Free</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Droplets size={18} className="text-[#c5a059]" />
-                  <span className="text-sm font-medium">Ayurvedic Formula</span>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start"
-              >
-                <motion.button
-                  whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(6, 78, 59, 0.3)" }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={scrollToProducts}
-                  className="px-8 py-4 rounded-full bg-[#064e3b] text-white font-bold flex items-center justify-center gap-3 hover:bg-[#064e3b]/90 cursor-pointer"
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-[#c5a059]/10 text-[#c5a059] border border-[#c5a059]/20 mb-4"
                 >
-                  Shop Now
-                  <ArrowRight size={18} />
-                </motion.button>
+                  <Sparkles size={14} />
+                  <span className="text-xs tracking-[0.1em] uppercase font-bold">
+                    {slides[current].subtitle}
+                  </span>
+                </motion.div>
 
-                <Link to="/about">
+                <motion.h1
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-black text-[#064e3b] leading-tight mb-4 whitespace-pre-line"
+                >
+                  {slides[current].title}
+                </motion.h1>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-[#064e3b]/80 text-sm md:text-base mb-6 font-medium"
+                >
+                  {slides[current].desc}
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="flex gap-6 mb-8"
+                >
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck size={16} className="text-[#c5a059]" />
+                    <span className="text-sm font-medium">Chemical Free</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Droplets size={16} className="text-[#c5a059]" />
+                    <span className="text-sm font-medium">Ayurvedic Formula</span>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="flex gap-4"
+                >
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-8 py-4 rounded-full border border-[#c5a059]/30 font-bold hover:bg-[#c5a059]/10 cursor-pointer"
+                    onClick={scrollToProducts}
+                    className="px-8 py-4 rounded-full bg-[#064e3b] text-white font-bold flex items-center gap-3 hover:bg-[#064e3b]/90 cursor-pointer"
                   >
-                    Our Story
+                    Shop Now
+                    <ArrowRight size={18} />
                   </motion.button>
-                </Link>
+
+                  <Link to="/about">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-8 py-4 rounded-full border border-[#c5a059]/30 font-bold hover:bg-[#c5a059]/10 cursor-pointer"
+                    >
+                      Our Story
+                    </motion.button>
+                  </Link>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          </AnimatePresence>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </section>
