@@ -6,7 +6,7 @@ const crypto = require('crypto');
 
 console.log('=== ORDER CONTROLLER LOADED ===');
 
-let sendOrderEmail = () => {};
+let sendOrderEmail = () => { };
 try {
   const emailModule = require('../config/email');
   sendOrderEmail = emailModule.sendOrderEmail;
@@ -28,15 +28,15 @@ const addOrderItems = async (req, res) => {
 
   try {
     const productIds = orderItems.map(item => item.product);
-    
+
     if (!productIds.every(id => id && typeof id === 'string' && id.length > 0)) {
       console.log('Invalid product IDs received:', productIds);
       res.status(400).json({ message: 'Invalid product ID format', received: productIds });
       return;
     }
-    
+
     const products = await Product.find({ _id: { $in: productIds } });
-    
+
     if (products.length !== orderItems.length) {
       res.status(400).json({ message: 'One or more products not found' });
       return;
@@ -48,15 +48,15 @@ const addOrderItems = async (req, res) => {
 
     for (const item of orderItems) {
       const product = productMap.get(item.product);
-      
+
       if (!product) {
         res.status(400).json({ message: `Product not found: ${item.product}` });
         return;
       }
 
       if (product.countInStock < item.qty) {
-        res.status(400).json({ 
-          message: `Insufficient stock for ${product.name}. Available: ${product.countInStock}` 
+        res.status(400).json({
+          message: `Insufficient stock for ${product.name}. Available: ${product.countInStock}`
         });
         return;
       }
@@ -112,9 +112,9 @@ const addOrderItems = async (req, res) => {
     });
   } catch (error) {
     console.error('ORDER ERROR:', error.name, error.message);
-    res.status(500).json({ 
-      message: 'Order creation failed', 
-      error: error.message 
+    res.status(500).json({
+      message: 'Order creation failed',
+      error: error.message
     });
   }
 };
@@ -138,11 +138,11 @@ const createPayLinkForOrder = async (req, res) => {
       };
 
       const razorpayOrder = await razorpay.orders.create(options);
-      
+
       order.paymentResult = {
         razorpay_order_id: razorpayOrder.id,
       };
-      
+
       await order.save();
 
       res.json({
@@ -223,18 +223,6 @@ const verifyPayment = async (req, res) => {
     res.status(400).json({ message: "Invalid signature" });
   }
 };
-      } catch (emailErr) {
-        console.log('Email error:', emailErr.message);
-      }
-
-      res.json({ message: "Payment verified successfully", order: updatedOrder });
-    } else {
-      res.status(404).json({ message: 'Order not found' });
-    }
-  } else {
-    res.status(400).json({ message: "Invalid signature" });
-  }
-};
 
 // @desc    Get order by ID
 // @route   GET /api/orders/:id
@@ -268,7 +256,7 @@ const createPaymentForOrder = async (req, res) => {
       return;
     }
     console.log('Order found:', order ? 'yes' : 'no', order ? 'totalPrice: ' + order.totalPrice + ', user: ' + order.user : '');
-    
+
     if (!order) {
       res.status(404).json({ message: 'Order not found' });
       return;
@@ -277,9 +265,9 @@ const createPaymentForOrder = async (req, res) => {
     // Check if user owns this order (allow if no user on order or user matches)
     const orderUserId = order.user ? order.user.toString() : null;
     const reqUserId = req.user ? req.user._id.toString() : null;
-    
+
     console.log('Order user ID:', orderUserId, 'Request user ID:', reqUserId);
-    
+
     // Allow if order has no user, or if user matches
     if (orderUserId && reqUserId && orderUserId !== reqUserId) {
       res.status(403).json({ message: 'Not authorized' });
@@ -307,11 +295,11 @@ const createPaymentForOrder = async (req, res) => {
 
     const razorpayOrder = await razorpay.orders.create(options);
     console.log('Razorpay order created successfully:', razorpayOrder.id);
-    
+
     order.paymentResult = {
       razorpay_order_id: razorpayOrder.id,
     };
-    
+
     await order.save();
 
     res.json({
