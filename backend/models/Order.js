@@ -18,7 +18,8 @@ const orderSchema = new mongoose.Schema({
     state: { type: String, required: true },
     zipCode: { type: String, required: true },
     country: { type: String, required: false, default: 'India' },
-    phone: { type: String, required: true }
+    phone: { type: String, required: true },
+    email: { type: String, required: false }
   },
   paymentMethod: { type: String, required: true, default: 'Razorpay' },
   paymentResult: {

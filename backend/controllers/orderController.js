@@ -6,13 +6,14 @@ const crypto = require('crypto');
 
 console.log('=== ORDER CONTROLLER LOADED ===');
 
-let sendOrderEmail = () => { };
+let emailModule = null;
+let sendOrderEmail = async () => { console.log('Email function not loaded'); };
 try {
-  const emailModule = require('../config/email');
+  emailModule = require('../config/email');
   sendOrderEmail = emailModule.sendOrderEmail;
-  console.log('Email module loaded successfully');
+  console.log('✅ Email module loaded successfully in orderController');
 } catch (e) {
-  console.log('Email module not available');
+  console.log('❌ Email module not available:', e.message);
 }
 
 // @desc    Create new order & Razorpay order
@@ -198,10 +199,12 @@ const verifyPayment = async (req, res) => {
         orderId: updatedOrder._id.toString().slice(-8).toUpperCase(),
         customerName: updatedOrder.shippingAddress.fullName,
         address: `${updatedOrder.shippingAddress.address}, ${updatedOrder.shippingAddress.city}, ${updatedOrder.shippingAddress.state} - ${updatedOrder.shippingAddress.zipCode}`,
+        email: updatedOrder.shippingAddress.email || '',
         items: updatedOrder.orderItems.map(item => ({
           name: item.name,
           qty: item.qty,
-          price: item.price
+          price: item.price,
+          image: item.image || ''
         })),
         total: updatedOrder.totalPrice,
         paymentMethod: updatedOrder.paymentMethod,
@@ -209,7 +212,12 @@ const verifyPayment = async (req, res) => {
       };
 
       // Send email in background (non-blocking)
-      sendOrderEmail(orderDetails);
+      console.log('Sending order confirmation email for:', orderDetails.orderId);
+      sendOrderEmail(orderDetails).then(result => {
+        console.log('Email send result:', result);
+      }).catch(err => {
+        console.log('Email send error:', err.message);
+      });
 
       res.json({ message: "Payment verified successfully", order: updatedOrder });
     } else {
