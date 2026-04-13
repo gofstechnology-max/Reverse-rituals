@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 const Hero = () => {
   const [current, setCurrent] = useState(0);
   const containerRef = useRef(null);
-  
+
   const slides = [
     {
       subtitle: "Natural Hair Recovery System",
@@ -44,7 +44,7 @@ const Hero = () => {
   return (
     <section
       ref={containerRef}
-      className="relative flex items-center overflow-hidden bg-[#fdfbf7] min-h-[100vh] min-h-[100dvh]"
+      className="relative flex items-center overflow-hidden bg-[#fdfbf7] min-h-[100dvh]"
       style={{
         backgroundImage: "url('/leaves-bg.png')",
         backgroundSize: "cover",
@@ -55,23 +55,23 @@ const Hero = () => {
 
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 items-center relative z-10 w-full px-3 md:px-16 py-10 md:py-20">
 
-<motion.div 
+        <motion.div
           className="relative flex justify-center lg:order-2 order-1 w-full"
         >
           <div className="relative w-[300px] sm:w-[380px] md:w-[480px] lg:w-[550px] aspect-square flex items-center justify-center">
             <motion.img
-                src={slides[current].image}
-                alt="Hair Growth Product"
-                loading="eager"
-                className="w-full h-full object-contain drop-shadow-xl"
-                animate={{
-                    y: [0, -15, 0]
-                }}
-                transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                }}
+              src={slides[current].image}
+              alt="Hair Growth Product"
+              loading="eager"
+              className="w-full h-full object-contain drop-shadow-xl"
+              animate={{
+                y: [0, -15, 0]
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
             />
           </div>
         </motion.div>
@@ -97,7 +97,7 @@ const Hero = () => {
                 </span>
               </motion.div>
 
-              <motion.h1 
+              <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
@@ -106,7 +106,7 @@ const Hero = () => {
                 {slides[current].title}
               </motion.h1>
 
-              <motion.p 
+              <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
@@ -115,7 +115,7 @@ const Hero = () => {
                 {slides[current].desc}
               </motion.p>
 
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
@@ -131,7 +131,7 @@ const Hero = () => {
                 </div>
               </motion.div>
 
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
