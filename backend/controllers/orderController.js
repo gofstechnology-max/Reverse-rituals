@@ -208,8 +208,8 @@ const verifyPayment = async (req, res) => {
         phone: updatedOrder.shippingAddress.phone,
       };
 
-      // Send email in BACKGROUND (non-blocking)
-      sendOrderEmail(orderDetails).catch(err => console.log('Email error:', err.message));
+      // Send email in background (non-blocking)
+      sendOrderEmail(orderDetails);
 
       res.json({ message: "Payment verified successfully", order: updatedOrder });
     } else {
