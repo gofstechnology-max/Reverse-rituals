@@ -145,7 +145,7 @@ const Navbar = () => {
                 )}
               </Link>
 
-              {/* Login / Profile */}
+              {/* Login / Profile - Desktop */}
               {!user ? (
                 <Link
                   to="/login"
@@ -157,10 +157,9 @@ const Navbar = () => {
                 <div className="flex items-center gap-2">
                   <Link
                     to={user.isAdmin ? "/admin" : "/orders"}
-                    className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-[#064e3b]/5 transition"
+                    className="p-2 rounded-full hover:bg-[#064e3b]/5 transition"
                   >
-                    <User size={18} className="text-[#064e3b]" />
-                    <span className="text-xs font-medium text-[#064e3b] hidden sm:inline">{user.name?.split(' ')[0]}</span>
+                    <User size={20} className="text-[#064e3b]" />
                   </Link>
                   <button
                     onClick={handleLogout}
@@ -187,7 +186,7 @@ const Navbar = () => {
               )}
             </Link>
 
-            {/* Login / Profile */}
+            {/* Login / Profile - Mobile */}
             {!user ? (
               <Link
                 to="/login"
@@ -196,21 +195,12 @@ const Navbar = () => {
                 Login
               </Link>
             ) : (
-              <div className="flex items-center gap-2">
-                <Link
-                  to={user.isAdmin ? "/admin" : "/orders"}
-                  className="flex items-center gap-2 px-2 py-1.5 rounded-full hover:bg-[#064e3b]/5 transition"
-                >
-                  <User size={18} className="text-[#064e3b]" />
-                  <span className="text-xs font-medium text-[#064e3b]">{user.name?.split(' ')[0]}</span>
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="px-2 py-1.5 text-red-500 text-xs font-medium hover:bg-red-50 rounded-full transition"
-                >
-                  Logout
-                </button>
-              </div>
+              <Link
+                to={user.isAdmin ? "/admin" : "/orders"}
+                className="p-2 rounded-full hover:bg-[#064e3b]/5 transition"
+              >
+                <User size={20} className="text-[#064e3b]" />
+              </Link>
             )}
 
           </div>
@@ -282,26 +272,7 @@ const Navbar = () => {
                   <MessageCircle size={18} /> WhatsApp
                 </a>
 
-                {/* Profile */}
-                {user ? (
-                  <Link
-                    to={user.isAdmin ? "/admin" : "/orders"}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center gap-2 py-3 px-4"
-                  >
-                    <User size={18} /> Profile
-                  </Link>
-                ) : (
-                  <Link
-                    to="/login"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center gap-2 py-3 px-4"
-                  >
-                    <User size={18} /> Login
-                  </Link>
-                )}
-
-                {/* ✅ LOGOUT ONLY HERE */}
+                {/* Logout - Mobile Sidebar */}
                 {user && (
                   <button
                     onClick={() => {

@@ -18,55 +18,68 @@ const CheckoutPage = () => {
 
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
-  // Always use cart for checkout - simpler flow
+  // Fetch user profile and load saved address
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!user?.token) {
+        setIsCheckingAuth(false);
+        return;
+      }
+      
+      try {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+        const { data } = await axios.get(`${API_URL}/api/users/profile`, {
+          headers: { Authorization: `Bearer ${user.token}` }
+        });
+        
+        // Store saved address for "Use Saved Address" button
+        if (data.shippingAddress?.address) {
+          setSavedAddressFromDB(data.shippingAddress);
+          // Auto-fill form with saved address
+          setFormData({
+            fullName: data.shippingAddress.fullName || data.name || '',
+            address: data.shippingAddress.address || '',
+            state: data.shippingAddress.state || '',
+            city: data.shippingAddress.city || '',
+            zipCode: data.shippingAddress.zipCode || '',
+            phone: data.shippingAddress.phone || data.phone || '',
+          });
+        }
+      } catch (error) {
+        console.log('Could not fetch user profile');
+      }
+      setIsCheckingAuth(false);
+    };
+
+    fetchUserProfile();
+  }, [user?.token]);
 
   const [formData, setFormData] = useState({
-    fullName: (user?.shippingAddress?.fullName) || (user?.name) || '',
-    address: user?.shippingAddress?.address || '',
-    state: user?.shippingAddress?.state || '',
-    city: user?.shippingAddress?.city || '',
-    zipCode: user?.shippingAddress?.zipCode || '',
-    phone: (user?.shippingAddress?.phone) || (user?.phone) || '',
+    fullName: '',
+    address: '',
+    state: '',
+    city: '',
+    zipCode: '',
+    phone: '',
   });
 
-  const [isLocating, setIsLocating] = useState(false);
-  const [isFetchingPincode, setIsFetchingPincode] = useState(false);
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
-  const [loadingStates, setLoadingStates] = useState(false);
-  const [loadingCities, setLoadingCities] = useState(false);
-  const [agreedToTerms, setAgreedToTerms] = useState(false);
-
-  // Auto-fill from saved address when user is available
-  useEffect(() => {
-    if (user?.shippingAddress?.address) {
-      setFormData({
-        fullName: user.shippingAddress.fullName || user.name || '',
-        address: user.shippingAddress.address || '',
-        state: user.shippingAddress.state || '',
-        city: user.shippingAddress.city || '',
-        zipCode: user.shippingAddress.zipCode || '',
-        phone: user.shippingAddress.phone || user.phone || '',
-      });
-    }
-  }, [user]);
-
-// If user has saved address, show option to use it
-  const hasSavedAddress = user?.shippingAddress?.address;
+  // State for saved address from DB
+  const [savedAddressFromDB, setSavedAddressFromDB] = useState(null);
+  
+  // If user has saved address in DB, show button
+  const hasSavedAddress = savedAddressFromDB?.address;
   
   const handleUseSavedAddress = () => {
-    if (user?.shippingAddress) {
+    if (savedAddressFromDB) {
       setFormData({
-        fullName: user.shippingAddress.fullName || user.name || '',
-        address: user.shippingAddress.address || '',
-        state: user.shippingAddress.state || '',
-        city: user.shippingAddress.city || '',
-        zipCode: user.shippingAddress.zipCode || '',
-        phone: user.shippingAddress.phone || user.phone || '',
+        fullName: savedAddressFromDB.fullName || user.name || '',
+        address: savedAddressFromDB.address || '',
+        state: savedAddressFromDB.state || '',
+        city: savedAddressFromDB.city || '',
+        zipCode: savedAddressFromDB.zipCode || '',
+        phone: savedAddressFromDB.phone || user.phone || '',
       });
       toast.success('Address loaded from saved');
-    } else {
-      toast.error('No saved address found');
     }
   };
 
@@ -100,7 +113,7 @@ const CheckoutPage = () => {
     }
   };
 
-const displayItems = cartItems;
+  const displayItems = cartItems;
   const finalTotal = cartTotal;
 
   useEffect(() => {
