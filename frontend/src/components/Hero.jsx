@@ -84,7 +84,7 @@ const Hero = () => {
                   {slides[current].desc}
                 </p>
 
-                <div className="flex gap-6 mb-8">
+                <div className="flex gap-6 mb-8 md:items-start items-center md:justify-start justify-center">
                   <div className="flex items-center gap-2">
                     <ShieldCheck size={16} className="text-[#c5a059]" />
                     <span className="text-sm font-medium">Chemical Free</span>
