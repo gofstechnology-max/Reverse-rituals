@@ -3,14 +3,14 @@ import { Play, Pause, Star } from "lucide-react";
 import { motion } from "framer-motion";
 
 const voiceReviews = [
-  { id: 1, name: "Jagathisan", audio: "/voice/audio-1.opus", rating: 5 },
-  { id: 2, name: "Gopikrishnan G", audio: "/voice/audio-2.opus", rating: 5 },
-  { id: 3, name: "Lavanya", audio: "/voice/audio-3.opus", rating: 5 },
-  { id: 4, name: "Thamizharasan", audio: "/voice/audio-4.opus", rating: 5 },
+  { id: 1, name: "Jagathisan", audio: "/voice/audio-1.opus", product: "Reverse ritual combo" },
+  { id: 2, name: "Gopikrishnan G", audio: "/voice/audio-2.opus", product: "Reverse ritual combo" },
+  { id: 3, name: "Lavanya", audio: "/voice/audio-3.opus", product: "Reverse ritual combo" },
+  { id: 4, name: "Thamizharasan", audio: "/voice/audio-4.opus", product: "Reverse ritual combo" },
 ];
 
 const VoiceReviewsSection = () => {
-  const [playingId, setPlayingId] = useState(null);
+  const [playingId, setPlayingId] = useState(null); 
   const [progress, setProgress] = useState({});
   const audioRefs = useRef({});
 
@@ -75,11 +75,11 @@ const VoiceReviewsSection = () => {
                 key={review.id}
                 whileHover={{ scale: 1.02 }}
                 className={`snap-start rounded-2xl p-[1px] transition-all ${playingId === review.id
-                    ? "bg-gradient-to-r from-[#064e3b] to-[#c5a059]"
+                    ? ""
                     : ""
                   }`}
               >
-                <div className="bg-white rounded-2xl p-5 shadow-md scrollbar-hide ">
+                <div className="bg-white rounded-2xl p-2 shadow-md scrollbar-hide ">
 
                   <audio
                     ref={(el) => (audioRefs.current[review.id] = el)}
@@ -92,9 +92,9 @@ const VoiceReviewsSection = () => {
                   <div className="flex items-center gap-4 scrollbar-hide ">
 
                     {/* Avatar */}
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#c5a059] to-[#e6d3a3] flex items-center justify-center text-white font-bold text-lg">
+                    {/* <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#c5a059] to-[#e6d3a3] flex items-center justify-center text-white font-bold text-lg">
                       {review.name.charAt(0)}
-                    </div>
+                    </div> */}
 
                     <div className="flex-1">
 
@@ -104,19 +104,15 @@ const VoiceReviewsSection = () => {
 
                       {/* Stars */}
                       <div className="flex gap-1 mt-1">
-                        {[...Array(review.rating)].map((_, i) => (
-                          <Star
-                            key={i}
-                            size={14}
-                            className="text-[#c5a059] fill-[#c5a059]"
-                          />
-                        ))}
+                        {
+                          review.product
+                        }
                       </div>
 
                       {/* Player */}
                       <button
                         onClick={() => togglePlay(review.id)}
-                        className={`mt-4 flex items-center gap-3 px-4 py-3 rounded-xl w-full transition-all ${playingId === review.id
+                        className={`mt-4 flex items-center gap-3 px-2 py-1 rounded-xl w-full transition-all ${playingId === review.id
                             ? "bg-[#064e3b] text-white"
                             : "bg-gray-100 hover:bg-gray-200"
                           }`}
