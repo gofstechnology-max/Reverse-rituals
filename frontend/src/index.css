@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Outfit:wght@100..900&display=swap');
 @import "tailwindcss";
-
+* {
+  scrollbar-width: none;
+}
 :root {
   --primary: #064e3b;
   --primary-light: #065f46;
@@ -241,4 +243,13 @@ th,
 
 [class*="Toastify__close-button"] {
   color: #ffffff !important;
+}
+
+
+
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+::-webkit-scrollbar {
+  display: none;
 }

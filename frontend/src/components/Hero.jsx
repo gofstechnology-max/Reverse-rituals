@@ -45,17 +45,30 @@ const Hero = () => {
       <div className="absolute inset-0 bg-white/30"></div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center relative z-10 w-full h-full px-4 md:px-8">
-        
+
         {/* Left Side - Image */}
-        <div className="flex items-center justify-center order-1 lg:order-2">
-          <div className="w-[280px] md:w-[350px] lg:w-[420px]">
-            <img
-              src="/ingredient.png"
-              alt="Hair Growth Product"
-              className="w-full h-auto object-contain drop-shadow-xl"
-            />
-          </div>
-        </div>
+        {/* Left Side - Image */}
+<div className="flex items-center justify-center order-1 lg:order-2">
+  <div className="w-[280px] md:w-[350px] lg:w-[420px]">
+    
+    <motion.img
+      src="/ingredient.png"
+      alt="Hair Growth Product"
+     className="w-full h-auto object-contain drop-shadow-xl will-change-transform"
+      
+      // 🔥 FLOAT ANIMATION
+      animate={{
+        y: [0, -20, 0],   // move up and down
+      }}
+      transition={{
+        duration: 4,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
+    />
+
+  </div>
+</div>
 
         {/* Right Side - Text with Animation */}
         <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left order-2 lg:order-1">
@@ -63,9 +76,9 @@ const Hero = () => {
             <AnimatePresence mode="wait">
               <motion.div
                 key={current}
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -30 }}
+                initial={{ opacity: 0, y: -30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 30 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
                 className="w-full"
               >

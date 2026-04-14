@@ -1,3 +1,7 @@
+* {
+  scrollbar-width: none;
+}
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;
@@ -204,4 +208,13 @@
   cursor: pointer;
 
   transition: all 0.4s ease;
+}
+
+/* Hide scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none;
 }
