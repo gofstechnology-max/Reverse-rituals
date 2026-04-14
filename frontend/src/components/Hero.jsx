@@ -44,17 +44,17 @@ const Hero = () => {
     >
       <div className="absolute inset-0 bg-white/30"></div>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center relative z-10 w-full h-full px-4 md:px-8">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-0 items-center relative z-10 w-full h-full px-4 md:px-8">
 
         {/* Left Side - Image */}
         {/* Left Side - Image */}
 <div className="flex items-center justify-center order-1 lg:order-2">
-  <div className="w-[280px] md:w-[350px] lg:w-[420px]">
+  <div className="w-[280px] md:w-[350px] lg:w-[420px] relative top-5 md:top-0">
     
     <motion.img
       src="/ingredient.png"
       alt="Hair Growth Product"
-     className="w-full h-auto object-contain drop-shadow-xl will-change-transform"
+     className="w-full object-contain drop-shadow-xl will-change-transform"
       
       // 🔥 FLOAT ANIMATION
       animate={{

@@ -10,7 +10,7 @@ const voiceReviews = [
 ];
 
 const VoiceReviewsSection = () => {
-  const [playingId, setPlayingId] = useState(null); 
+  const [playingId, setPlayingId] = useState(null);
   const [progress, setProgress] = useState({});
   const audioRefs = useRef({});
 
@@ -75,8 +75,8 @@ const VoiceReviewsSection = () => {
                 key={review.id}
                 whileHover={{ scale: 1.02 }}
                 className={`snap-start rounded-2xl p-[1px] transition-all ${playingId === review.id
-                    ? ""
-                    : ""
+                  ? "border-[#064e3b] border-1"
+                  : ""
                   }`}
               >
                 <div className="bg-white rounded-2xl p-2 shadow-md scrollbar-hide ">
@@ -92,9 +92,9 @@ const VoiceReviewsSection = () => {
                   <div className="flex items-center gap-4 scrollbar-hide ">
 
                     {/* Avatar */}
-                    {/* <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#c5a059] to-[#e6d3a3] flex items-center justify-center text-white font-bold text-lg">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#c5a059] to-[#e6d3a3] flex items-center justify-center text-white font-bold text-lg">
                       {review.name.charAt(0)}
-                    </div> */}
+                    </div>
 
                     <div className="flex-1">
 
@@ -113,8 +113,8 @@ const VoiceReviewsSection = () => {
                       <button
                         onClick={() => togglePlay(review.id)}
                         className={`mt-4 flex items-center gap-3 px-2 py-1 rounded-xl w-full transition-all ${playingId === review.id
-                            ? "bg-[#064e3b] text-white"
-                            : "bg-gray-100 hover:bg-gray-200"
+                          ? "bg-[#064e3b] text-white"
+                          : "bg-gray-100 hover:bg-gray-200"
                           }`}
                       >
                         {/* Play Button */}
