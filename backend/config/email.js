@@ -15,7 +15,7 @@ const sendOrderEmail = async (orderDetails) => {
     const adminEmail = process.env.ADMIN_NOTIFY_EMAIL || 'reverserituals@gmail.com';
     console.log('📧 Sending order confirmation for:', orderDetails.orderId);
     
-    const { orderId, customerName, address, items, total, email } = orderDetails;
+    const { orderId, customerName, address, items, total, email, phone, altPhone } = orderDetails;
 
     const deliveryDate = new Date();
     deliveryDate.setDate(deliveryDate.getDate() + 5);
@@ -117,13 +117,16 @@ const sendOrderEmail = async (orderDetails) => {
               </table>
             </td>
           </tr>
-          <!-- Address -->
+          <!-- Address & Phone -->
           <tr>
             <td style="padding:0 25px 20px;">
               <p style="margin:0 0 8px;font-size:14px;font-weight:bold;color:#333;">Shipping Address</p>
               <p style="margin:0;color:#666;font-size:14px;line-height:1.5;">
                 ${customerName}<br>
                 ${address}
+              </p>
+              <p style="margin:10px 0 0;font-size:14px;color:#333;">
+                <strong>Phone:</strong> ${phone}${altPhone ? '<br><strong>Alt Phone:</strong> ' + altPhone : ''}
               </p>
             </td>
           </tr>

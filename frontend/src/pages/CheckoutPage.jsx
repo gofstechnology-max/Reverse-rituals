@@ -61,6 +61,7 @@ const CheckoutPage = () => {
     city: '',
     zipCode: '',
     phone: '',
+    altPhone: '',
   });
 
   // State for saved address from DB
@@ -337,6 +338,7 @@ const CheckoutPage = () => {
           zipCode: formData.zipCode || '',
           country: 'India',
           phone: formData.phone || '',
+          altPhone: formData.altPhone || '',
           email: user?.email || ''
         },
         paymentMethod: 'Razorpay'
@@ -449,6 +451,11 @@ const CheckoutPage = () => {
                       <label className="text-sm font-bold text-[#064e3b]/60 ml-1 mb-2 block">Phone Number</label>
                       <input type="tel" required name="phone" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value.replace(/\D/g, '').slice(0, 10) })}
                         className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059]" placeholder="10-digit number" />
+                    </div>
+                    <div>
+                      <label className="text-sm font-bold text-[#064e3b]/60 ml-1 mb-2 block">Alternate Phone (Optional)</label>
+                      <input type="tel" name="altPhone" value={formData.altPhone || ''} onChange={(e) => setFormData({ ...formData, altPhone: e.target.value.replace(/\D/g, '').slice(0, 10) })}
+                        className="w-full px-5 py-3 bg-[#fdfbf7] border border-[#064e3b]/10 rounded-xl focus:outline-none focus:border-[#c5a059]" placeholder="Alternate number" />
                     </div>
                   </div>
                 </div>

@@ -200,6 +200,8 @@ const verifyPayment = async (req, res) => {
         customerName: updatedOrder.shippingAddress.fullName,
         address: `${updatedOrder.shippingAddress.address}, ${updatedOrder.shippingAddress.city}, ${updatedOrder.shippingAddress.state} - ${updatedOrder.shippingAddress.zipCode}`,
         email: updatedOrder.shippingAddress.email || '',
+        phone: updatedOrder.shippingAddress.phone || '',
+        altPhone: updatedOrder.shippingAddress.altPhone || '',
         items: updatedOrder.orderItems.map(item => ({
           name: item.name,
           qty: item.qty,
@@ -208,7 +210,6 @@ const verifyPayment = async (req, res) => {
         })),
         total: updatedOrder.totalPrice,
         paymentMethod: updatedOrder.paymentMethod,
-        phone: updatedOrder.shippingAddress.phone,
       };
 
       // Send email in background (non-blocking)

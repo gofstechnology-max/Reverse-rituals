@@ -571,7 +571,7 @@ const importData = async () => {
     await connectDB();
     mongoose.set('bufferTimeoutMS', 30000);
 
-    await User.deleteMany({});
+    
     await Product.deleteMany({});
     console.log('Previous data cleared');
 
