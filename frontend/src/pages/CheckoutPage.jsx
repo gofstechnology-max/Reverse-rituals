@@ -303,7 +303,15 @@ const CheckoutPage = () => {
     });
   };
 
+  // Redirect to orders page after successful payment
+  useEffect(() => {
+    if (paymentSuccess) {
+      navigate('/orders', { replace: true });
+    }
+  }, [paymentSuccess, navigate]);
+
   const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   const handlePayment = async (e) => {
     e.preventDefault();
@@ -366,7 +374,6 @@ const CheckoutPage = () => {
 
             if (verifyRes.data.message === "Payment verified successfully") {
               toast.success('Payment Successful!');
-              navigate('/orders');
               clearCart();
               localStorage.removeItem('repay_order');
               localStorage.setItem('latestOrder', JSON.stringify({
@@ -376,7 +383,8 @@ const CheckoutPage = () => {
                 totalPrice: order.totalPrice,
                 orderItems: order.orderItems
               }));
-
+              setPaymentSuccess(true);
+              return;
             }
           } catch (err) {
             toast.error('Payment verification failed');

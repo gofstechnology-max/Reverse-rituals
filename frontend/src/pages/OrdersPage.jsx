@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Package, Truck, CheckCircle, MapPin, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -42,9 +43,9 @@ const OrdersPage = () => {
     fetchOrders();
   }, [user, navigate]);
 
-const handlePayNow = (order) => {
+const handleBuyAgain = (order) => {
     if (!order.orderItems || order.orderItems.length === 0) {
-      alert('No items in this order');
+      toast.error('No items in this order');
       return;
     }
     
@@ -72,11 +73,11 @@ const handlePayNow = (order) => {
     // Save to localStorage
     localStorage.setItem('cartItems', JSON.stringify(newItems));
     
-    // Force state update by setting state variable in localStorage
+    // Force state update
     window.dispatchEvent(new Event('storage'));
     
-    // Navigate to cart using React Router
-    navigate('/cart', { replace: true });
+    // Navigate to cart with message
+    navigate('/cart', { state: { message: 'Items added to cart!' } });
   };
 
   if (loading) return (

@@ -33,16 +33,18 @@ const Layout = () => {
       </a>
 
       <ToastContainer
-        position="bottom-right"
+        position="top-center"
         autoClose={3000}
         hideProgressBar={false}
-        newestOnTop={false}
+        enableProgressBar={true}
+        newestOnTop={true}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
         draggable
         pauseOnHover
         className="custom-toast-container"
+        style={{ zIndex: 99999 }}
       />
     </div>
   );

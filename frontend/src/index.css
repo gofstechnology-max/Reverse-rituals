@@ -223,25 +223,39 @@ th,
 }
 
 /* Custom Toast Styles - react-toastify v11 */
-[class*="Toastify__toast--success"] {
+.Toastify__toast-container {
+  z-index: 999999 !important;
+}
+
+.Toastify__toast--success {
   background: #064e3b !important;
   color: #ffffff !important;
 }
 
-[class*="Toastify__progress-bar"] {
+.Toastify__progress-bar {
   background: #c5a059 !important;
+  height: 4px !important;
 }
 
-[class*="Toastify__toast--error"] {
+.Toastify__progress-bar--animated {
+  animation: toast-progress 3s linear forwards;
+}
+
+@keyframes toast-progress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.Toastify__toast--error {
   background: #dc2626 !important;
   color: #ffffff !important;
 }
 
-[class*="Toastify__toast-body"] {
+.Toastify__toast-body {
   color: #ffffff !important;
 }
 
-[class*="Toastify__close-button"] {
+.Toastify__close-button {
   color: #ffffff !important;
 }
 

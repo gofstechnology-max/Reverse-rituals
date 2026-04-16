@@ -5,7 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import {
   ShoppingBag, Package, Truck, CheckCircle, Trash2, Edit3, Plus, X,
   DollarSign, Users, BarChart3, Calendar, Search, Home, Settings,
-  LogOut, Bell, Menu, ChevronRight, Image, CreditCard, MapPin, Phone, Mail, Download
+  LogOut, Bell, Menu, ChevronRight, Image, CreditCard, MapPin, Phone, Mail, Download, FileSpreadsheet
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
@@ -23,6 +23,7 @@ const AdminPage = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [exportDate, setExportDate] = useState('');
   const [formData, setFormData] = useState({
     name: '', price: '', description: '', image: '', category: '', countInStock: '',
   });
@@ -227,6 +228,51 @@ const AdminPage = () => {
         toast.error('Deletion failed');
       }
     }
+  };
+
+  const exportOrdersToExcel = () => {
+    let filtered = orders;
+    if (exportDate) {
+      const selectedDate = new Date(exportDate).toDateString();
+      filtered = orders.filter(order => new Date(order.createdAt).toDateString() === selectedDate);
+    }
+
+    if (filtered.length === 0) {
+      toast.error('No orders found for selected date');
+      return;
+    }
+
+    const csvContent = [
+      ['Order ID', 'Date', 'Customer Name', 'Address', 'City', 'State', 'Pincode', 'Phone', 'Alt Phone', 'Email', 'Products', 'Total', 'Status', 'Payment'],
+      ...filtered.map(order => [
+        order._id.toString().slice(-8).toUpperCase(),
+        new Date(order.createdAt).toLocaleDateString('en-IN'),
+        order.shippingAddress.fullName,
+        order.shippingAddress.address,
+        order.shippingAddress.city,
+        order.shippingAddress.state,
+        order.shippingAddress.zipCode,
+        order.shippingAddress.phone,
+        order.shippingAddress.altPhone || '',
+        order.shippingAddress.email || '',
+        order.orderItems.map(item => `${item.name} (x${item.qty})`).join(', '),
+        order.totalPrice,
+        order.isPaid ? 'Paid' : 'Unpaid',
+        order.isDelivered ? 'Delivered' : 'Pending',
+      ])
+    ].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    const fileName = exportDate ? `orders-${exportDate}.csv` : 'all-orders.csv';
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast.success(`Exported ${filtered.length} orders!`);
   };
 
   const handleProductSubmit = async (e) => {
@@ -528,8 +574,38 @@ const AdminPage = () => {
             </div>
           )}
 
-          {activeTab === 'orders' && (
-            <div className="space-y-3 sm:space-y-4">
+{activeTab === 'orders' && (
+            <div>
+              {/* Export Section */}
+              <div className="bg-white rounded-xl p-4 mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <FileSpreadsheet size={20} className="text-[#064e3b]" />
+                  <span className="font-bold text-[#064e3b]">Export Orders</span>
+                </div>
+                <div className="flex flex-wrap gap-3 items-center">
+                  <input
+                    type="date"
+                    value={exportDate}
+                    onChange={(e) => setExportDate(e.target.value)}
+                    className="px-4 py-2 border border-[#064e3b]/10 rounded-lg text-sm focus:outline-none focus:border-[#c5a059]"
+                  />
+                  <button
+                    onClick={exportOrdersToExcel}
+                    className="flex items-center gap-2 px-4 py-2 bg-[#064e3b] text-white rounded-lg font-bold text-sm hover:bg-[#064e3b]/90"
+                  >
+                    <Download size={16} /> Export CSV
+                  </button>
+                  {exportDate && (
+                    <button
+                      onClick={() => setExportDate('')}
+                      className="text-[#064e3b]/40 text-sm hover:text-[#064e3b]"
+                    >
+                      Clear Date
+                    </button>
+                  )}
+                </div>
+              </div>
+
               {filteredOrders.map((order) => (
                 <motion.div
                   key={order._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
@@ -554,12 +630,13 @@ const AdminPage = () => {
                         <p className="text-[#064e3b]/40 text-xs sm:text-sm">{order.orderItems.length} items</p>
                       </div>
                       <div className="flex flex-wrap gap-2">
-                        {order.isDelivered ? (
-                          <span className="px-2 sm:px-4 py-1 sm:py-2 bg-green-100 text-green-600 rounded-full text-xs sm:text-sm font-bold">Delivered</span>
-                        ) : order.isPaid ? (
+                        {order.isPaid ? (
                           <span className="px-2 sm:px-4 py-1 sm:py-2 bg-green-100 text-green-600 rounded-full text-xs sm:text-sm font-bold">Paid</span>
                         ) : (
                           <span className="px-2 sm:px-4 py-1 sm:py-2 bg-red-100 text-red-600 rounded-full text-xs sm:text-sm font-bold">Unpaid</span>
+                        )}
+                        {order.isDelivered && (
+                          <span className="px-2 sm:px-4 py-1 sm:py-2 bg-blue-100 text-blue-600 rounded-full text-xs sm:text-sm font-bold">Delivered</span>
                         )}
                         {!order.isDelivered && (
                           <button
