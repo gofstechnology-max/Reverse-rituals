@@ -24,6 +24,8 @@ const AdminPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [exportDate, setExportDate] = useState('');
+  const [exportFromDate, setExportFromDate] = useState('');
+  const [exportToDate, setExportToDate] = useState('');
   const [formData, setFormData] = useState({
     name: '', price: '', description: '', image: '', category: '', countInStock: '',
   });
@@ -232,21 +234,35 @@ const AdminPage = () => {
 
   const exportOrdersToExcel = () => {
     let filtered = orders;
+    
+    // Filter by single date
     if (exportDate) {
       const selectedDate = new Date(exportDate).toDateString();
       filtered = orders.filter(order => new Date(order.createdAt).toDateString() === selectedDate);
     }
+    
+    // Filter by date range
+    if (exportFromDate && exportToDate) {
+      const fromDate = new Date(exportFromDate);
+      const toDate = new Date(exportToDate);
+      toDate.setHours(23, 59, 59, 999); // Include full end day
+      filtered = orders.filter(order => {
+        const orderDate = new Date(order.createdAt);
+        return orderDate >= fromDate && orderDate <= toDate;
+      });
+    }
 
     if (filtered.length === 0) {
-      toast.error('No orders found for selected date');
+      toast.error('No orders found for selected date range');
       return;
     }
 
     const csvContent = [
-      ['Order ID', 'Date', 'Customer Name', 'Address', 'City', 'State', 'Pincode', 'Phone', 'Alt Phone', 'Email', 'Products', 'Total', 'Status', 'Payment'],
+      ['Order ID', 'Date', 'Time', 'Customer Name', 'Address', 'City', 'State', 'Pincode', 'Phone', 'Alt Phone', 'Email', 'Products', 'Total', 'Payment Status', 'Delivery Status'],
       ...filtered.map(order => [
         order._id.toString().slice(-8).toUpperCase(),
         new Date(order.createdAt).toLocaleDateString('en-IN'),
+        new Date(order.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
         order.shippingAddress.fullName,
         order.shippingAddress.address,
         order.shippingAddress.city,
@@ -266,7 +282,12 @@ const AdminPage = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    const fileName = exportDate ? `orders-${exportDate}.csv` : 'all-orders.csv';
+    let fileName = 'all-orders.csv';
+    if (exportDate) {
+      fileName = `orders-${exportDate}.csv`;
+    } else if (exportFromDate && exportToDate) {
+      fileName = `orders-${exportFromDate}-to-${exportToDate}.csv`;
+    }
     link.download = fileName;
     document.body.appendChild(link);
     link.click();
@@ -577,32 +598,68 @@ const AdminPage = () => {
 {activeTab === 'orders' && (
             <div>
               {/* Export Section */}
-              <div className="bg-white rounded-xl p-4 mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                <div className="flex items-center gap-2">
+              <div className="bg-white rounded-xl p-4 mb-4">
+                <div className="flex items-center gap-2 mb-4">
                   <FileSpreadsheet size={20} className="text-[#064e3b]" />
                   <span className="font-bold text-[#064e3b]">Export Orders</span>
                 </div>
-                <div className="flex flex-wrap gap-3 items-center">
-                  <input
-                    type="date"
-                    value={exportDate}
-                    onChange={(e) => setExportDate(e.target.value)}
-                    className="px-4 py-2 border border-[#064e3b]/10 rounded-lg text-sm focus:outline-none focus:border-[#c5a059]"
-                  />
-                  <button
-                    onClick={exportOrdersToExcel}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#064e3b] text-white rounded-lg font-bold text-sm hover:bg-[#064e3b]/90"
-                  >
-                    <Download size={16} /> Export CSV
-                  </button>
-                  {exportDate && (
+                <div className="flex flex-col lg:flex-row gap-4">
+                  {/* Single Date */}
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-[#064e3b]/60">Single Date:</span>
+                      <input
+                        type="date"
+                        value={exportDate}
+                        onChange={(e) => { setExportDate(e.target.value); setExportFromDate(''); setExportToDate(''); }}
+                        className="px-3 py-2 border border-[#064e3b]/10 rounded-lg text-sm focus:outline-none focus:border-[#c5a059]"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="hidden lg:block w-px h-10 bg-[#064e3b]/10"></div>
+                  
+                  {/* Date Range */}
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-[#064e3b]/60">From:</span>
+                      <input
+                        type="date"
+                        value={exportFromDate}
+                        onChange={(e) => { setExportFromDate(e.target.value); setExportDate(''); }}
+                        className="px-3 py-2 border border-[#064e3b]/10 rounded-lg text-sm focus:outline-none focus:border-[#c5a059]"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-[#064e3b]/60">To:</span>
+                      <input
+                        type="date"
+                        value={exportToDate}
+                        onChange={(e) => { setExportToDate(e.target.value); setExportDate(''); }}
+                        className="px-3 py-2 border border-[#064e3b]/10 rounded-lg text-sm focus:outline-none focus:border-[#c5a059]"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="hidden lg:block w-px h-10 bg-[#064e3b]/10"></div>
+                  
+                  {/* Export Button */}
+                  <div className="flex items-center gap-2">
                     <button
-                      onClick={() => setExportDate('')}
-                      className="text-[#064e3b]/40 text-sm hover:text-[#064e3b]"
+                      onClick={exportOrdersToExcel}
+                      className="flex items-center gap-2 px-4 py-2 bg-[#064e3b] text-white rounded-lg font-bold text-sm hover:bg-[#064e3b]/90"
                     >
-                      Clear Date
+                      <Download size={16} /> Export CSV
                     </button>
-                  )}
+                    {(exportDate || exportFromDate || exportToDate) && (
+                      <button
+                        onClick={() => { setExportDate(''); setExportFromDate(''); setExportToDate(''); }}
+                        className="px-3 py-2 text-[#064e3b]/40 text-sm hover:text-[#064e3b]"
+                      >
+                        Clear
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
 
