@@ -195,11 +195,20 @@ const verifyPayment = async (req, res) => {
 
       const updatedOrder = await order.save();
 
+      // Get user email if logged in
+      let userEmail = updatedOrder.shippingAddress.email || '';
+      if (updatedOrder.user) {
+        const user = await User.findById(updatedOrder.user);
+        if (user && user.email) {
+          userEmail = user.email;
+        }
+      }
+
       const orderDetails = {
         orderId: updatedOrder._id.toString().slice(-8).toUpperCase(),
         customerName: updatedOrder.shippingAddress.fullName,
         address: `${updatedOrder.shippingAddress.address}, ${updatedOrder.shippingAddress.city}, ${updatedOrder.shippingAddress.state} - ${updatedOrder.shippingAddress.zipCode}`,
-        email: updatedOrder.shippingAddress.email || '',
+        email: userEmail,
         phone: updatedOrder.shippingAddress.phone || '',
         altPhone: updatedOrder.shippingAddress.altPhone || '',
         items: updatedOrder.orderItems.map(item => ({
@@ -213,7 +222,7 @@ const verifyPayment = async (req, res) => {
       };
 
       // Send email in background (non-blocking)
-      console.log('Sending order confirmation email for:', orderDetails.orderId);
+      console.log('Sending order confirmation email for:', orderDetails.orderId, 'to:', userEmail);
       sendOrderEmail(orderDetails).then(result => {
         console.log('Email send result:', result);
       }).catch(err => {

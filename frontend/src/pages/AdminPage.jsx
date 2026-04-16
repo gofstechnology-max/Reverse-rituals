@@ -5,7 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import {
   ShoppingBag, Package, Truck, CheckCircle, Trash2, Edit3, Plus, X,
   DollarSign, Users, BarChart3, Calendar, Search, Home, Settings,
-  LogOut, Bell, Menu, ChevronRight, Image, CreditCard, MapPin, Phone, Mail
+  LogOut, Bell, Menu, ChevronRight, Image, CreditCard, MapPin, Phone, Mail, Download
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
@@ -98,6 +98,120 @@ const AdminPage = () => {
         toast.error('Delete failed');
       }
     }
+  };
+
+  const downloadInvoice = (order) => {
+    const printContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Invoice - Order #${order._id.toString().slice(-8).toUpperCase()}</title>
+  <style>
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; padding: 30px; max-width: 800px; margin: 0 auto; background: #fff; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #064e3b; }
+    .company { font-size: 28px; font-weight: bold; color: #064e3b; }
+    .invoice-title { font-size: 24px; color: #333; font-weight: bold; }
+    .order-info { display: flex; justify-content: space-between; margin-bottom: 30px; }
+    .order-info-box { background: #f9fafb; padding: 15px; border-radius: 8px; width: 48%; }
+    .order-info-box h4 { margin: 0 0 10px; color: #064e3b; font-size: 14px; text-transform: uppercase; }
+    .order-info-box p { margin: 5px 0; font-size: 13px; color: #333; }
+    .customer-section { background: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+    .customer-section h4 { margin: 0 0 15px; color: #064e3b; font-size: 14px; text-transform: uppercase; }
+    .customer-section p { margin: 5px 0; font-size: 13px; color: #333; }
+    .items-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    .items-table th { background: #064e3b; color: white; padding: 12px; text-align: left; font-size: 13px; }
+    .items-table td { padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+    .items-table tr:last-child td { border-bottom: 2px solid #064e3b; }
+    .total-section { text-align: right; padding: 20px; background: #f0fdf4; border-radius: 8px; }
+    .total-section .total-amount { font-size: 24px; font-weight: bold; color: #064e3b; }
+    .footer { margin-top: 40px; text-align: center; color: #666; font-size: 12px; padding-top: 20px; border-top: 1px solid #eee; }
+    .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+    .status-paid { background: #dcfce7; color: #166534; }
+    .status-unpaid { background: #fee2e2; color: #991b1b; }
+    @media print {
+      .no-print { display: none; }
+      body { padding: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="company">🌿 Reverse Rituals</div>
+    <div class="invoice-title">INVOICE</div>
+  </div>
+  
+  <div class="order-info">
+    <div class="order-info-box">
+      <h4>Order Details</h4>
+      <p><strong>Order ID:</strong> ${order._id.toString().slice(-8).toUpperCase()}</p>
+      <p><strong>Date:</strong> ${new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+      <p><strong>Status:</strong> <span class="status-badge ${order.isPaid ? 'status-paid' : 'status-unpaid'}">${order.isPaid ? 'PAID' : 'UNPAID'}</span></p>
+    </div>
+    <div class="order-info-box">
+      <h4>Payment Info</h4>
+      <p><strong>Method:</strong> ${order.paymentMethod || 'Razorpay'}</p>
+      <p><strong>Payment ID:</strong> ${order.paymentResult?.razorpay_payment_id || 'N/A'}</p>
+    </div>
+  </div>
+
+  <div class="customer-section">
+    <h4>Customer Details</h4>
+    <p><strong>Name:</strong> ${order.shippingAddress.fullName}</p>
+    <p><strong>Address:</strong> ${order.shippingAddress.address}, ${order.shippingAddress.city}, ${order.shippingAddress.state} - ${order.shippingAddress.zipCode}</p>
+    <p><strong>Phone:</strong> ${order.shippingAddress.phone}${order.shippingAddress.altPhone ? ', ' + order.shippingAddress.altPhone : ''}</p>
+    <p><strong>Email:</strong> ${order.shippingAddress.email || 'N/A'}</p>
+  </div>
+
+  <table class="items-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Qty</th>
+        <th>Price</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${order.orderItems.map(item => `
+      <tr>
+        <td>${item.name}</td>
+        <td>${item.qty}</td>
+        <td>₹${item.price}</td>
+        <td>₹${item.price * item.qty}</td>
+      </tr>
+      `).join('')}
+    </tbody>
+  </table>
+
+  <div class="total-section">
+    <p style="margin: 0; font-size: 14px; color: #666;">Grand Total</p>
+    <p class="total-amount">₹${order.totalPrice}</p>
+  </div>
+
+  <div class="footer">
+    <p>Thank you for your order! 🌿</p>
+    <p>Reverse Rituals - Natural Hair Care Products</p>
+    <p>support@reverserituals.com</p>
+  </div>
+  
+  <div class="no-print" style="margin-top: 30px; text-align: center;">
+    <button onclick="window.print()" style="padding: 12px 24px; background: #064e3b; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px;">
+      🖨️ Print / Save as PDF
+    </button>
+  </div>
+</body>
+</html>`;
+
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.onload = () => {
+      printWindow.print();
+    };
   };
 
   const handleDeleteProduct = async (id) => {
@@ -443,7 +557,7 @@ const AdminPage = () => {
                         {order.isDelivered ? (
                           <span className="px-2 sm:px-4 py-1 sm:py-2 bg-green-100 text-green-600 rounded-full text-xs sm:text-sm font-bold">Delivered</span>
                         ) : order.isPaid ? (
-                          <span className="px-2 sm:px-4 py-1 sm:py-2 bg-yellow-100 text-yellow-600 rounded-full text-xs sm:text-sm font-bold">Pending</span>
+                          <span className="px-2 sm:px-4 py-1 sm:py-2 bg-green-100 text-green-600 rounded-full text-xs sm:text-sm font-bold">Paid</span>
                         ) : (
                           <span className="px-2 sm:px-4 py-1 sm:py-2 bg-red-100 text-red-600 rounded-full text-xs sm:text-sm font-bold">Unpaid</span>
                         )}
@@ -470,6 +584,14 @@ const AdminPage = () => {
                     {expandedOrder === order._id && (
                       <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="border-t border-[#064e3b]/5">
                         <div className="p-5 lg:p-6 bg-[#fdfbf7]/50">
+                          <div className="flex justify-end mb-4">
+                            <button
+                              onClick={() => downloadInvoice(order)}
+                              className="flex items-center gap-2 px-4 py-2 bg-[#064e3b] text-white rounded-lg font-bold text-sm hover:bg-[#064e3b]/90"
+                            >
+                              <Download size={16} /> Download Bill
+                            </button>
+                          </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                               <h5 className="text-sm font-bold text-[#064e3b]/40 uppercase tracking-wider mb-3">Shipping Address</h5>
