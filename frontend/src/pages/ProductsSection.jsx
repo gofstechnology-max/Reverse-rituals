@@ -60,15 +60,14 @@ const ProductsSection = ({ products, loading }) => {
                 </div>
             ) : (
                 <>
-                    {/* 🔥 Mobile + Tablet Swiper (FIXED) */}
+                    {/* 🔥 Mobile + Tablet Swiper */}
                     <div className="md:hidden max-w-4xl mx-auto">
                         <Swiper
                             grabCursor={true}
                             centeredSlides={true}
                             slidesPerView={"auto"}
                             spaceBetween={16}
-                            loop={true}
-                            loopedSlides={products.length}
+                            loop={products.length > 3}
                             speed={500}
                             watchSlidesProgress={true}
                             className="!overflow-visible px-2"

@@ -35,7 +35,7 @@ const ReviewSection = () => {
 
         <Swiper
           centeredSlides={true}
-          loop={true}
+          loop={reviews.length > 3}
           grabCursor={true}
 
           slidesPerView={1.5}

@@ -303,15 +303,15 @@ const CheckoutPage = () => {
     });
   };
 
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+
   // Redirect to orders page after successful payment
   useEffect(() => {
     if (paymentSuccess) {
       navigate('/orders', { replace: true });
     }
   }, [paymentSuccess, navigate]);
-
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   const handlePayment = async (e) => {
     e.preventDefault();
