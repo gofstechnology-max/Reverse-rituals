@@ -103,6 +103,19 @@ const AdminPage = () => {
     }
   };
 
+  const handleResetStatus = async (id) => {
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+      await axios.put(`${API_URL}/api/orders/${id}/status`, { status: 'Processing' }, {
+        headers: { Authorization: `Bearer ${user.token}` }
+      });
+      toast.success('Order reset to Processing');
+      fetchData();
+    } catch (error) {
+      toast.error('Failed to reset status');
+    }
+  };
+
   const downloadInvoice = (order) => {
     const printContent = `
 <!DOCTYPE html>
@@ -692,16 +705,35 @@ const AdminPage = () => {
                         ) : (
                           <span className="px-2 sm:px-4 py-1 sm:py-2 bg-red-100 text-red-600 rounded-full text-xs sm:text-sm font-bold">Unpaid</span>
                         )}
-                        {order.isDelivered && (
-                          <span className="px-2 sm:px-4 py-1 sm:py-2 bg-blue-100 text-blue-600 rounded-full text-xs sm:text-sm font-bold">Delivered</span>
+                        
+                        {/* Order Status - Click to change */}
+                        {!order.isDelivered ? (
+                          <div className="relative">
+                            {order.isPaid ? (
+                              <button
+                                onClick={(e) => { e.stopPropagation(); handleDeliver(order._id); }}
+                                className="px-2 sm:px-4 py-1 sm:py-2 bg-blue-100 text-blue-600 rounded-full text-xs sm:text-sm font-bold hover:bg-blue-200 transition-all"
+                              >
+                                Shipped
+                              </button>
+                            ) : (
+                              <span className="px-2 sm:px-4 py-1 sm:py-2 bg-gray-100 text-gray-600 rounded-full text-xs sm:text-sm font-bold">Processing</span>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="px-2 sm:px-4 py-1 sm:py-2 bg-purple-100 text-purple-600 rounded-full text-xs sm:text-sm font-bold">Delivered</span>
                         )}
-                        {!order.isDelivered && (
+                        
+                        {/* Reset to Processing if needed */}
+                        {!order.isPaid && (
                           <button
-                            onClick={(e) => { e.stopPropagation(); handleDeliver(order._id); }}
-                            className="px-2 sm:px-4 py-1 sm:py-2 bg-[#c5a059] text-white rounded-full text-xs sm:text-sm font-bold hover:bg-[#064e3b] transition-all"
+                            onClick={(e) => { e.stopPropagation(); handleResetStatus(order._id); }}
+                            className="px-2 sm:px-4 py-1 sm:py-2 bg-gray-200 text-gray-600 rounded-full text-xs sm:text-sm font-bold hover:bg-gray-300"
+                            title="Reset to Processing"
                           >
-                            Deliver
+                            ↺
                           </button>
+                        )}
                         )}
                         <button
                           onClick={(e) => { e.stopPropagation(); handleDeleteOrder(order._id); }}

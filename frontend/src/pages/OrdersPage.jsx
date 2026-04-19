@@ -128,12 +128,24 @@ const handleBuyAgain = (order) => {
                     <span className="text-xs text-gray-500">{new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.isPaid ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
-                      {order.isPaid ? 'Paid' : 'Pending'}
-                    </span>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.isDelivered ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'}`}>
-                      {order.isDelivered ? 'Delivered' : 'Processing'}
-                    </span>
+                    {!order.isPaid ? (
+                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                        Processing
+                      </span>
+                    ) : order.isDelivered ? (
+                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-700">
+                        Delivered
+                      </span>
+                    ) : (
+                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                        Shipped
+                      </span>
+                    )}
+                    {order.estimatedDelivery && !order.isDelivered && order.isPaid && (
+                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
+                        Est: {new Date(order.estimatedDelivery).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -175,9 +187,24 @@ const handleBuyAgain = (order) => {
                           </div>
                           <div>
                             <p className="text-xs text-gray-500">Delivery</p>
-                            <p className={`text-xs font-medium ${order.isDelivered ? 'text-[#064e3b]' : 'text-gray-400'}`}>{order.isDelivered ? 'Shipped' : 'Processing'}</p>
+                            <p className={`text-xs font-medium ${order.isDelivered ? 'text-[#064e3b]' : 'text-gray-400'}`}>
+                              {order.isDelivered ? `Shipped ${order.deliveredAt ? new Date(order.deliveredAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : ''}` : 'Processing'}
+                            </p>
                           </div>
                         </div>
+                        {order.estimatedDelivery && !order.isDelivered && (
+                          <div className="flex items-center gap-4">
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#c5a059]/10 text-[#c5a059]">
+                              <Package size={16} />
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-500">Expected</p>
+                              <p className="text-xs font-medium text-[#c5a059]">
+                                {new Date(order.estimatedDelivery).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                              </p>
+                            </div>
+                          </div>
+                        )}
                       </div>
 
                       <div className="pt-3 border-t border-gray-100 flex justify-between items-center">

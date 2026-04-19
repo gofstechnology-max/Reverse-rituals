@@ -15,11 +15,16 @@ const sendOrderEmail = async (orderDetails) => {
     const adminEmail = process.env.ADMIN_NOTIFY_EMAIL || 'reverserituals@gmail.com';
     console.log('📧 Sending order confirmation for:', orderDetails.orderId);
     
-    const { orderId, customerName, address, items, total, email, phone, altPhone } = orderDetails;
+    const { orderId, customerName, address, items, total, email, phone, altPhone, estimatedDelivery } = orderDetails;
 
-    const deliveryDate = new Date();
-    deliveryDate.setDate(deliveryDate.getDate() + 5);
-    const deliveryDateStr = deliveryDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    let deliveryDateStr;
+    if (estimatedDelivery) {
+      deliveryDateStr = new Date(estimatedDelivery).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    } else {
+      const deliveryDate = new Date();
+      deliveryDate.setDate(deliveryDate.getDate() + 5);
+      deliveryDateStr = deliveryDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    }
 
     // Build order items HTML inline
     const orderItemsHtml = items.map(item => `

@@ -101,6 +101,7 @@ const addOrderItems = async (req, res) => {
       itemsPrice,
       shippingPrice: 0,
       totalPrice,
+      estimatedDelivery: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days from now
       paymentResult: {
         razorpay_order_id: razorpayOrder.id,
       },
@@ -219,6 +220,7 @@ const verifyPayment = async (req, res) => {
         })),
         total: updatedOrder.totalPrice,
         paymentMethod: updatedOrder.paymentMethod,
+        estimatedDelivery: updatedOrder.estimatedDelivery,
       };
 
       // Send email in background (non-blocking)
@@ -359,6 +361,40 @@ const updateOrderToDelivered = async (req, res) => {
     res.status(404).json({ message: 'Order not found' });
   }
 };
+      }
+    } catch (emailErr) {
+      console.log('Delivery email error:', emailErr.message);
+    }
+    
+res.json(updatedOrder);
+  } else {
+    res.status(404).json({ message: 'Order not found' });
+  }
+};
+
+// @desc    Update order status
+// @route   PUT /api/orders/:id/status
+// @access  Private/Admin
+const updateOrderStatus = async (req, res) => {
+  const { status } = req.body;
+  const order = await Order.findById(req.params.id);
+
+  if (order) {
+    if (status === 'Processing') {
+      order.isDelivered = false;
+      order.deliveredAt = null;
+    } else if (status === 'Shipped') {
+      order.isDelivered = false;
+    } else if (status === 'Delivered') {
+      order.isDelivered = true;
+      order.deliveredAt = Date.now();
+    }
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
+  } else {
+    res.status(404).json({ message: 'Order not found' });
+  }
+};
 
 // @desc    Delete order
 // @route   DELETE /api/orders/:id
@@ -381,6 +417,7 @@ module.exports = {
   verifyPayment,
   getOrders,
   updateOrderToDelivered,
+  updateOrderStatus,
   deleteOrder,
   createPaymentForOrder,
 };
