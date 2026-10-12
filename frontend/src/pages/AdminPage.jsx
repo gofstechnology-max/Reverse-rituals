@@ -267,7 +267,7 @@ const AdminPage = () => {
       .filter(part => part.length > 0);
 
     return `
-      <div class="thermal-bill-page" style="width: 384px; height: 575px; padding: 20px; font-family: 'Outfit', 'Noto Sans Tamil', system-ui, -apple-system, sans-serif; background: #fff; box-sizing: border-box; color: #000; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;">
+      <div class="thermal-bill-page" style="width: 384px; height: 576px; padding: 18px; font-family: 'Outfit', 'Noto Sans Tamil', system-ui, -apple-system, sans-serif; background: #fff; box-sizing: border-box; color: #000; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;">
         <div>
           <div style="text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 2px; letter-spacing: 0.5px;">REVERSE RITUALS</div>
           <div style="text-align: center; font-size: 13px; margin-bottom: 8px;">Natural Hair Care Products</div>
@@ -325,18 +325,27 @@ const AdminPage = () => {
   const downloadThermalBill = async (order) => {
     setThermalGenerating(order._id);
     try {
+      loadTamilFont();
       const element = document.createElement('div');
       element.innerHTML = getThermalBillHTML(order);
 
-      const safeBillId = (order.orderId || order._id.toString().slice(-8)).replace(/\//g, '-').toUpperCase();
       const opt = {
         margin: 0,
-        filename: `bill-${safeBillId}-${new Date().toISOString().slice(0, 10)}.pdf`,
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'in', format: [4, 6], orientation: 'portrait' }
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: false }
       };
 
-      await html2pdf().set(opt).from(element).save();
+      const imgData = await html2pdf().set(opt).from(element).outputImg('dataurlstring');
+
+      const safeBillId = (order.orderId || order._id.toString().slice(-8)).replace(/\//g, '-').toUpperCase();
+      const pdf = new jsPDF({
+        unit: 'in',
+        format: [4, 6],
+        orientation: 'portrait'
+      });
+
+      pdf.addImage(imgData, 'JPEG', 0, 0, 4, 6);
+      pdf.save(`bill-${safeBillId}-${new Date().toISOString().slice(0, 10)}.pdf`);
       toast.success('Bill downloaded successfully');
     } catch (err) {
       console.error('Thermal bill error:', err);
@@ -353,9 +362,7 @@ const AdminPage = () => {
     }
 
     try {
-      const element = document.createElement('div');
-      element.innerHTML = filteredOrders.map(order => getThermalBillHTML(order)).join('<div class="html2pdf__page-break"></div>');
-
+      loadTamilFont();
       let filenameDate = new Date().toISOString().slice(0, 10);
       if (exportDate) {
         filenameDate = new Date(exportDate).toISOString().slice(0, 10);
@@ -363,15 +370,32 @@ const AdminPage = () => {
         filenameDate = new Date(exportFromDate).toISOString().slice(0, 10);
       }
 
-      const opt = {
-        margin: 0,
-        filename: `bills-${filenameDate}.pdf`,
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'in', format: [4, 6], orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'legacy'] }
-      };
+      const pdf = new jsPDF({
+        unit: 'in',
+        format: [4, 6],
+        orientation: 'portrait'
+      });
 
-      await html2pdf().set(opt).from(element).save();
+      for (let i = 0; i < filteredOrders.length; i++) {
+        const order = filteredOrders[i];
+        const element = document.createElement('div');
+        element.innerHTML = getThermalBillHTML(order);
+
+        const opt = {
+          margin: 0,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true, logging: false }
+        };
+
+        const imgData = await html2pdf().set(opt).from(element).outputImg('dataurlstring');
+
+        if (i > 0) {
+          pdf.addPage([4, 6], 'portrait');
+        }
+        pdf.addImage(imgData, 'JPEG', 0, 0, 4, 6);
+      }
+
+      pdf.save(`bills-${filenameDate}.pdf`);
       toast.success(`${filteredOrders.length} bills generated successfully`);
     } catch (error) {
       console.error('Bulk thermal bill error:', error);
